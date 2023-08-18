@@ -1,0 +1,25 @@
+﻿@using AcademicianPlatformLoginPrototype.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+@if (User.Identity?.Name != null)
+{
+    var currentUser = await UserManager.FindByNameAsync(User.Identity.Name);
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <img src="@currentUser.ProfilePhotoPath" class="profilePic"/><a  class="nav-link text-dark d-inline" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hoşgeldiniz @currentUser.FirstName @currentUser.LastName</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark nav-text text-decoration-none" asp-area="" asp-controller="Home" asp-action="NewAnnouncement">Yeni Duyuru</a>
+        </li>
+        <li class="nav-item">
+        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button  type="submit" class="nav-link btn btn-link text-dark">Çıkış Yap</button>
+        </form>
+        </li>
+    }
+}
+</ul>

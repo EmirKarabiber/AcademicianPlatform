@@ -1,0 +1,20 @@
+﻿@using AcademicianPlatformLoginPrototype.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="container">
+    <h2>Create New Announcement</h2>
+    <form method="post" action="/Home/PostNewAnnouncement">
+        <div class="form-group">
+            <label for="AnnouncementTitle">Announcement Title</label>
+            <input type="text" class="form-control" id="AnnouncementTitle" name="announcementTitle" required>
+        </div>
+        <div class="form-group">
+            <label for="AnnouncementContent">Announcement Content</label>
+            <textarea class="form-control" id="AnnouncementContent" name="announcementContent" rows="4" required></textarea>
+        </div>
+        <input type="hidden" name="senderName" id="senderName" value="@User.Identity.Name" />
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
