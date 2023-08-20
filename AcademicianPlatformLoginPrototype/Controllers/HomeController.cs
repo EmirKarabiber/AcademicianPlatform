@@ -50,6 +50,16 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 			await _context.SaveChangesAsync();
 			return RedirectToAction("Index");
 		}
+		public async Task<IActionResult> DeleteAnnouncement(int announcementID)
+		{
+			var announcementToDelete = _context.Announcements.Find(announcementID);
+			if(announcementToDelete != null)
+			{
+                _context.Announcements.Remove(announcementToDelete);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()

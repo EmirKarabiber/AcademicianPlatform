@@ -224,8 +224,6 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
                 }
             }
 
-
-
             ProviderDisplayName = info.ProviderDisplayName;
             
             ReturnUrl = returnUrl;
@@ -245,7 +243,7 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
                     $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml");
             }
         }
-
+        
         private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)

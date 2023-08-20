@@ -2,35 +2,37 @@
 @using Microsoft.AspNetCore.Identity
 @model IEnumerable<Announcement>
 @inject UserManager<ApplicationUser> UserManager
+@inject IUserStore<ApplicationUser> UserStore
+@inject SignInManager<ApplicationUser> SignInManager
 @{
     ViewData["Title"] = "Home Page";
 }
-
     @if (Model != null)
     {
         @foreach (var item in Model)
         {
-        <br />
+        @if(item != null)
+        {
             var senderID = item.AnnouncementSenderID;
-            var user = await UserManager.FindByIdAsync(senderID.ToString());
-            <div class="card">
-                <h5 class="card-header d-inline align-content-end">
-                    Announcement
-                    <form action="/Announcements/DeleteAnnouncement" method="POST">
-                        <input type="hidden" name="announcementId" value="@item.ID" />
-                        <button type="submit" class="btn justify-content-end d-inline">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                            </svg>
-                        </button>
-                    </form>
-                </h5>
-                <div class="card-body">
-                    <h5 class="card-title"><img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic">@item.AnnouncementTitle</h5>
-                    <p class="card-text">@item.AnnouncementContent</p>
-                </div>
-                @if(user != null)
-                {
+            var user = await UserStore.FindByIdAsync(senderID,CancellationToken.None);
+            if(user != null)
+            {
+                <div class="card">
+                    <h5 class="card-header d-inline align-content-end">
+                        Announcement
+                        <form action="/Home/DeleteAnnouncement" method="POST">
+                            <input type="hidden" name="announcementID" value="@item.ID" />
+                            <button type="submit" class="btn justify-content-end d-inline">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                </svg>
+                            </button>
+                        </form>
+                    </h5>
+                    <div class="card-body">
+                        <h5 class="card-title"><img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic">@item.AnnouncementTitle</h5>
+                        <p class="card-text">@item.AnnouncementContent</p>
+                    </div>
                     <div class="card-footer">
                         <p class="card-text">@user.FirstName @user.LastName</p>
                         <p class="card-text">@user.PhoneNumber</p>
@@ -38,8 +40,10 @@
                         <p class="card-text">@item.AnnouncementSentDate</p>
                         <p class="card-text"><a href="@user.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.</p>
                     </div>
-                }
-                
-            </div>
+                </div>
+                <br />
+            }
         }
     }
+}
+
