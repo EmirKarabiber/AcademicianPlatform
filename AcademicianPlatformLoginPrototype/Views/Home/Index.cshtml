@@ -39,6 +39,7 @@
                         <p class="card-text">@user.Email</p>
                         <p class="card-text">@item.AnnouncementSentDate</p>
                         <p class="card-text"><a href="@user.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.</p>
+                        <a class="btn btn-primary" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Get Details</a>
                     </div>
                 </div>
                 <br />
