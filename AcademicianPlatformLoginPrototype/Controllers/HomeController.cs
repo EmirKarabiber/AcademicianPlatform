@@ -14,12 +14,14 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 		private readonly ILogger<HomeController> _logger;
 		private readonly ApplicationDbContext _context;
 		private readonly IUserStore<ApplicationUser> _userStore;
+		private readonly UserManager<ApplicationUser> _userManager;
 
-		public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IUserStore<ApplicationUser> userStore)
+		public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IUserStore<ApplicationUser> userStore, UserManager<ApplicationUser> userManager)
 		{
 			_logger = logger;
 			_context = context;
 			_userStore = userStore;
+			_userManager = userManager;
 		}
 		[Authorize]
 		public IActionResult Index()
@@ -97,7 +99,7 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 
 		public async Task<IActionResult> MyAnnouncoments()
 		{
-			var user = await _userStore.FindByNameAsync(User.Identity.Name, CancellationToken.None);
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 			if (user == null)
 			{
 				return NotFound();
