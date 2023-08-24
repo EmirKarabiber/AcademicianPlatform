@@ -23,3 +23,197 @@ body {
     border-radius:120px;
     display:inline;
 }
+
+/*//profiles css codes start*/
+
+#hesapAyarlari-title {
+    color: #8b1a1a;
+    font-size: 35px;
+    font-weight: bold;
+    margin-top: 40px;
+}
+
+
+/* Profilinizi düzenleyin yazýsýný kaldýrdým*/
+/*#profiliniziDuzenleyin-title {
+    color: #000;
+    font-size: 15px;
+    font-style: revert;
+}*/
+
+/* Örnek 2: Form içi etiketler */
+.form-floating label {
+    font-size: 14px;
+    color: #333;
+
+}
+
+/* Örnek 3: Form giriþ kutularý */
+.form-control {
+    border: 1px solid #ccc;
+    padding: 8px;
+
+}
+
+/* Örnek 4: Kaydet düðmesi */
+.btn-primary {
+    background-color: #191970;
+    color: white;
+    border: 1px solid #191970; /* Siyah çerçeve ekleyin */
+    outline: none; /* Varsa varsayýlan mavi çerçeveyi kaldýrýn */
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+/* Örnek 5: Hata mesajlarý */
+.text-danger {
+    color: #FF0000;
+}
+
+
+
+
+#profile-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 30px; /* Yazý boyutunu istediðiniz piksel deðeriyle ayarlayýn */
+    font-family: 'Lexend', sans-serif; /* Lexend fontunu kullan */
+    font-weight: 500; /* Medium (500) kalýnlýk */
+}
+#manageEmail-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 30px; /* Yazý boyutunu istediðiniz piksel deðeriyle ayarlayýn */
+    font-family: 'Lexend', sans-serif; /* Lexend fontunu kullan */
+    font-weight: 500; /* Medium (500) kalýnlýk */
+}
+#setPassword-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 2px;
+    font-size: 30px; /* Yazý boyutunu istediðiniz piksel deðeriyle ayarlayýn */
+    font-family: 'Lexend', sans-serif; /* Lexend fontunu kullan */
+    font-weight: 500; /* Medium (500) kalýnlýk */
+}
+#registeredLogins-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 2px;
+    font-size: 30px; /* Yazý boyutunu istediðiniz piksel deðeriyle ayarlayýn */
+    font-family: 'Lexend', sans-serif; /* Lexend fontunu kullan */
+    font-weight: 500; /* Medium (500) kalýnlýk */
+}
+#twoFactor-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 2px;
+    font-size: 30px; /* Yazý boyutunu istediðiniz piksel deðeriyle ayarlayýn */
+    font-family: 'Lexend', sans-serif; /* Lexend fontunu kullan */
+    font-weight: 500; /* Medium (500) kalýnlýk */
+}
+
+
+
+
+/* Kutucuklarýn kenarlarýný yuvarlatma */
+.form-floating input.form-control {
+    border-radius: 10px;
+}
+
+/* Kutucuklarýn üst tarafýna 10px margin ekleme */
+.form-floating {
+    margin-top: 10px;
+}
+
+
+
+
+/* Sidebar start */
+
+/* Sidebar arka plan rengi */
+.nav-pills {
+    background-color: #fff;
+}
+    /* Dikdörtgenlerin yüksekliðini artýrma */
+    .nav-pills .nav-link {
+        padding: 15px 20px; /* Yüksekliði istediðiniz gibi ayarlayýn */
+    }
+/* Menü seçeneklerinin alt baþlýklarý (yazý) */
+.nav-pills .nav-item .nav-link {
+    color: #02a358; /* Beyaz yazý rengi */
+}
+
+/* Menü seçeneklerinin normal durum rengi */
+.nav-pills .nav-item .nav-link {
+    background-color: transparent; /* Þeffaf arkaplan */
+    color: #4f4f4f; /* Siyah yazý rengi */
+    transition: background-color 0.3s, color 0.3s; /* Geçiþ efekti ekleme */
+    font-size: large;
+    font-weight: 600;
+}
+
+    /* Menü seçeneklerinin týklanmýþ durum rengi */
+    .nav-pills .nav-item .nav-link.active {
+        background-color: transparent; /* Þeffaf arkaplan */
+        color: black; /* Siyah yazý rengi */
+    }
+
+    /* Menü seçeneklerine hover özelliði eklendiðinde */
+    .nav-pills .nav-item .nav-link:hover {
+        background-color: rgba(200, 200, 200, 0.5); /* Þeffaf gri arkaplan */
+        color: black; /* Siyah yazý rengi */
+    }
+    /* Seçilen menü seçeneðinin sol baþýný siyaha boyama */
+    .nav-pills .nav-item .nav-link.active {
+        position: relative;
+        background-color: white; /* Varsayýlan arka plan rengi */
+        border-radius: 10px; /* Köþeleri yuvarlama */
+    }
+
+        .nav-pills .nav-item .nav-link.active::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 9px; /* Ýstediðiniz geniþlik */
+            height: 100%;
+            background-color: #1c1c1c; /* Siyah çizgi rengi */
+            border-top-left-radius: 10px; /* Sol üst köþeyi yuvarlama */
+            border-bottom-left-radius: 10px; /* Sol alt köþeyi yuvarlama */
+        }
+
+
+/* e-mail ayarlarýndaki buton*/
+#email-verification {
+    color: #363636;
+    border: none; /* Alt çizgiyi kaldýr */
+    font-size: 14px; /* Yazý boyutunu ayarla */
+    padding-top:10px;
+    font-style:italic;
+}
+.text-info {
+    color: #000;
+    border: none; /* Alt çizgiyi kaldýr */
+    font-size: 14px; /* Yazý boyutunu ayarla */
+    padding-top: 10px;
+}
+
+.hover-gray:hover {
+    background-color: #708090; /* Arka plan rengini deðiþtir */
+    border-color: #708090;
+}
+/* Sidebar end */
+
+
+
+
+
+
+
+
+
+
+
+/*//profiles css codes end*/
