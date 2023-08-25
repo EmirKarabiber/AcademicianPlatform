@@ -1,0 +1,29 @@
+@model List<Announcement>
+
+
+<h2 class="text-center display-4">My Announcements</h2>
+<hr>
+
+@if (Model.Count > 0)
+{
+    <ul>
+        @foreach (var announcement in Model)
+        {
+            <li>
+                <h3>@announcement.AnnouncementTitle</h3>
+                <p>@announcement.AnnouncementContent</p>
+                <p><strong>Date: </strong>@announcement.AnnouncementSentDate.ToString("dd-MM-yyyy HH:mm:ss")</p>
+                <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteAnnouncement"
+                    asp-route-announcementID="@announcement.ID">Delete</a>
+            </li>
+            <hr />
+        }
+    </ul>
+}
+else
+{
+    <p>No announcements to display.</p>
+}
+
+<a class="btn btn-warning" asp-controller="Home" asp-action="Index">Back to Home</a>
+

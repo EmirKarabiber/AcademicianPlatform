@@ -23,3 +23,200 @@ body {
     border-radius:120px;
     display:inline;
 }
+
+/*//profiles css codes start*/
+
+#hesapAyarlari-title {
+    color: #8b1a1a;
+    font-size: 35px;
+    font-weight: bold;
+    margin-top: 40px;
+}
+
+
+/* Profilinizi düzenleyin yazýsýný kaldýrdým*/
+/*#profiliniziDuzenleyin-title {
+    color: #000;
+    font-size: 15px;
+    font-style: revert;
+}*/
+
+/* Örnek 2: Form içi etiketler */
+.form-floating label {
+    font-size: 14px;
+    color: #333;
+
+}
+
+/* Örnek 3: Form giriþ kutularý */
+.form-control {
+    border: 1px solid #ccc;
+    padding: 8px;
+
+}
+
+/* Örnek 4: Kaydet düðmesi */
+.btn-primary {
+    background-color: #191970;
+    color: white;
+    border: 1px solid #191970; 
+    outline: none;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+/* Örnek 5: Hata mesajlarý */
+.text-danger {
+    color: #FF0000;
+}
+
+
+
+
+#profile-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 30px; 
+    font-family: 'Lexend', sans-serif; 
+    font-weight: 500; 
+}
+#manageEmail-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 30px; 
+    font-family: 'Lexend', sans-serif; 
+    font-weight: 500; 
+}
+#setPassword-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 2px;
+    font-size: 30px; 
+    font-family: 'Lexend', sans-serif; 
+    font-weight: 500; 
+}
+#registeredLogins-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 2px;
+    font-size: 30px; 
+    font-family: 'Lexend', sans-serif; 
+    font-weight: 500; 
+}
+#twoFactor-title {
+    color: #BE1622;
+    padding-top: 10px;
+    padding-bottom: 2px;
+    font-size: 30px; 
+    font-family: 'Lexend', sans-serif; 
+    font-weight: 500; 
+}
+
+
+
+
+.form-floating input.form-control {
+    border-radius: 10px;
+}
+
+
+.form-floating {
+    margin-top: 10px;
+}
+
+
+
+
+/* Sidebar start */
+
+
+.nav-pills {
+    background-color: #fff;
+}
+    /* Dikdörtgenlerin yüksekliðini artýrma */
+    .nav-pills .nav-link {
+        padding: 15px 20px;
+    }
+/* Menü seçeneklerinin alt baþlýklarý (yazý) */
+.nav-pills .nav-item .nav-link {
+    color: #02a358;
+}
+
+/* Menü seçeneklerinin normal durum rengi */
+.nav-pills .nav-item .nav-link {
+    background-color: transparent; 
+    color: #4f4f4f; 
+    transition: background-color 0.3s, color 0.3s; 
+    font-size: large;
+    font-weight: 600;
+}
+
+    /* Menü seçeneklerinin týklanmýþ durum rengi */
+    .nav-pills .nav-item .nav-link.active {
+        background-color: transparent; 
+        color: black; 
+    }
+
+    
+    .nav-pills .nav-item .nav-link:hover {
+        background-color: rgba(200, 200, 200, 0.5); 
+        color: black; 
+    }
+    /* Seçilen menü seçeneðinin sol baþýný siyaha boyama */
+    .nav-pills .nav-item .nav-link.active {
+        position: relative;
+        background-color: white; 
+        border-radius: 10px; 
+    }
+
+        .nav-pills .nav-item .nav-link.active::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 9px; 
+            height: 100%;
+            background-color: #1c1c1c; 
+            border-top-left-radius: 10px; 
+            border-bottom-left-radius: 10px; 
+        }
+
+
+/* e-mail ayarlarýndaki buton*/
+#email-verification {
+    color: #363636;
+    border: none;
+    font-size: 14px;
+    padding-top:10px;
+    font-style:italic;
+}
+.text-info {
+    color: #000;
+    border: none; 
+    font-size: 14px; 
+    padding-top: 10px;
+}
+
+.hover-gray:hover {
+    background-color: #708090;
+    border-color: #708090;
+}
+/* Sidebar end */
+
+
+
+
+
+
+
+
+
+
+
+/*//profiles css codes end*/
+
+.card rounded border-none mb-3 {
+
+}
