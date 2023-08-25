@@ -17,9 +17,11 @@
 			var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
 			if (user != null)
 			{
-				<div class="container" style=" height:50% ">
-					<div class="card rounded border-none mb-3" id="">
-						<div class="card-header d-inline align-content-end card-header-with-shadow rounded-top" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1);">
+
+				<div class="container" style=" height:50%">
+					<div class="card border-secondary mb-3" id="card" style="border-radius: 20px;">
+
+						<div class="card-header d-inline align-content-end card-header-with-shadow rounded-top" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1); border-radius: 30px;">
 							<h5>
 								Duyuru
 							</h5>
@@ -59,11 +61,10 @@
 								</p>
 							<a class="btn btn-primary" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 						</div>
-
-
 					</div>
-
+					
 					<br />
+					
 				</div>
 			}
 		}
