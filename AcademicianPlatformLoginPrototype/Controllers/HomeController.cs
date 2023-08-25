@@ -42,7 +42,7 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 		}
 		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName)
 		{
-			var user = await _userStore.FindByNameAsync(senderName, CancellationToken.None);
+			var user = await _userManager.FindByNameAsync(senderName);
 			Announcement announcement = new Announcement()
 			{
 				AnnouncementTitle = announcementTitle,

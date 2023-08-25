@@ -5,46 +5,65 @@
 @inject IUserStore<ApplicationUser> UserStore
 @inject SignInManager<ApplicationUser> SignInManager
 @{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
-    @if (Model != null)
-    {
-        @foreach (var item in Model)
-        {
-        @if(item != null)
-        {
-            var senderID = item.AnnouncementSenderID;
-            var user = await UserStore.FindByIdAsync(senderID,CancellationToken.None);
-            if(user != null)
-            {
-                <div class="card">
-                    <h5 class="card-header d-inline align-content-end">
-                        Announcement
-                        <form action="/Home/DeleteAnnouncement" method="POST">
-                            <input type="hidden" name="announcementID" value="@item.ID" />
-                            <button type="submit" class="btn justify-content-end d-inline">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                                </svg>
-                            </button>
-                        </form>
-                    </h5>
-                    <div class="card-body">
-                        <h5 class="card-title"><img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic">@item.AnnouncementTitle</h5>
-                        <p class="card-text">@item.AnnouncementContent</p>
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-text">@user.FirstName @user.LastName</p>
-                        <p class="card-text">@user.PhoneNumber</p>
-                        <p class="card-text">@user.Email</p>
-                        <p class="card-text">@item.AnnouncementSentDate</p>
-                        <p class="card-text"><a href="@user.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.</p>
-                        <a class="btn btn-primary" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Get Details</a>
-                    </div>
-                </div>
-                <br />
-            }
-        }
-    }
-}
+@if (Model != null)
+{
+	@foreach (var item in Model)
+	{
+		@if (item != null)
+		{
+			var senderID = item.AnnouncementSenderID;
+			var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
+			if (user != null)
+			{
 
+				<div class="card rounded border-none mb-3" style="max-width: 100%; background-color: #f8f9fa; box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1); border-radius: 20px;">
+					<div class="card-header d-inline align-content-end card-header-with-shadow rounded-top" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1); border-top-left-radius: 20px; border-top-right-radius: 20px;">
+						<h5>
+							Duyuru
+						</h5>
+					</div>
+					<span style=" align-items: end; justify-content:end; text-align: end;">Gönderim tarihi: @item.AnnouncementSentDate</span>
+
+					<div class="card-body">
+						<div>
+							<h5 class="card-title">
+								<div class="conatiner">
+									<div class="row">
+										<div class="col-1 m-0">
+											<img src="/img/278115066_274999588167415_3465706660679823450_n.jpg" class="img-fluid display-inline profilePic" style="width: 200px;">
+
+										</div>
+										<div class="col-10" style="margin-top: 10px;">
+
+											<div class="row ml-0">
+
+												<span style="font-size: 22px; ">@user.FirstName @user.LastName</span>
+											</div>
+											<div class="row">
+												<span style="font-size: 13px;">Yazılım Mühendisliği</span>
+
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</h5>
+						</div>
+						<span style="font-size: 24px; color: #85150d;">@item.AnnouncementTitle</span>
+						<br />
+						<br />
+						<p class="card-text" style="">@item.AnnouncementContent</p>
+						<a class="btn btn-primary" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+					</div>
+
+
+				</div>
+
+				<br />
+
+			}
+		}
+	}
+}
