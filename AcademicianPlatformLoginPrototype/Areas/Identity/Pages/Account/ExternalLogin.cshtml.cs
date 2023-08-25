@@ -22,6 +22,9 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication;
 using System.Xml.Linq;
+using MessagePack;
+using Microsoft.CodeAnalysis.Options;
+using System.Reflection.PortableExecutable;
 
 namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
 {
@@ -61,6 +64,47 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
         public string ProviderDisplayName { get; set; }
 
         public string ReturnUrl { get; set; }
+        public List<string> Departments = new List<string>
+        {
+            "",
+            "Tıp",
+            "Diş Hekimliği",
+            "Eczacılık",
+            "Bilgisayar Mühendisliği",
+            "Endüstri Mühendisliği",
+            "Endüstriyel Tasarım Mühendisliği",
+            "Kimya Mühendisliği",
+            "Makine Mühendisliği",
+            "Mekatronik Mühendisliği",
+            "Mimarlık",
+            "Moleküler Biyoloji ve Genetik",
+            "Yazılım Mühendisliği",
+            "Beslenme ve Diyetetik",
+            "Ergoterapi",
+            "Fizyoterapi ve Rehabilitasyon",
+            "Hemşirelik",
+            "Odyoloji",
+            "İngiliz Dili ve Edebiyatı",
+            "İşletme",
+            "Psikoloji",
+            "İngilizce Mütercim-Tercümanlık",
+            "İngilizce Hazırlık Birimi",
+            "Ortak Yabancı Dil Dersleri Birimi",
+            "Anestezi",
+            "Ağız ve Diş Sağlığı",
+            "İlk ve Acil Yardım",
+            "Tıbbi Görüntüleme Teknikleri"
+        };
+        public List<string> Titles = new List<string>
+        {
+            "",
+            "Prof. Dr.",
+            "Doç. Dr.",
+            "Yrd. Doç. Dr.",
+            "Dr. Öğr. Üyesi",
+            "Öğr. Üyesi",
+            "Arş. Gör."
+        };
 
         [TempData]
         public string ErrorMessage { get; set; }
@@ -85,10 +129,10 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
             public string AboutMeText { get; set; }
             [Required]
             [Display(Name = "Departman")]
-            public string Department { get; set; }
+            public int Department { get; set; }
             [Required]
             [Display(Name = "Unvan")]
-            public string Title { get; set; }
+            public int Title { get; set; }
             public IFormFile CV { get; set; }
             [Display(Name = "Profil Resmi")]
             public IFormFile ProfilePhoto { get; set; }
@@ -194,8 +238,8 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.AboutMeText = Input.AboutMeText;
-                user.Department = Input.Department;
-                user.Title = Input.Title;
+                user.Department = Departments[Input.Department];
+                user.Title = Titles[Input.Title];
 
                 string cvName = Input.CV.FileName;
                 string cvPath = Path.Combine(_environment.WebRootPath, "cvs", cvName);
