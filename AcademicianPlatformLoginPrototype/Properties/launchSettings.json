@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "AcademicianPlatformLoginPrototype": {
+    "AcademicianPlatform": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

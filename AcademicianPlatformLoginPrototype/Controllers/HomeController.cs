@@ -1,13 +1,13 @@
-﻿using AcademicianPlatformLoginPrototype.Areas.Identity.Data;
-using AcademicianPlatformLoginPrototype.Data;
-using AcademicianPlatformLoginPrototype.Models;
+﻿using AcademicianPlatform.Areas.Identity.Data;
+using AcademicianPlatform.Data;
+using AcademicianPlatform.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
-namespace AcademicianPlatformLoginPrototype.Controllers
+namespace AcademicianPlatform.Controllers
 {
     public class HomeController : Controller
     {

@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using AcademicianPlatformLoginPrototype.Areas.Identity.Data;
+using AcademicianPlatform.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
+namespace AcademicianPlatform.Areas.Identity.Pages.Account
 {
     public class LoginWith2faModel : PageModel
     {

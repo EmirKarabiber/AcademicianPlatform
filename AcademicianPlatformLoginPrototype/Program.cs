@@ -1,9 +1,9 @@
-using AcademicianPlatformLoginPrototype.Areas.Identity.Data;
-using AcademicianPlatformLoginPrototype.Data;
+using AcademicianPlatform.Areas.Identity.Data;
+using AcademicianPlatform.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace AcademicianPlatformLoginPrototype
+namespace AcademicianPlatform
 {
 	public class Program
 	{

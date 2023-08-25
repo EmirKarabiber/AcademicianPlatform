@@ -1,4 +1,4 @@
-namespace AcademicianPlatformLoginPrototype.Models
+namespace AcademicianPlatform.Models
 {
 	public class ErrorViewModel
 	{

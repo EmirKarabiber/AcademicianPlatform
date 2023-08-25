@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace AcademicianPlatformLoginPrototype.Data.Migrations
+namespace AcademicianPlatform.Data.Migrations
 {
 	public partial class CreateIdentitySchema : Migration
 	{

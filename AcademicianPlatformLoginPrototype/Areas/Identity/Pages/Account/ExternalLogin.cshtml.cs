@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using AcademicianPlatformLoginPrototype.Areas.Identity.Data;
+using AcademicianPlatform.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +26,7 @@ using MessagePack;
 using Microsoft.CodeAnalysis.Options;
 using System.Reflection.PortableExecutable;
 
-namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
+namespace AcademicianPlatform.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel

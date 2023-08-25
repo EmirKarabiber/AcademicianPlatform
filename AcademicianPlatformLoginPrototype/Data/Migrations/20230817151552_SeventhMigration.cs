@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AcademicianPlatformLoginPrototype.Data.Migrations
+namespace AcademicianPlatform.Data.Migrations
 {
     public partial class SeventhMigration : Migration
     {

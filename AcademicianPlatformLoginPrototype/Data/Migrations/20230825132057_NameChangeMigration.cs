@@ -4,7 +4,7 @@
 
 namespace AcademicianPlatform.Data.Migrations
 {
-    public partial class OmerMigration_1 : Migration
+    public partial class NameChangeMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

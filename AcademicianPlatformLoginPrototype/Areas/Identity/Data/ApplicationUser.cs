@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Policy;
 
-namespace AcademicianPlatformLoginPrototype.Areas.Identity.Data
+namespace AcademicianPlatform.Areas.Identity.Data
 {
 	public class ApplicationUser : IdentityUser
 	{

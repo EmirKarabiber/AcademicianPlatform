@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using AcademicianPlatformLoginPrototype.Areas.Identity.Data;
+using AcademicianPlatform.Areas.Identity.Data;
 
-namespace AcademicianPlatformLoginPrototype.Data
+namespace AcademicianPlatform.Data
 {
     public class Seed
     {

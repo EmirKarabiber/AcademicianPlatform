@@ -1,9 +1,10 @@
-﻿using AcademicianPlatformLoginPrototype.Areas.Identity.Data;
-using AcademicianPlatformLoginPrototype.Models;
+﻿using AcademicianPlatform.Areas.Identity.Data;
+using AcademicianPlatform.Models;
+using AcademicianPlatform.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace AcademicianPlatformLoginPrototype.Data
+namespace AcademicianPlatform.Data
 {
 	public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 	{

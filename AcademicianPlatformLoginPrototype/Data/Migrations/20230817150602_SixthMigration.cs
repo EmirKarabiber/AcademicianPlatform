@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace AcademicianPlatformLoginPrototype.Data.Migrations
+namespace AcademicianPlatform.Data.Migrations
 {
     public partial class SixthMigration : Migration
     {
