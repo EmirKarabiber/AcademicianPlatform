@@ -1,17 +1,17 @@
 ﻿@page
 @model ExternalLoginModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Kayıt Ol";
 }
 
 <h1>@ViewData["Title"]</h1>
-<h2 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
+<br />
+<h4 id="external-login-title">İstanbul Sağlık ve Teknoloji Üniversitesi @Model.ProviderDisplayName Hesabınız ile Kayıt Olun</h4>
 <hr />
 
 <p id="external-login-description" class="text-info">
-    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
-    Please enter an email address for this site below and click the Register button to finish
-    logging in.
+    <strong>@Model.ProviderDisplayName</strong> hesabınız başarıyla doğrulanmıştır.
+    Lütfen bilgilerinizi doğru bir şekilde girerek Kayıt Ol butonuna tıklayınız.
 </p>
 
 <div class="row">
@@ -19,7 +19,7 @@
         <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="POST" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" />
+                <input asp-for="Input.Email" class="form-control" autocomplete="email" disabled/>
                 <label asp-for="Input.Email" class="form-label"></label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
@@ -63,7 +63,7 @@
                 <label asp-for="Input.ProfilePhoto" class="form-label"></label>
                 <span asp-validation-for="Input.ProfilePhoto" class="text-danger"></span>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Kayıt Ol</button>
         </form>
     </div>
 </div>
