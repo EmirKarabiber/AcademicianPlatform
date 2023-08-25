@@ -14,8 +14,7 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 		private readonly ILogger<HomeController> _logger;
 		private readonly ApplicationDbContext _context;
 		private readonly IUserStore<ApplicationUser> _userStore;
-
-		public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IUserStore<ApplicationUser> userStore)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IUserStore<ApplicationUser> userStore)
 		{
 			_logger = logger;
 			_context = context;
@@ -32,11 +31,13 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 		{
 			return View();
 		}
-		public IActionResult NewAnnouncement()
+        [Authorize]
+        public IActionResult NewAnnouncement()
 		{
 			return View();
 		}
-		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName)
+        [Authorize]
+        public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName)
 		{
 			var user = await _userStore.FindByNameAsync(senderName,CancellationToken.None);
 			Announcement announcement = new Announcement()
@@ -50,7 +51,8 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 			await _context.SaveChangesAsync();
 			return RedirectToAction("Index");
 		}
-		public async Task<IActionResult> DeleteAnnouncement(int announcementID)
+        [Authorize]
+        public async Task<IActionResult> DeleteAnnouncement(int announcementID)
 		{
 			var announcementToDelete = _context.Announcements.Find(announcementID);
 			if(announcementToDelete != null)

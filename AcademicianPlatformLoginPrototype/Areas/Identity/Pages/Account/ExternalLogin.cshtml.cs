@@ -84,11 +84,6 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
             public IFormFile CV { get; set; }
             public IFormFile ProfilePhoto { get; set; }
         }
-        public class WhitelistData
-        {
-            public List<string> whitelistedEmails { get; set;}
-        }
-        
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public async Task<IActionResult> OnPost(string provider, string returnUrl = null)
@@ -147,7 +142,16 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();
-            
+            //Getting email information coming back from Microsoft API to check in the whitelist to see if it exists in the list. If it is, then user is an academician, they may proceed. If it isn't, then we reject.
+            foreach (var claim in info.Principal.Claims)
+            {
+                if (claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(claim.Value);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
             if (info == null)
             {
                 ErrorMessage = "Error loading external login information during confirmation.";

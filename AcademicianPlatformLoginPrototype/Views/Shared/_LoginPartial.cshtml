@@ -7,7 +7,8 @@
 @if (User.Identity?.Name != null)
 {
     var currentUser = await UserManager.FindByNameAsync(User.Identity.Name);
-    @if (SignInManager.IsSignedIn(User))
+    await SignInManager.SignOutAsync();
+    @if (SignInManager.IsSignedIn(User) && currentUser != null)
     {
         <li class="nav-item">
             <img src="@currentUser.ProfilePhotoPath" class="profilePic"/><a  class="nav-link text-dark d-inline" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hoşgeldiniz @currentUser.FirstName @currentUser.LastName</a>
@@ -19,7 +20,7 @@
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button  type="submit" class="nav-link btn btn-link text-dark">Çıkış Yap</button>
         </form>
-        </li>
+            </li>
+        }
     }
-}
 </ul>
