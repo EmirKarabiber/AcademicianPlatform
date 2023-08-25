@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authentication;
+using System.Xml.Linq;
 
 namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
 {
@@ -52,6 +53,7 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _environment = webHostEnvironment;
         }
+        public bool isWhiteListed = false;
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -70,25 +72,27 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
             [Required]
+            [Display(Name = "Telefon Numarası")]
             public string PhoneNumber { get; set; }
             [Required]
+            [Display(Name = "İsim")]
             public string FirstName { get; set; }
             [Required]
+            [Display(Name = "Soyisim")]
             public string LastName { get; set; }
             [Required]
+            [Display(Name = "Hakkımda")]
             public string AboutMeText { get; set; }
             [Required]
+            [Display(Name = "Departman")]
             public string Department { get; set; }
             [Required]
+            [Display(Name = "Unvan")]
             public string Title { get; set; }
             public IFormFile CV { get; set; }
+            [Display(Name = "Profil Resmi")]
             public IFormFile ProfilePhoto { get; set; }
         }
-        public class WhitelistData
-        {
-            public List<string> whitelistedEmails { get; set;}
-        }
-        
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public async Task<IActionResult> OnPost(string provider, string returnUrl = null)
@@ -113,6 +117,30 @@ namespace AcademicianPlatformLoginPrototype.Areas.Identity.Pages.Account
             {
                 ErrorMessage = "Error loading external login information.";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+            }
+            string emailFromMicrosoft = string.Empty;
+            //Getting email information coming back from Microsoft API to check in the whitelist to see if it exists in the list. If it is, then user is an academician, they may proceed. If it isn't, then we reject.
+            foreach (var claim in info.Principal.Claims)
+            {
+                if (claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")
+                {
+                    emailFromMicrosoft = claim.Value;
+                }
+            }
+            //Let's read whitelist.json file.
+            string whiteListContent = System.IO.File.ReadAllText(Path.Combine(_environment.ContentRootPath, "External", "whitelist.json"));
+            var whiteList = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(whiteListContent);
+            List<string> emailsInWhiteList = whiteList["emails"];
+            foreach (var email in emailsInWhiteList)
+            {
+                if (email == emailFromMicrosoft)
+                {
+                    isWhiteListed = true;
+                }
+            }
+            if (isWhiteListed == false)
+            {
+                return BadRequest("I'm sorry but you are not whitelisted!");
             }
 
             // Sign in the user with this external login provider if the user already has a login.
