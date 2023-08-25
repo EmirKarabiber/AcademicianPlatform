@@ -36,10 +36,12 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 		{
 			return View();
 		}
+		[Authorize]
 		public IActionResult NewAnnouncement()
 		{
 			return View();
 		}
+		[Authorize]
 		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName)
 		{
 			var user = await _userManager.FindByNameAsync(senderName);
@@ -54,6 +56,7 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 			await _context.SaveChangesAsync();
 			return RedirectToAction("Index");
 		}
+		[Authorize]
 		public async Task<IActionResult> DeleteAnnouncement(int announcementID)
 		{
 			var announcementToDelete = _context.Announcements.Find(announcementID);
@@ -70,8 +73,6 @@ namespace AcademicianPlatformLoginPrototype.Controllers
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
-
-
 
 		public IActionResult AnnouncementDetails([FromRoute(Name = "ID")] int announcementID)
 		{
