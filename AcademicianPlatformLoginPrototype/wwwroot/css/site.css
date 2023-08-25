@@ -1,27 +1,27 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
 
-.profilePic{
-    width:5%;
-    height:auto;
-    border-radius:120px;
-    display:inline;
+.profilePic {
+    width: 5%;
+    height: auto;
+    border-radius: 120px;
+    display: inline;
 }
 
 /*//profiles css codes start*/
@@ -45,21 +45,19 @@ body {
 .form-floating label {
     font-size: 14px;
     color: #333;
-
 }
 
 /* Örnek 3: Form giriþ kutularý */
 .form-control {
     border: 1px solid #ccc;
     padding: 8px;
-
 }
 
 /* Örnek 4: Kaydet düðmesi */
 .btn-primary {
     background-color: #191970;
     color: white;
-    border: 1px solid #191970; 
+    border: 1px solid #191970;
     outline: none;
     border-radius: 10px;
     margin-top: 10px;
@@ -77,41 +75,45 @@ body {
     color: #BE1622;
     padding-top: 10px;
     padding-bottom: 10px;
-    font-size: 30px; 
-    font-family: 'Lexend', sans-serif; 
-    font-weight: 500; 
+    font-size: 30px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 500;
 }
+
 #manageEmail-title {
     color: #BE1622;
     padding-top: 10px;
     padding-bottom: 10px;
-    font-size: 30px; 
-    font-family: 'Lexend', sans-serif; 
-    font-weight: 500; 
+    font-size: 30px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 500;
 }
+
 #setPassword-title {
     color: #BE1622;
     padding-top: 10px;
     padding-bottom: 2px;
-    font-size: 30px; 
-    font-family: 'Lexend', sans-serif; 
-    font-weight: 500; 
+    font-size: 30px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 500;
 }
+
 #registeredLogins-title {
     color: #BE1622;
     padding-top: 10px;
     padding-bottom: 2px;
-    font-size: 30px; 
-    font-family: 'Lexend', sans-serif; 
-    font-weight: 500; 
+    font-size: 30px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 500;
 }
+
 #twoFactor-title {
     color: #BE1622;
     padding-top: 10px;
     padding-bottom: 2px;
-    font-size: 30px; 
-    font-family: 'Lexend', sans-serif; 
-    font-weight: 500; 
+    font-size: 30px;
+    font-family: 'Lexend', sans-serif;
+    font-weight: 500;
 }
 
 
@@ -139,49 +141,49 @@ body {
     .nav-pills .nav-link {
         padding: 15px 20px;
     }
-/* Menü seçeneklerinin alt baþlýklarý (yazý) */
-.nav-pills .nav-item .nav-link {
-    color: #02a358;
-}
-
-/* Menü seçeneklerinin normal durum rengi */
-.nav-pills .nav-item .nav-link {
-    background-color: transparent; 
-    color: #4f4f4f; 
-    transition: background-color 0.3s, color 0.3s; 
-    font-size: large;
-    font-weight: 600;
-}
-
-    /* Menü seçeneklerinin týklanmýþ durum rengi */
-    .nav-pills .nav-item .nav-link.active {
-        background-color: transparent; 
-        color: black; 
+    /* Menü seçeneklerinin alt baþlýklarý (yazý) */
+    .nav-pills .nav-item .nav-link {
+        color: #02a358;
     }
 
-    
-    .nav-pills .nav-item .nav-link:hover {
-        background-color: rgba(200, 200, 200, 0.5); 
-        color: black; 
-    }
-    /* Seçilen menü seçeneðinin sol baþýný siyaha boyama */
-    .nav-pills .nav-item .nav-link.active {
-        position: relative;
-        background-color: white; 
-        border-radius: 10px; 
+    /* Menü seçeneklerinin normal durum rengi */
+    .nav-pills .nav-item .nav-link {
+        background-color: transparent;
+        color: #4f4f4f;
+        transition: background-color 0.3s, color 0.3s;
+        font-size: large;
+        font-weight: 600;
     }
 
-        .nav-pills .nav-item .nav-link.active::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 9px; 
-            height: 100%;
-            background-color: #1c1c1c; 
-            border-top-left-radius: 10px; 
-            border-bottom-left-radius: 10px; 
+        /* Menü seçeneklerinin týklanmýþ durum rengi */
+        .nav-pills .nav-item .nav-link.active {
+            background-color: transparent;
+            color: black;
         }
+
+
+        .nav-pills .nav-item .nav-link:hover {
+            background-color: rgba(200, 200, 200, 0.5);
+            color: black;
+        }
+        /* Seçilen menü seçeneðinin sol baþýný siyaha boyama */
+        .nav-pills .nav-item .nav-link.active {
+            position: relative;
+            background-color: white;
+            border-radius: 10px;
+        }
+
+            .nav-pills .nav-item .nav-link.active::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 9px;
+                height: 100%;
+                background-color: #1c1c1c;
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+            }
 
 
 /* e-mail ayarlarýndaki buton*/
@@ -189,13 +191,14 @@ body {
     color: #363636;
     border: none;
     font-size: 14px;
-    padding-top:10px;
-    font-style:italic;
+    padding-top: 10px;
+    font-style: italic;
 }
+
 .text-info {
     color: #000;
-    border: none; 
-    font-size: 14px; 
+    border: none;
+    font-size: 14px;
     padding-top: 10px;
 }
 
@@ -213,10 +216,16 @@ body {
     max-width: 100%;
     background-color: #f8f9fa;
     box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1);
-   
 }
 
-.card-header d-inline align-content-end card-header-with-shadow rounded-top  {
+.card-header d-inline align-content-end card-header-with-shadow rounded-top {
     box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1);
-  
 }
+
+.card-text {
+    width: 600px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+

@@ -17,8 +17,8 @@
 			var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
 			if (user != null)
 			{
-				<div class="container">
-					<div class="card rounded border-none mb-3">
+				<div class="container" style=" height:50% ">
+					<div class="card rounded border-none mb-3" id="">
 						<div class="card-header d-inline align-content-end card-header-with-shadow rounded-top" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1);">
 							<h5>
 								Duyuru
@@ -54,7 +54,9 @@
 							<span style="font-size: 24px; color: #85150d;">@item.AnnouncementTitle</span>
 							<br />
 							<br />
-							<p class="card-text" style="">@item.AnnouncementContent</p>
+							<p class="card-text" style="">
+								@item.AnnouncementContent
+								</p>
 							<a class="btn btn-primary" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 						</div>
 
