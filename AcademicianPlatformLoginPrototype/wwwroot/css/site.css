@@ -212,20 +212,20 @@ body {
 
 /*//profiles css codes end*/
 
-.card-text {
+#card-text {
     width: 600px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-.card {
+#card {
     position: relative;
     transition: all 0.3s ease-in-out;
 }
 
-    .card::before,
-    .card::after {
+    #card::before,
+    #card::after {
         position: absolute;
         content: "Duyurunun Detaylarina Buraya Tiklayarak Ulasabilirsiniz";
         width: 100%;
@@ -240,15 +240,15 @@ body {
         z-index: 100;
     }
 
-    .card:hover::before,
-    .card:hover::after { 
+    #card:hover::before,
+    #card:hover::after { 
         opacity: 1;
         filter: none;
         background-color: rgba(255, 255, 255, 0.8);
         color: #000;
     }
 
-    .card .content {
+    #card .content {
         filter: none;
         opacity: 1;
     }
@@ -264,7 +264,9 @@ body {
     margin-top: 50px;
 }
 
-.card:hover #details {
-    opacity: 1; 
+#card:hover #details {
+    opacity: 1;
     filter: none;
+    z-index: 10000;
+    pointer-events: auto;
 }
