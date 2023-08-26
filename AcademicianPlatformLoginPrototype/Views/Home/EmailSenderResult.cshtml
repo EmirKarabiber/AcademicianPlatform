@@ -1,0 +1,11 @@
+﻿@model EmailViewModel
+@{
+    ViewData["Title"] = "EmailSenderResult";
+}
+
+<h1 class="display-4 text-center">Mailiniz Başarıyla gönderildi</h1>
+<p><strong>Gönderen : </strong>@Model.SenderEmail</p>
+<p><strong>Alıcı : </strong>@Model.RecipientEmail</p>
+<p><strong>Başlık : </strong>@Model.Subject</p>
+<p><strong>Açıklama : </strong>@Model.Body</p>
+

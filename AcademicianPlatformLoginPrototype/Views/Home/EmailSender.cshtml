@@ -9,11 +9,13 @@
 <form asp-controller="Home" asp-action="SendEmail" method="post">
     <div class="form-group">
         <label asp-for="SenderEmail">Gönderen E-posta</label>
-        <input asp-for="SenderEmail" type="email" class="form-control" id="SenderEmail" name="SenderEmail" required disabled>
+        <p>@Model.SenderEmail</p>
+        <input asp-for="SenderEmail" type="hidden" class="form-control" id="SenderEmail" name="SenderEmail" required>
     </div>
     <div class="form-group">
         <label asp-for="RecipientEmail">Alıcı E-Posta</label>
-        <input asp-for="RecipientEmail" type="email" class="form-control" id="RecipientEmail" name="RecipientEmail" required disabled>
+        <p>@Model.RecipientEmail</p>
+        <input asp-for="RecipientEmail" type="hidden" class="form-control" id="RecipientEmail" name="RecipientEmail" required>
     </div>
     <div class="form-group">
         <label asp-for="Subject">Başlık</label>
