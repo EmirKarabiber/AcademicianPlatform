@@ -13,6 +13,7 @@
 @{
     var senderID = Model.AnnouncementSenderID;
     var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
+    var AnnouncomentSenderID = Model.AnnouncementSenderID;
 }
 
 <h2 class="display-4 text-center">Announcement Details</h2>
@@ -40,11 +41,17 @@
 
         <p class="card-text"><a href="@user.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına
             ulaşabilirsiniz.</p>
-        <a class="btn btn-primary" onclick="sendEmail()">Mail Gönder</a>
+        <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID">Send Email</a>
+
         <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteAnnouncement"
             asp-route-announcementID="@Model.ID">Delete</a>
     </div>
 </div>
+
+@*  Eski sistem kodları (yedek olarak tutuluyor)
+
+<!--<a class="btn btn-primary" onclick="sendEmail()">Mail Gönder</a>-->
+        <!--  eski sistemin kodları  -->
 <script>
     function sendEmail() {
         var recipientEmail = "@user.Email"; // Kullanıcının mail adresini alın
@@ -55,13 +62,4 @@
         
         window.location.href = mailtoLink;
     }
-</script>
-
-@* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora harum, eos alias dolor aperiam molestias ipsa.
-Eos,
-reprehenderit? Quos a ipsum minima earum eos reprehenderit doloribus tempore modi optio possimus id nam pariatur
-dolores ratione quibusdam vitae labore voluptates, in quod incidunt reiciendis odit quis similique. Molestias illo
-explicabo, maxime eaque atque necessitatibus reprehenderit mollitia dolores dolor assumenda excepturi obcaecati vero
-repellendus rerum beatae enim. Architecto dolorum nobis iure cum illum asperiores iste placeat eligendi recusandae,
-veniam harum beatae cumque in dolores delectus quidem molestias reprehenderit. Nulla perferendis, rerum velit
-mollitia et quos amet corrupti voluptates. Repellat ipsam assumenda quos?</p> *@
+</script>*@

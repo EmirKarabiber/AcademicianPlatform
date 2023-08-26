@@ -5,7 +5,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MimeKit;
 using System.Diagnostics;
+using System.Net.Mail;
+using MailKit.Security;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 
 namespace AcademicianPlatform.Controllers
 {
@@ -88,6 +93,7 @@ namespace AcademicianPlatform.Controllers
             ViewBag.MailtoLink = mailtoLink;
 
 
+
             var announcement = _context.Announcements.FirstOrDefault(a => a.ID == announcementID);  //duyuruları başka ekranda açma
             if (announcement == null)
             {
@@ -96,6 +102,8 @@ namespace AcademicianPlatform.Controllers
 
             return View(announcement);
         }
+
+
         [Authorize]
 
         public async Task<IActionResult> MyAnnouncoments()
@@ -114,6 +122,74 @@ namespace AcademicianPlatform.Controllers
             return View(userAnnouncements);
         }
         //----
+
+
+
+        [Authorize]
+        public async Task<IActionResult> EmailSender([FromRoute(Name = "ID")] int announcementID)
+        {
+            // Mevcut kullanıcıyı bul
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            // Gönderici olarak kullanıcının e-posta adresini al
+            string senderEmail = user.Email;
+
+            // Belirtilen duyuruyu veritabanından bul
+            Announcement announcement = _context.Announcements.FirstOrDefault(a => a.ID == announcementID);
+            if (announcement == null)
+            {
+                return NotFound(); // Duyuru bulunamazsa 404 (Not Found) döndür
+            }
+
+            // Duyurunun sahibini veritabanından bul
+            var announcementOwner = await _userManager.FindByIdAsync(announcement.AnnouncementSenderID);
+
+            // E-posta gönderimi için kullanılacak modeli oluştur
+            EmailViewModel model = new EmailViewModel
+            {
+                SenderEmail = senderEmail, // Gönderici e-posta adresi
+                Subject = announcement.AnnouncementTitle.ToString() + " Hk.", // E-posta konusu
+                RecipientEmail = announcementOwner.Email, // Alıcı e-posta adresi (duyuru sahibi)
+                Body = null // E-posta içeriği (varsayılan olarak boş bırakıldı)
+            };
+
+            // Oluşturulan modeli view'e taşı ve e-posta gönderim sayfasını görüntüle
+            return View(model);
+        }
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> SendEmail(EmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var message = new MimeMessage();
+                //message.From.Add(new MailboxAddress("Gönderen", model.SenderEmail));
+                message.From.Add(new MailboxAddress("Gönderen", model.SenderEmail));
+                message.To.Add(new MailboxAddress("Alıcı", model.RecipientEmail));
+                message.Subject = model.Subject;
+
+                var bodyBuilder = new BodyBuilder();
+                bodyBuilder.HtmlBody = model.Body;
+                message.Body = bodyBuilder.ToMessageBody();
+
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                    await client.AuthenticateAsync("","");
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
+
+                TempData["Message"] = "E-posta başarıyla gönderildi!";
+                return RedirectToAction("Index");
+            }
+
+            // Model geçerli değilse formu tekrar göster
+            return View("EmailSender", model);
+        }
 
     }
 }
