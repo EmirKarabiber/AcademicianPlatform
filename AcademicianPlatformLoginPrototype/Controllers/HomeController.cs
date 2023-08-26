@@ -150,7 +150,8 @@ namespace AcademicianPlatform.Controllers
                 SenderEmail = senderEmail, // Gönderici e-posta adresi
                 Subject = announcement.AnnouncementTitle.ToString() + " Hk.", // E-posta konusu
                 RecipientEmail = announcementOwner.Email, // Alıcı e-posta adresi (duyuru sahibi)
-                Body = null // E-posta içeriği (varsayılan olarak boş bırakıldı)
+                Body = null, // E-posta içeriği (varsayılan olarak boş bırakıldı)
+                AnnouncementIDForEmail = announcementID
             };
 
             // Oluşturulan modeli view'e taşı ve e-posta gönderim sayfasını görüntüle
@@ -165,6 +166,7 @@ namespace AcademicianPlatform.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 // Oluşturulan email mesajı
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("Gönderen : " + model.SenderEmail, model.SenderEmail));
@@ -193,13 +195,17 @@ namespace AcademicianPlatform.Controllers
                 }
 
                 TempData["Message"] = "E-posta başarıyla gönderildi!";
-                return RedirectToAction("Index");
+                return RedirectToAction("EmailSenderResult",model);
             }
 
             // Model geçerli değilse formu tekrar göster
             return View("EmailSender", model);
         }
 
+        public IActionResult EmailSenderResult(EmailViewModel model)
+        {
+            return View(model);
+        }
 
     }
 }
