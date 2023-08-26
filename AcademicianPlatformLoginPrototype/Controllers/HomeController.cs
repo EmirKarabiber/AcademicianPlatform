@@ -161,25 +161,34 @@ namespace AcademicianPlatform.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> SendEmail(EmailViewModel model)
+        public async Task<IActionResult> SendEmail([FromForm] EmailViewModel model)
         {
             if (ModelState.IsValid)
             {
+                // Oluşturulan email mesajı
                 var message = new MimeMessage();
-                //message.From.Add(new MailboxAddress("Gönderen", model.SenderEmail));
-                message.From.Add(new MailboxAddress("Gönderen", model.SenderEmail));
-                message.To.Add(new MailboxAddress("Alıcı", model.RecipientEmail));
+                message.From.Add(new MailboxAddress("Gönderen : " + model.SenderEmail, model.SenderEmail));
+                message.To.Add(new MailboxAddress("Alıcı : " + model.RecipientEmail, model.RecipientEmail));
                 message.Subject = model.Subject;
 
                 var bodyBuilder = new BodyBuilder();
                 bodyBuilder.HtmlBody = model.Body;
                 message.Body = bodyBuilder.ToMessageBody();
 
+                // E-posta gönderme işlemi için SMTP istemcisini kullanma
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
+                    // SMTP sunucusuna bağlanma
                     await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync("","");
+            
+                    // Kimlik doğrulama
+                    await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
+                    //yeni bir mail hesabı açtım , oradan gerekli şifreyi aldım lakin anlık olarak gereksiz mailler penceresine yolluyor maili
+            
+                    // E-postayı gönderme
                     await client.SendAsync(message);
+            
+                    // SMTP sunucusundan çıkma
                     await client.DisconnectAsync(true);
                 }
 
@@ -190,6 +199,7 @@ namespace AcademicianPlatform.Controllers
             // Model geçerli değilse formu tekrar göster
             return View("EmailSender", model);
         }
+
 
     }
 }
