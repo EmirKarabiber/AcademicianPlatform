@@ -253,7 +253,7 @@ body {
         opacity: 1;
     }
 
-.btn-primary { 
+.details { 
     transform: translate(-50%, -195%);
     position: absolute;
     left: 50%;
@@ -264,7 +264,7 @@ body {
     margin-top: 50px;
 }
 
-.card:hover .btn-primary {
+.card:hover .details {
     opacity: 1; 
     filter: none;
 }
