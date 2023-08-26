@@ -3,9 +3,13 @@
     ViewData["Title"] = "EmailSenderResult";
 }
 
-<h1 class="display-4 text-center">Mailiniz Başarıyla gönderildi</h1>
+<h1 class="display-5 text-center">Mailiniz Başarıyla gönderildi</h1>
 <p><strong>Gönderen : </strong>@Model.SenderEmail</p>
 <p><strong>Alıcı : </strong>@Model.RecipientEmail</p>
 <p><strong>Başlık : </strong>@Model.Subject</p>
 <p><strong>Açıklama : </strong>@Model.Body</p>
 
+<div class="btn-group">
+<a class="btn btn-primary" asp-action="Index" asp-controller="Home">Ana Sayfaya dön</a>
+<a class="btn btn-warning" asp-action="AnnouncementDetails" asp-route-id="@Model.AnnouncementIDForEmail" asp-controller="Home">İlgili Duyuruya git</a>
+</div>
