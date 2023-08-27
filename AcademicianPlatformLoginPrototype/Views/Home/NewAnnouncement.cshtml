@@ -1,40 +1,55 @@
-﻿@using AcademicianPlatform.Areas.Identity.Data;
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.tiny.cloud/1/s1xxsaoeo1yfo9x90not7xl265w8u69sjqdh0xtesl04mwxs/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
-<div class="container">
-    <h2>Create New Announcement</h2>
-    <form method="post" action="/Home/PostNewAnnouncement">
-        <div class="form-group">
-            <label for="AnnouncementTitle">Announcement Title</label>
-            <input type="text" class="form-control" id="AnnouncementTitle" name="announcementTitle" required>
-        </div>
-        <div class="form-group">
-            <label for="AnnouncementContent">Announcement Content</label>
-            <textarea class="form-control" id="AnnouncementContent" name="announcementContent" rows="4" required></textarea>
-        </div>
-        <input type="hidden" name="senderName" id="senderName" value="@User.Identity.Name" />
-        <div class="form-group">
-            <label for="AnnouncementFaculty">AnnouncementFaculty</label>
-            <select class="form-control" id="AnnouncementFaculty" name="announcementFaculty" required>
-                <option value="Tüm Fakülteler">Tüm Fakülteler</option>
-                <option value="Tıp">Tıp Fakültesi</option>
-                <option value="Diş Hekimliği">Diş Hekimliği Fakültesi</option>
-                <option value="Eczacılık">Eczacılık Fakültesi</option>
-                <option value="Mühendislik ve Doğa Bilimleri">Mühendislik ve Doğa Bilimleri Fakültesi</option>
-                <option value="Sağlık Bilimleri">Sağlık Bilimleri Fakültesi</option>
-                <option value="İktisadi, İdari ve Sosyal Bilimler">İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Gönder</button>
-
-    </form>
-</div>
-
+</head>
+<body>
+    <div class="page-center">
+        <div class="container">
+            <div class="centered-text">
+                <h2 class="new">Yeni Duyuru Oluştur</h2>
+            </div>
             
+            <form method="post" action="/Home/PostNewAnnouncement">
+                <div class="form-group">
+                    <label for="AnnouncementTitle">Başlık</label>
+                    <input type="text" class="form-control" id="AnnouncementTitle" name="announcementTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="AnnouncementContent">Duyuru İçeriği</label>
+                    <textarea class="form-control" id="AnnouncementContent" name="announcementContent" rows="10" cols="18" required></textarea>
+                </div>
+                <script>
+                    tinymce.init({
+                        selector: '#AnnouncementContent',
+                        plugins: 'advtemplate media link linkchecker',
+                        toolbar: "inserttemplate addtemplate link mycustomicon media",  
+                        contextmenu: 'advtemplate',
+                        
+                        
+                    });
+                </script>
+                <div class="form-group">
+                    <label for="AnnouncementFaculty">AnnouncementFaculty</label>
+                    <select class="form-control" id="AnnouncementFaculty" name="announcementFaculty" required>
+                        <option value="Tüm Fakülteler">Tüm Fakülteler</option>
+                        <option value="Tıp">Tıp Fakültesi</option>
+                        <option value="Diş Hekimliği">Diş Hekimliği Fakültesi</option>
+                        <option value="Eczacılık">Eczacılık Fakültesi</option>
+                        <option value="Mühendislik ve Doğa Bilimleri">Mühendislik ve Doğa Bilimleri Fakültesi</option>
+                        <option value="Sağlık Bilimleri">Sağlık Bilimleri Fakültesi</option>
+                        <option value="İktisadi, İdari ve Sosyal Bilimler">İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
+                    </select>
+                </div>
 
+                <input type="hidden" name="senderName" id="senderName" value="@User.Identity.Name" />
+                <button type="submit" class="btn custom-button">Oluştur</button>
+            </form>
+        </div>
 
+    </div>
+</body>
+</html>
 
 
