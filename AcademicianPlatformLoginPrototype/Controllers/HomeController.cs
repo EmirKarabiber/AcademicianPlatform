@@ -207,5 +207,27 @@ namespace AcademicianPlatform.Controllers
             return View(model);
         }
 
-    }
+		// Bu metot, belirli bir fakülte için duyuruları listeleyen bir sayfanın işlemesini sağlar.
+		// İstenilen fakülte adı "announcementFaculty" parametresi ile alınır.
+		public IActionResult IndexFaculty([FromQuery] string announcementFaculty)
+		{
+			// Eğer fakülte adı geçerli bir değere sahipse işlem yapılır.
+			if (!string.IsNullOrEmpty(announcementFaculty))
+			{
+				// Veritabanından belirtilen fakültede yapılan duyuruları çeker.
+				var announcements = _context.Announcements
+					.Where(a => a.AnnouncementFaculty == announcementFaculty)
+					.OrderByDescending(a => a.ID)
+					.ToList();
+
+				// Duyuruları içeren bir görünümü döndürür.
+				return View("Index", announcements);
+			}
+
+			// Eğer fakülte adı geçerli değilse, genel "Index" sayfasına yönlendirme yapılır.
+			return RedirectToAction("Index");
+		}
+
+
+	}
 }
