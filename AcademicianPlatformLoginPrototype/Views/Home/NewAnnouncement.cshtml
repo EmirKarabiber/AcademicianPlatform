@@ -17,6 +17,18 @@
                     <input type="text" class="form-control" id="AnnouncementTitle" name="announcementTitle" required>
                 </div>
                 <div class="form-group">
+                    <label for="AnnouncementFaculty">İlgili Fakülte</label>
+                    <select class="form-control" id="AnnouncementFaculty" name="announcementFaculty" required>
+                        <option value="Tüm Fakülteler">Tüm Fakülteler</option>
+                        <option value="Tıp">Tıp Fakültesi</option>
+                        <option value="Diş Hekimliği">Diş Hekimliği Fakültesi</option>
+                        <option value="Eczacılık">Eczacılık Fakültesi</option>
+                        <option value="Mühendislik ve Doğa Bilimleri">Mühendislik ve Doğa Bilimleri Fakültesi</option>
+                        <option value="Sağlık Bilimleri">Sağlık Bilimleri Fakültesi</option>
+                        <option value="İktisadi, İdari ve Sosyal Bilimler">İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="AnnouncementContent">Duyuru İçeriği</label>
                     <textarea class="form-control" id="AnnouncementContent" name="announcementContent" rows="10" cols="18" required></textarea>
                 </div>
@@ -30,18 +42,7 @@
                         
                     });
                 </script>
-                <div class="form-group">
-                    <label for="AnnouncementFaculty">Fakülte</label>
-                    <select class="form-control" id="AnnouncementFaculty" name="announcementFaculty" required>
-                        <option value="Tüm Fakülteler">Tüm Fakülteler</option>
-                        <option value="Tıp">Tıp Fakültesi</option>
-                        <option value="Diş Hekimliği">Diş Hekimliği Fakültesi</option>
-                        <option value="Eczacılık">Eczacılık Fakültesi</option>
-                        <option value="Mühendislik ve Doğa Bilimleri">Mühendislik ve Doğa Bilimleri Fakültesi</option>
-                        <option value="Sağlık Bilimleri">Sağlık Bilimleri Fakültesi</option>
-                        <option value="İktisadi, İdari ve Sosyal Bilimler">İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
-                    </select>
-                </div>
+                
 
                 <input type="hidden" name="senderName" id="senderName" value="@User.Identity.Name" />
                 <button type="submit" class="btn custom-button">Oluştur</button>
