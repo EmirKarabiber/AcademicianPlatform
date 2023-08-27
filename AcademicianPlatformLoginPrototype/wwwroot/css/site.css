@@ -227,7 +227,7 @@ body {
     #card::before,
     #card::after {
         position: absolute;
-        content: "Duyurunun Detaylarina Buraya Tiklayarak Ulasabilirsiniz";
+        content: "";
         width: 100%;
         height: 100%;
         display: flex;
@@ -238,6 +238,7 @@ body {
         transition: all 0.5s;
         opacity: 0;
         z-index: 100;
+        
     }
 
     #card:hover::before,
@@ -253,15 +254,33 @@ body {
         opacity: 1;
     }
 
-#details { 
+#details {
     transform: translate(-50%, -195%);
     position: absolute;
     left: 50%;
-    
     bottom: 0;
     opacity: 0;
     transition: 0.3s ease-out;
-    margin-top: 50px;
+    margin-top: 60px;
+    border: 0px solid;
+    outline: 2px solid;
+    color: black;
+    outline-color: black;
+    outline-offset: 0px;
+    text-shadow: none;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 2.5rem;
+    max-width: 160px;
+    width: 100%;
+    letter-spacing: 0.3rem;
+    font-weight: 600;
+    position: relative;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    transition: all 550ms cubic-bezier( .36,.63,.5,.73 );
 }
 
 #card:hover #details {
@@ -283,7 +302,7 @@ body {
 }
 
 /* Ýçeriði içeren alan */
-.container {
+#container {
     width: 80%;
     background-color: #f7f7f7;
     border-radius: 10px;
@@ -321,3 +340,14 @@ body {
 .custom-button:hover {
     background-color: darkred; 
 }
+
+#details {
+   
+}
+
+    #details:hover {
+        border: 2px solid var(--accent);
+        outline-color: rgba(255, 255, 255, 0);
+        outline-offset: 15px;
+        color: var(--accent);
+    }

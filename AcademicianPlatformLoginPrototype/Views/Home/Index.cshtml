@@ -26,13 +26,13 @@
 								Duyuru (@item.AnnouncementFaculty)
 							</h5>
 						</div>
-						<span style=" align-items: end; justify-content:end; text-align: end;">Gönderim tarihi: @item.AnnouncementSentDate</span>
+						
 
 						<div class="card-body">
-
+							<div></div>
 							<div>
 								<h5 class="card-title">
-									<div class="conatiner">
+									<div class="conatainer">
 										<div class="row">
 											<div class="col-lg-1 col-sm-2">
 												<img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic" style="width: 200px;">
@@ -42,7 +42,7 @@
 
 												<div class="row ml-0">
 
-													<span style="font-size: 22px; ">@user.Title @user.FirstName @user.LastName</span>
+													<span style="font-size: 22px; ">@user.Title @user.FirstName @user.LastName <span style=" float: right; font-size: 12px;">Gönderim tarihi: @item.AnnouncementSentDate</span></span>
 												</div>
 												<div class="row">
 													<span style="font-size: 13px;">@user.Department</span>
@@ -55,15 +55,14 @@
 								</h5>
 							</div>
 							<span style="font-size: 24px; color: #85150d;">@item.AnnouncementTitle</span>
-							<br />
-							<br />
+						
 							<p class="card-text" id="card-text" style="">
 								@item.AnnouncementContent
 								</p>
-							<a class="btn btn-primary" id ="details" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+							<a id ="details" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 						</div>
 					</div>
-					<div></div>
+					
 					<br />
 					
 				</div>
