@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Net.Mail;
 using MailKit.Security;
 using MailKit.Net.Smtp;
-using MailKit.Security;
 
 namespace AcademicianPlatform.Controllers
 {
