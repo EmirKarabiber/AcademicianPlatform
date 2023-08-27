@@ -11,7 +11,6 @@
     {
         <li class="nav-item">
             <img src="@currentUser.ProfilePhotoPath" class="profilePic"/><a  class="nav-link text-dark d-inline" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hoşgeldiniz @currentUser.FirstName @currentUser.LastName</a>
-             <a class="btn btn-secondary" asp-area="" asp-controller="Home" asp-action="MyAnnouncoments">Duyurularımı görüntüle</a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark nav-text text-decoration-none" asp-area="" asp-controller="Home" asp-action="NewAnnouncement">Yeni Duyuru</a>

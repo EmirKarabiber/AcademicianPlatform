@@ -1,7 +1,13 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$('.edit-btn').click(function () {
+    var announcementId = $(this).data('id');
+    var announcementTitle = $(this).data('title');
+    var announcementContent = $(this).data('content');
+    $('#title').val(announcementTitle);
+    $('#content').val(announcementContent);
+    $('#editModal').modal('show');
+});
 
-// Write your JavaScript code.
-
-
+$('#editForm').submit(function (e) {
+    $('#editModal').modal('hide');
+});
 

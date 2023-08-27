@@ -1,0 +1,62 @@
+@page
+@model MyAnnouncementsModel
+@{
+    ViewData["Title"] = "Duyurularým";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
+
+}
+
+<h4 id="profile-title">@ViewData["Title"]</h4>
+@{
+    Console.WriteLine(Model.Announcements.Count);
+}
+<partial name="_StatusMessage" for="StatusMessage" />
+<hr />
+@if (Model.Announcements.Count > 0)
+{
+    <ul>
+        @foreach (var announcement in Model.Announcements)
+        {
+            <li>
+                <h3>@announcement.AnnouncementTitle</h3>
+                <p>@announcement.AnnouncementContent</p>
+                <p><strong>Tarih: </strong>@announcement.AnnouncementSentDate.ToString("dd-MM-yyyy HH:mm:ss")</p>
+                <form method="post">
+                    <input type="hidden" name="announcementId" value="@announcement.ID" />
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                    <br />
+                    <button type="button" class="btn btn-primary edit-btn" data-id="@announcement.ID" data-title="@announcement.AnnouncementTitle" data-content="@announcement.AnnouncementContent">Düzenle</button>
+                </form>
+                <div class="modal fade shadow-lg" id="editModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <form asp-page-handler="Edit" method="post" id="editForm">
+                                <div class="form-group text-center">
+                                    <h2>Düzenle: @announcement.AnnouncementTitle</h2>
+                                </div>
+                                <div class="form-group">
+                                    <label for="title">Baþlýk</label>
+                                    <input type="text" class="form-control" id="title" name="AnnouncementTitle"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="content">Ýçerik</label>
+                                    <textarea class="form-control" id="content" name="AnnouncementContent" rows="4"></textarea>
+                                </div>
+                                <input name ="AnnouncementId" type="hidden" value="@announcement.ID">
+                                <button type="submit" class="btn btn-primary text-center">Kaydet</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+    </div>
+            </li>
+        <hr />
+        }
+    </ul>
+}
+else
+{
+    <p>Hiç duyurunuz bulunmamaktadýr. <a class="text-dark" asp-area="" asp-controller="Home" asp-action="NewAnnouncement">Yeni duyuru</a> oluþturmak ister misiniz?</p>
+}
