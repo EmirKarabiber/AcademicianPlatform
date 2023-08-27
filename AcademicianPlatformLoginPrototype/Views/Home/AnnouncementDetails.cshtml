@@ -19,6 +19,7 @@
 <h2 class="display-4 text-center">Announcement Details</h2>
 <p><strong>Title:</strong> @Model.AnnouncementTitle</p>
 <p><strong>Content:</strong> @Model.AnnouncementContent</p>
+<p><strong>Faculty:</strong> @Model.AnnouncementFaculty Fakültesi</p>
 <p><strong>Sent Date:</strong> @Model.AnnouncementSentDate</p>
 <a class="btn btn-warning" asp-action="Index">Back to Main Menu</a>
 
@@ -29,6 +30,7 @@
     <div class="card-header">
         <h4> @user.FirstName @user.LastName</h4>
         <p class="card-text">@Model.AnnouncementSentDate</p>
+        <h6><strong>Faculty:</strong> @Model.AnnouncementFaculty Fakültesi</h6>
     </div>
     <div class="card-body">
         <h4 class="card-title">@Model.AnnouncementTitle</h4>

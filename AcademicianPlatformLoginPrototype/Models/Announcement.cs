@@ -17,5 +17,7 @@ namespace AcademicianPlatform.Models
         public string AnnouncementSenderID { get; set; }
         [Required]
         public DateTime AnnouncementSentDate { get; set; }
+        
+        public string? AnnouncementFaculty { get; set; }
     }
 }

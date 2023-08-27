@@ -44,7 +44,7 @@ namespace AcademicianPlatform.Controllers
 		{
 			return View();
 		}
-		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName)
+		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName , string announcementFaculty)
 		{
 			var user = await _userManager.FindByNameAsync(senderName);
 			Announcement announcement = new Announcement()
@@ -52,8 +52,9 @@ namespace AcademicianPlatform.Controllers
 				AnnouncementTitle = announcementTitle,
 				AnnouncementContent = announcementContent,
 				AnnouncementSentDate = DateTime.Now,
-				AnnouncementSenderID = user.Id
-			};
+				AnnouncementSenderID = user.Id,
+                AnnouncementFaculty = announcementFaculty
+            };
 			await _context.Announcements.AddAsync(announcement);
 			await _context.SaveChangesAsync();
 			return RedirectToAction("Index");

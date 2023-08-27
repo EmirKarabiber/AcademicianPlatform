@@ -15,6 +15,26 @@
             <textarea class="form-control" id="AnnouncementContent" name="announcementContent" rows="4" required></textarea>
         </div>
         <input type="hidden" name="senderName" id="senderName" value="@User.Identity.Name" />
+        <div class="form-group">
+            <label for="AnnouncementFaculty">AnnouncementFaculty</label>
+            <select class="form-control" id="AnnouncementFaculty" name="announcementFaculty" required>
+                <option value="Tüm Fakülteler">Tüm Fakülteler</option>
+                <option value="Tıp">Tıp Fakültesi</option>
+                <option value="Diş Hekimliği">Diş Hekimliği Fakültesi</option>
+                <option value="Eczacılık">Eczacılık Fakültesi</option>
+                <option value="Mühendislik ve Doğa Bilimleri">Mühendislik ve Doğa Bilimleri Fakültesi</option>
+                <option value="Sağlık Bilimleri">Sağlık Bilimleri Fakültesi</option>
+                <option value="İktisadi, İdari ve Sosyal Bilimler">İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-primary">Gönder</button>
+
     </form>
 </div>
+
+            
+
+
+
+
