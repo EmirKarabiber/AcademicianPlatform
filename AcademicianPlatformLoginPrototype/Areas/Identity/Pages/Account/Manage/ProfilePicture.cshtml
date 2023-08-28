@@ -1,0 +1,47 @@
+﻿@page
+@model ProfilePictureModel
+@inject UserManager<ApplicationUser> userManager
+@{
+    ViewData["Title"] = "Profil Resmini Güncelle";
+    ViewData["ActivePage"] = ManageNavPages.ProfilePicture;
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
+}
+
+<h4 id="profile-title">@ViewData["Title"]</h4>
+<partial name="_StatusMessage" for="StatusMessage" />
+<hr />
+@{
+	var user = await userManager.FindByNameAsync(User.Identity.Name);
+}
+<div class="card border mb-3" style="border-radius: 20px;">
+	<div class="card-body">
+		<div>
+			<h5 class="card-title">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-1 col-sm-2">
+							<img src="@Model.ProfilePictureDirectory" class="img-fluid display-inline profilePic" style="width: 200px;">
+						</div>
+						<div class="col-10" style="margin-top: 10px;">
+							<div class="row ml-0">
+								<span style="font-size: 22px; ">@user.Title @user.FirstName @user.LastName <span style=" float: right; font-size: 12px;">Gönderim tarihi: @DateTime.Now</span></span>
+							</div>
+							<div class="row">
+								<span style="font-size: 13px;">@user.Department</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h5>
+		</div>
+	</div>
+</div>
+<form asp-page-handler="UpdateProfilePicture" method="POST" enctype="multipart/form-data">
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-floating">
+			<input asp-for="Input.ProfilePhoto" name="profilePicture" class="form-control" autocomplete="profilephoto" />
+			<label asp-for="Input.ProfilePhoto" class="form-label"></label>
+			<span asp-validation-for="Input.ProfilePhoto" class="text-danger"></span>
+        </div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Güncelle</button>
+</form>

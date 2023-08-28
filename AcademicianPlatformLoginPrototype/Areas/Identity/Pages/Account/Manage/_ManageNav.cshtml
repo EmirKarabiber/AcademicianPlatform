@@ -1,16 +1,7 @@
 ﻿@inject SignInManager<ApplicationUser> SignInManager
 
 <ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><i class="fas fa-user fa-xs" style="color: #4f4f4f;"></i>      Profil</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.MyAnnouncementsClass(ViewContext)" id="myAnnouncements" asp-page="./MyAnnouncements"><i class="fas fa-bullhorn fa-xs" style="color: #4f4f4f;"></i>      Duyurularım</a></li>
-    <!--
-    <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email"><i class="fas fa-envelope fa-xs" style="color: #4f4f4f;"></i>      E-mail</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword"><i class="fas fa-lock fa-xs" style="color: #4f4f4f;"></i>      Şifre</a></li>
-    @*@if (hasExternalLogins)
-    {
-        <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins"><i class="fas fa-sign-in-alt fa-xs" style="color: #4f4f4f;"></i>      Harici Giriş</a></li>
-    }*@
-    <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication"><i class="fas fa-key fa-xs" style="color: #4f4f4f;"></i>      İki faktörlü Kimlik Doğrulama</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData"><i class="fas fa-id-card fa-xs" style="color: #4f4f4f;"></i>      Kişisel Veriler</a></li>
-    -->
+    <li class="nav-item"><a class="nav-link @ManageNavPages.MyAnnouncementsNavClass(ViewContext)" id="myAnnouncements" asp-page="./MyAnnouncements"><i class="fas fa-bullhorn fa-xs" style="color: #4f4f4f;"></i>      Duyurularım</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ProfilePictureNavClass(ViewContext)" id="profile-picture" asp-page="./ProfilePicture"><i class="fas fa-image fa-xs" style="color: #4f4f4f;"></i>      Profil Resmini Güncelle</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><i class="fas fa-phone fa-xs" style="color: #4f4f4f;"></i>      İletişim Bilgilerini Güncelle</a></li>
 </ul>

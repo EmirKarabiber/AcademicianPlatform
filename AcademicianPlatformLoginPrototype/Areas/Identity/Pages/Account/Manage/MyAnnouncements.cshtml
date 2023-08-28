@@ -2,15 +2,12 @@
 @model MyAnnouncementsModel
 @{
     ViewData["Title"] = "Duyurularým";
-    ViewData["ActivePage"] = ManageNavPages.Index;
+    ViewData["ActivePage"] = ManageNavPages.MyAnnouncements;
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
 
 }
 
 <h4 id="profile-title">@ViewData["Title"]</h4>
-@{
-    Console.WriteLine(Model.Announcements.Count);
-}
 <partial name="_StatusMessage" for="StatusMessage" />
 <hr />
 @if (Model.Announcements.Count > 0)
