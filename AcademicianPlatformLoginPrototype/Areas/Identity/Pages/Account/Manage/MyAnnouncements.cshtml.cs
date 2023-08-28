@@ -48,7 +48,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
             await _context.SaveChangesAsync();
             return RedirectToPage("MyAnnouncements");
         }
-        public async Task<IActionResult> OnPostEditAsync(string AnnouncementTitle, string AnnouncementContent, int AnnouncementId)
+        public async Task<IActionResult> OnPostEditAsync(string AnnouncementTitle,string AnnouncementFaculty, string AnnouncementContent, int AnnouncementId)
         {
             var announcementToEdit = _context.Announcements.FirstOrDefault(a => a.ID == AnnouncementId);
             if(announcementToEdit == null)
@@ -56,6 +56,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
                 return NotFound();
             }
             announcementToEdit.AnnouncementTitle = AnnouncementTitle;
+            announcementToEdit.AnnouncementFaculty = AnnouncementFaculty;
             announcementToEdit.AnnouncementContent = AnnouncementContent;
             await _context.SaveChangesAsync();
             return RedirectToPage("MyAnnouncements");
