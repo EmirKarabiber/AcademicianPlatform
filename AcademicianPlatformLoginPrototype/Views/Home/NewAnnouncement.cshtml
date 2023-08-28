@@ -1,16 +1,8 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <script src="https://cdn.tiny.cloud/1/s1xxsaoeo1yfo9x90not7xl265w8u69sjqdh0xtesl04mwxs/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
-</head>
-<body>
-    <div class="page-center">
+﻿    <div class="page-center">
         <div class="container" id="container">
             <div class="centered-text">
                 <h2 class="new">Yeni Duyuru Oluştur</h2>
             </div>
-            
             <form method="post" action="/Home/PostNewAnnouncement">
                 <div class="form-group">
                     <label for="AnnouncementTitle">Başlık</label>
@@ -38,19 +30,13 @@
                         plugins: 'advtemplate media link linkchecker',
                         toolbar: "inserttemplate addtemplate link mycustomicon media",  
                         contextmenu: 'advtemplate',
-                        
-                        
                     });
                 </script>
-                
-
                 <input type="hidden" name="senderName" id="senderName" value="@User.Identity.Name" />
                 <button type="submit" class="btn custom-button">Oluştur</button>
             </form>
         </div>
-
     </div>
-</body>
-</html>
+<script src="https://cdn.tiny.cloud/1/s1xxsaoeo1yfo9x90not7xl265w8u69sjqdh0xtesl04mwxs/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 
