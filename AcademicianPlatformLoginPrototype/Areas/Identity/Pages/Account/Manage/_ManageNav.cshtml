@@ -1,7 +1,9 @@
 ﻿@inject SignInManager<ApplicationUser> SignInManager
 
 <ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.MyAnnouncementsNavClass(ViewContext)" id="myAnnouncements" asp-page="./MyAnnouncements"><i class="fas fa-bullhorn fa-xs" style="color: #4f4f4f;"></i>      Duyurularım</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ProfilePictureNavClass(ViewContext)" id="profile-picture" asp-page="./ProfilePicture"><i class="fas fa-image fa-xs" style="color: #4f4f4f;"></i>      Profil Resmini Güncelle</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><i class="fas fa-phone fa-xs" style="color: #4f4f4f;"></i>      İletişim Bilgilerini Güncelle</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.MyAnnouncementsNavClass(ViewContext)" id="myAnnouncements" asp-page="./MyAnnouncements"><i class="fas fa-bullhorn fa-sm" style="color: #4f4f4f;"></i>      Duyurularım</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ProfilePictureNavClass(ViewContext)" id="profile-picture" asp-page="./ProfilePicture"><i class="fas fa-image fa-sm" style="color: #4f4f4f;"></i>      Profil Resmini Güncelle</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.EditCVNavClass(ViewContext)" id="edit-cv" asp-page="./EditCV"><i class="fas fa-file-contract fa-sm" style="color: #4f4f4f;"></i>      CV Güncelle</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.AboutMeNavClass(ViewContext)" id="about-me" asp-page="./AboutMe"><i class="fas fa-id-card fa-sm" style="color: #4f4f4f;"></i>      Hakkımda Güncelle</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><i class="fas fa-phone fa-sm" style="color: #4f4f4f;"></i>      İletişim Bilgilerini Güncelle</a></li>
 </ul>

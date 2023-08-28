@@ -1,0 +1,41 @@
+﻿@page
+@model AcademicianPlatform.Areas.Identity.Pages.Account.Manage.EditCVModel
+@inject UserManager<ApplicationUser> userManager
+@{
+	ViewData["Title"] = "CV Güncelle";
+	ViewData["ActivePage"] = ManageNavPages.EditCV;
+	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
+}
+
+<h4 id="profile-title"><i class="fas fa-file-contract fa-sm" style="color: #BE1622;"></i>   @ViewData["Title"]</h4>
+<partial name="_StatusMessage" for="StatusMessage" />
+<hr />
+@{
+	var user = await userManager.FindByNameAsync(User.Identity.Name);
+}
+@if (@user.CVPath != string.Empty)
+{
+	<p>Güncel CV nize <a href="@Model.CVDirectory">buradan</a> ulaşabilirsiniz.</p>
+	<form asp-page-handler="UpdateCV" method="POST" enctype="multipart/form-data">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-floating">
+			<input asp-for="Input.CV" name="cv" class="form-control" autocomplete="cv" />
+			<label asp-for="Input.CV" class="form-label"></label>
+			<span asp-validation-for="Input.CV" class="text-danger"></span>
+		</div>
+		<button type="submit" class="w-100 btn btn-lg btn-primary">Güncelle</button>
+	</form>
+}
+else
+{
+	<p>Sistemde size ait bir CV bulunamamaktadır. Aşağıdaki formdan yükleyebilirsiniz.</p>
+	<form asp-page-handler="UploadCV" method="POST" enctype="multipart/form-data">
+		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+		<div class="form-floating">
+			<input asp-for="Input.CV" name="cv" class="form-control" autocomplete="cv" />
+			<label asp-for="Input.CV" class="form-label"></label>
+			<span asp-validation-for="Input.CV" class="text-danger"></span>
+		</div>
+		<button type="submit" class="w-100 btn btn-lg btn-primary">Yükle</button>
+	</form>
+}

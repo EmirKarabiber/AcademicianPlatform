@@ -75,6 +75,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
 			}
 			user.ProfilePhotoPath = "/" + relativeProfilePhotoPath;
             await _userManager.UpdateAsync(user);
+            StatusMessage = "Profil fotoðrafýnýz baþarýyla güncellenmiþtir.";
 			return RedirectToPage("ProfilePicture");
         }
     }
