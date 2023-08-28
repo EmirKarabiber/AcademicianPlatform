@@ -53,7 +53,7 @@
         {
             @*Not: ortak bir servere geçene kadar bu kısımlara ikisini de eklenecek ama daha sonra karmaşa
                    olmaması adına silinecek *@
-            <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID">Send Email</a>
+            <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID" class="btn btn-success">Send Email</a>
 
             <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteAnnouncement"
                asp-route-announcementID="@Model.ID">Delete</a>
@@ -61,7 +61,7 @@
         }
         else
         {
-            <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID">Send Email</a>
+            <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID" class="btn btn-success">Send Email</a>
         }
     </div>
 </div>
