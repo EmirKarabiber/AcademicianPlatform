@@ -238,6 +238,8 @@ namespace AcademicianPlatform.Controllers
                 bodyBuilder.HtmlBody = model.Body;
                 message.Body = bodyBuilder.ToMessageBody();
 
+                message.ReplyTo.Add(new MailboxAddress("Yanıt Adresi : " + model.SenderEmail, model.SenderEmail));
+
                 // E-posta gönderme işlemi için SMTP istemcisini kullanma
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
