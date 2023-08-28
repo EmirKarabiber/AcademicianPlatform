@@ -10,6 +10,10 @@ using System.Diagnostics;
 using System.Net.Mail;
 using MailKit.Security;
 using MailKit.Net.Smtp;
+using Newtonsoft.Json.Linq;
+using System.IO;
+
+
 
 namespace AcademicianPlatform.Controllers
 {
@@ -44,7 +48,7 @@ namespace AcademicianPlatform.Controllers
 		{
 			return View();
 		}
-		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName , string announcementFaculty)
+		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName , string announcementFaculty, bool sendToAll)
 		{
 			var user = await _userManager.FindByNameAsync(senderName);
 			Announcement announcement = new Announcement()
@@ -57,9 +61,66 @@ namespace AcademicianPlatform.Controllers
             };
 			await _context.Announcements.AddAsync(announcement);
 			await _context.SaveChangesAsync();
-			return RedirectToAction("Index");
-		}
-		public async Task<IActionResult> DeleteAnnouncement(int announcementID)
+            if (sendToAll)
+            {
+                return RedirectToAction("YourAction", announcement);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+
+        //-------- bu kısım deneysel, mail eklerken herkese de gönderilsin mi gibi bir seçenek çıkmalı ve
+        //-------- ona göre whitelistdeki herkese mail gönderecek
+        public async Task <IActionResult>YourAction(Announcement announcement)
+        {
+            var jsonPath = "./External/whitelist.json"; // JSON dosyasının yolu
+            var jsonData = System.IO.File.ReadAllText(jsonPath);
+            var json = JObject.Parse(jsonData);
+
+            var emailList = json["emails"].ToObject<string[]>();
+            // emailList içeriğini kullanarak istediğiniz işlemleri gerçekleştirin
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            foreach (var recipientEmail in emailList)
+            {
+                var message = new MimeMessage();
+                var bodyBuilder = new BodyBuilder();
+                message.From.Add(new MailboxAddress("Gönderen : " + user.Email, user.Email));
+                message.To.Add(new MailboxAddress("Alıcı : " + recipientEmail, recipientEmail));
+                message.Subject = announcement.AnnouncementTitle + " Hakkında";
+
+            
+                bodyBuilder.HtmlBody = "(Bu mail yeni bir duyuru eklendiğine dair bilgilendirmedir) " + announcement.AnnouncementContent;
+                message.Body = bodyBuilder.ToMessageBody();
+
+                // E-posta gönderme işlemi için SMTP istemcisini kullanma
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    // SMTP sunucusuna bağlanma
+                    await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                    // Kimlik doğrulama
+                    await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
+                    // E-postayı gönderme
+                    await client.SendAsync(message);
+                    // SMTP sunucusundan çıkma
+                    await client.DisconnectAsync(true);
+                }
+            }
+            var emailModel = new EmailViewModel
+            {
+                RecipientEmail = emailList.ToString(),
+                Subject = "Yeni Duyuru: " + announcement.AnnouncementTitle,
+                Body = announcement.AnnouncementContent
+            };
+            TempData["Message"] = "E-posta başarıyla gönderildi!";
+            return RedirectToAction("EmailSenderResult", emailModel); 
+        }
+
+
+        public async Task<IActionResult> DeleteAnnouncement(int announcementID)
 		{
 			var announcementToDelete = _context.Announcements.Find(announcementID);
 			if (announcementToDelete != null)
