@@ -63,7 +63,7 @@ namespace AcademicianPlatform.Controllers
 			await _context.SaveChangesAsync();
             if (sendToAll)
             {
-                return RedirectToAction("YourAction", announcement);
+                return RedirectToAction("SendEmailAll", announcement);
             }
             else
             {
@@ -74,7 +74,7 @@ namespace AcademicianPlatform.Controllers
 
         //-------- bu kısım deneysel, mail eklerken herkese de gönderilsin mi gibi bir seçenek çıkmalı ve
         //-------- ona göre whitelistdeki herkese mail gönderecek
-        public async Task <IActionResult>YourAction(Announcement announcement)
+        public async Task <IActionResult> SendEmailAll(Announcement announcement)
         {
             var jsonPath = "./External/whitelist.json"; // JSON dosyasının yolu
             var jsonData = System.IO.File.ReadAllText(jsonPath);
@@ -279,7 +279,7 @@ namespace AcademicianPlatform.Controllers
 			{
 				// Veritabanından belirtilen fakültede yapılan duyuruları çeker.
 				var announcements = _context.Announcements
-					.Where(a => a.AnnouncementFaculty == announcementFaculty)
+					.Where(a => a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler")
 					.OrderByDescending(a => a.ID)
 					.ToList();
 
