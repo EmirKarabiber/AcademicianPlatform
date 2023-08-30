@@ -142,14 +142,13 @@ namespace AcademicianPlatform.Controllers
 
 		public IActionResult AnnouncementDetails([FromRoute(Name = "ID")] int announcementID)
 		{
+
 			// Mail bilgilerini hazırla
 			string recipientEmail = "destek@example.com";
 			string subject = "Konu";	//şu kısımlar bir şekilde sayfadan çekilecek
 			string body = "İçerik";
-
             // Mailto linki oluştur
             string mailtoLink = $"mailto:{recipientEmail}?subject={subject}&body={body}";
-
             // Mailto linkini View'e taşı
             ViewBag.MailtoLink = mailtoLink;
 
@@ -166,7 +165,6 @@ namespace AcademicianPlatform.Controllers
 
 
         [Authorize]
-
         public async Task<IActionResult> MyAnnouncoments()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -291,6 +289,13 @@ namespace AcademicianPlatform.Controllers
 			return RedirectToAction("Index");
 		}
 
+        [Authorize]
+        public IActionResult Academians()
+        {
 
-	}
+            var users = _userManager.Users.OrderBy(u => u.UserName).ToList();
+            return View(users);
+        }
+
+    }
 }

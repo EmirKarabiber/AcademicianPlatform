@@ -1,0 +1,33 @@
+﻿@model List<ApplicationUser>
+@using AcademicianPlatform.Areas.Identity.Data;
+@{
+    ViewData["Title"] = "View";
+
+}
+<style>
+    #UserPhoto {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto; /* Resmin ortada durmasını sağlar */
+    }
+</style>
+<h1 class="display-4 text-center">Akademisyenler</h1>
+<h2>Tüm Kullanıcı Adları</h2>
+
+<div class="card-container">
+    <div class="row">
+        @foreach (var user in Model)
+        {
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic" id="UserPhoto" style="width: 200px;">
+                    <h5 class="text-center">@user.FirstName @user.LastName</h5>
+                    <h6 class="text-center">@user.Department</h6>
+                    <!-- Diğer kullanıcı bilgilerini burada görüntüleyebilirsiniz -->
+                </div>
+            </div>
+        }
+    </div>
+</div>
