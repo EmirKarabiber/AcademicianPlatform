@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\cvs\" />
+    <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\profilephotos\" />
   </ItemGroup>
 

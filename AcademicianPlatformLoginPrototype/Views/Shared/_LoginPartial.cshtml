@@ -3,21 +3,21 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
+<ul class="navbar-nav justify-content-end">
 @if (User.Identity?.Name != null)
 {
     var currentUser = await UserManager.FindByNameAsync(User.Identity.Name);
     @if (SignInManager.IsSignedIn(User) && currentUser != null)
     {
         <li class="nav-item">
-            <img src="@currentUser.ProfilePhotoPath" class="profilePic"/><a  class="nav-link text-dark d-inline" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hoşgeldiniz @currentUser.FirstName @currentUser.LastName</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link text-dark nav-text text-decoration-none" asp-area="" asp-controller="Home" asp-action="NewAnnouncement">Yeni Duyuru</a>
         </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark nav-text text-decoration-none" asp-area="" asp-controller="Home" asp-action="Academians">Akademisyenler</a>
-            </li>
-        }
+        <li class="nav-item">
+            <a class="nav-link text-dark nav-text text-decoration-none" asp-area="" asp-controller="Home" asp-action="Academians">Akademisyenler</a>
+        </li>
+        <li class="nav-item p-0 m-0 justify-content-center p-0 m-0">
+            <a class="nav-link text-dark nav-text text-decoration-none p-0 m-0" style="width:50px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Hesap Ayarları"><img src="@currentUser.ProfilePhotoPath" class="profilePic p-0 m-0" /></a>
+        </li>
     }
+}
 </ul>

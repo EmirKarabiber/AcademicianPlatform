@@ -1,0 +1,19 @@
+﻿@using AcademicianPlatform.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    if(User.Identity.Name == string.Empty || User.Identity.Name == null)
+    {
+        await SignInManager.SignOutAsync();
+    }
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+@if(currentUser != null && SignInManager.IsSignedIn(User))
+{
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid justify-content-end p-0 m-0">
+            <p class="nav-link text-dark d-inline p-0 m-0 px-4"> Hoşgeldiniz, <b>@currentUser.FirstName @currentUser.LastName</b></p>
+        </div>
+    </nav>
+}
