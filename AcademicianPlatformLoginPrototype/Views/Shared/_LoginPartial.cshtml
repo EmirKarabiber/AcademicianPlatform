@@ -10,9 +10,6 @@
     @if (SignInManager.IsSignedIn(User) && currentUser != null)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark nav-text text-decoration-none" asp-area="" asp-controller="Home" asp-action="NewAnnouncement">Yeni Duyuru</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link text-dark nav-text text-decoration-none" asp-area="" asp-controller="Home" asp-action="Academians">Akademisyenler</a>
         </li>
         <li class="nav-item p-0 m-0 justify-content-center p-0 m-0">

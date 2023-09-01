@@ -13,7 +13,27 @@
 		margin: 0 0.3%; /* Adjust the margin value as needed */
 	}
 </style>
-<div class="container mt-4 mb-4">
+<div class="container mb-3 mt-1">
+	<div class="row">
+		<div class="col-4">
+			<select class="form-select" id="facultySelect">
+				<option value="">Duyuruları Filtrele...</option>
+				<option value="Index">Filtrele: Tüm Fakülteler</option>
+				<option value="IndexFaculty" data-faculty="Tıp">Filtrele: Tıp Fakültesi</option>
+				<option value="IndexFaculty" data-faculty="Diş Hekimliği">Filtrele: Diş Hekimliği Fakültesi</option>
+				<option value="IndexFaculty" data-faculty="Eczacılık">Filtrele: Eczacılık Fakültesi</option>
+				<option value="IndexFaculty" data-faculty="Mühendislik ve Doğa Bilimleri">Filtrele: Mühendislik ve Doğa Bilimleri Fakültesi</option>
+				<option value="IndexFaculty" data-faculty="Sağlık Bilimleri">Filtrele: Sağlık Bilimleri Fakültesi</option>
+				<option value="IndexFaculty" data-faculty="İktisadi, İdari ve Sosyal Bilimler">Filtrele: İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
+			</select>
+		</div>
+		<div class="col-4"></div>
+		<div class="col-4 text-end">
+			<a asp-controller="Home" asp-action="NewAnnouncement" class="btn btn-outline-dark faculty-btn">Yeni Duyuru</a>
+		</div>
+	</div>
+</div>
+@*<div class="container mt-1 mb-3">
 	<div class="d-flex justify-content-between">
 		<a asp-controller="Home" asp-action="Index" class="btn btn-primary faculty-btn">Tüm Fakülteler</a>
 		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="Tıp" class="btn btn-primary faculty-btn">Tıp Fakültesi</a>
@@ -23,7 +43,7 @@
 		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="Sağlık Bilimleri" class="btn btn-primary faculty-btn">Sağlık Bilimleri Fakültesi</a>
 		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="İktisadi, İdari ve Sosyal Bilimler" class="btn btn-primary faculty-btn">İktisadi, İdari ve Sosyal Bilimler Fakültesi</a>
 	</div>
-</div>
+</div>*@
 
 @if (Model != null)
 {
@@ -38,7 +58,7 @@
 			{
 
 				<div class="container" style=" height:50%">
-					<div class="card border mb-3" id="card" style="border-radius: 20px;">
+					<div class="card border mb-3 shadow" id="card" style="border-radius: 20px;">
 
 						<div class="card-header d-inline align-content-end card-header-with-shadow rounded-top" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1); border-radius: 30px;">
 							<h5>
