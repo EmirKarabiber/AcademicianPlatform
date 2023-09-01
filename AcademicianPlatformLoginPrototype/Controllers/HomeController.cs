@@ -297,5 +297,26 @@ namespace AcademicianPlatform.Controllers
             return View(users);
         }
 
+        public IActionResult AcademicianDetails(string id)
+        {
+            var academician = _userManager.Users.FirstOrDefault(u => u.Id == id);
+            var userAnnouncements = _context.Announcements
+                .Where(a => a.AnnouncementSenderID == id)
+                .ToList();
+
+            var viewModel = new AcademicianDetailsViewModel
+            {
+                UserId = academician.Id,
+                UserName = academician.UserName,
+                Email = academician.Email,
+                UserAnnouncements = userAnnouncements,
+                // Diğer kullanıcı bilgilerini burada doldurun.
+            };
+
+            return View(viewModel);
+        }
+
+
+
     }
 }

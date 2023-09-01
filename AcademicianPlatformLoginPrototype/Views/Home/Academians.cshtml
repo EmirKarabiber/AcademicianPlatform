@@ -1,5 +1,6 @@
 ﻿@model List<ApplicationUser>
 @using AcademicianPlatform.Areas.Identity.Data;
+
 @{
     ViewData["Title"] = "View";
 
@@ -20,14 +21,17 @@
     <div class="row">
         @foreach (var user in Model)
         {
-            <div class="col-md-3">
-                <div class="card">
-                    <img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic my-2" id="UserPhoto" style="width: 200px;">
-                    <h5 class="text-center">@user.Title @user.FirstName @user.LastName</h5>
-                    <h6 class="text-center">@user.Department</h6>
-                    <!-- Diğer kullanıcı bilgilerini burada görüntüleyebilirsiniz -->
+            
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic my-2" id="UserPhoto" style="width: 200px;">
+                        <h5 class="text-center">@user.Title @user.FirstName @user.LastName</h5>
+                        <h6 class="text-center">@user.Department</h6>
+                        <a asp-action="AcademicianDetails" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Detayları Görüntüle</a>
+                        <!-- Diğer kullanıcı bilgilerini burada görüntüleyebilirsiniz -->
+                    </div>
                 </div>
-            </div>
+            
         }
     </div>
 </div>
