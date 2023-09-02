@@ -62,6 +62,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
             _microsoftSignInManager = microsoftSignInManager;
         }
         public bool isWhiteListed = false;
+        private static ExternalLoginInfo info { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -162,7 +163,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
                 ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
-            var info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync();
+            info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync(null,IdentityConstants.ExternalScheme);
 
             if (info == null)
             {
@@ -225,9 +226,21 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 			// Get the information about the user from the external login provider
-			var info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync();
-            
-            if (info == null)
+			// var info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync(null,IdentityConstants.ExternalScheme);
+
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// OnGetCallbackAsync() function returns info variable successfully, however in OnPostConfirmationAsync() function returns null.                                  //
+			// Since in both functions we are trying to access same data, I decided to keep the first "info" variable we retrieve from OnGetCallbackAsync() and keep it as a  //
+			// static variable. We are not retrieving the same variable in OnPostConfirmationAsync() anymore because it returns null, we are using the old one.               //
+            //                                                                                                                                                                //
+			// I don't know if it's going to cause problems in the future, but it looks like it's working right now.                                                          //
+			// If you encounter anymore issues related to this problem, try to find another way. Here are the steps to revert back to old version:                            //
+			// 1- Uncomment "var info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync(null,IdentityConstants.ExternalScheme);" on line 229.                //
+			// 2- Delete the static "info" property of type ExternalLoginInfo.
+            // 3- Put "var" in the beginning of line 166.
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			if (info == null)
             {
                 ErrorMessage = "Error loading external login information during confirmation.";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });

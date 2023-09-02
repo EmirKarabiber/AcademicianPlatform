@@ -67,45 +67,15 @@ public class MicrosoftSignInManager<TUser> : SignInManager<TUser> where TUser : 
 			_context = value;
 		}
 	}
-	public virtual async Task<ExternalLoginInfo?> GetMicrosoftExternalLoginInfoAsync(string? expectedXsrf = null)
+	public virtual async Task<ExternalLoginInfo?> GetMicrosoftExternalLoginInfoAsync(string? expectedXsrf = null, string? scheme = null)
 	{
-		var auth = await Context.AuthenticateAsync(IdentityConstants.ExternalScheme);
-		//Debugging purposes
-		Console.WriteLine(auth);
-		//
-		var items = auth?.Properties?.Items;
-		//Debugging purposes
-		foreach (var item in items)
-		{
-			Console.WriteLine(item);
-		}
-		//
-		if (auth?.Principal == null || items == null || !items.ContainsKey(LoginProviderKey))
+		var auth = await Context.AuthenticateAsync(scheme);
+		if (auth?.Principal == null)
 		{
 			return null;
 		}
-
-		if (expectedXsrf != null)
-		{
-			if (!items.ContainsKey(XsrfKey))
-			{
-				return null;
-			}
-			var userId = items[XsrfKey] as string;
-			if (userId != expectedXsrf)
-			{
-				return null;
-			}
-		}
-
 		var providerKey = auth.Principal.FindFirstValue(ClaimTypes.NameIdentifier);
-		//Debugging purposes
-		Console.WriteLine(providerKey);
-		//
-		var provider = items[LoginProviderKey] as string;
-		//Debugging purposes
-		Console.WriteLine(provider);
-		//
+		var provider = "Microsoft";
 		if (providerKey == null || provider == null)
 		{
 			return null;
@@ -113,9 +83,6 @@ public class MicrosoftSignInManager<TUser> : SignInManager<TUser> where TUser : 
 
 		var providerDisplayName = (await GetExternalAuthenticationSchemesAsync()).FirstOrDefault(p => p.Name == provider)?.DisplayName
 									?? provider;
-		//Debugging purposes
-		Console.WriteLine(providerDisplayName);
-		//
 		return new ExternalLoginInfo(auth.Principal, provider, providerKey, providerDisplayName)
 		{
 			AuthenticationTokens = auth.Properties?.GetTokens(),
