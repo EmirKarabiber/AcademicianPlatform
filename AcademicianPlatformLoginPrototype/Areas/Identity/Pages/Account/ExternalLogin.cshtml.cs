@@ -25,6 +25,8 @@ using System.Xml.Linq;
 using MessagePack;
 using Microsoft.CodeAnalysis.Options;
 using System.Reflection.PortableExecutable;
+using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.EntityFrameworkCore;
 
 namespace AcademicianPlatform.Areas.Identity.Pages.Account
 {
@@ -32,13 +34,13 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
     public class ExternalLoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly MicrosoftSignInManager<ApplicationUser> _microsoftSignInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
-        private readonly IWebHostEnvironment _environment;
-
+        private readonly IWebHostEnvironment _environment;        
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
@@ -46,7 +48,9 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+			IHttpContextAccessor contextAccessor,
+            MicrosoftSignInManager<ApplicationUser> microsoftSignInManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -55,6 +59,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _environment = webHostEnvironment;
+            _microsoftSignInManager = microsoftSignInManager;
         }
         public bool isWhiteListed = false;
 
@@ -62,8 +67,10 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
         public InputModel Input { get; set; }
 
         public string ProviderDisplayName { get; set; }
+		private const string LoginProviderKey = "LoginProvider";
+		private const string XsrfKey = "XsrfId";
 
-        public string ReturnUrl { get; set; }
+		public string ReturnUrl { get; set; }
         public List<string> Departments = new List<string>
         {
             "",
@@ -139,15 +146,15 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
         }
         public IActionResult OnGet() => RedirectToPage("./Login");
 
-        public async Task<IActionResult> OnPost(string provider, string returnUrl = null)
-        {
-            // Request a redirect to the external login provider.
-            var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return new ChallengeResult(provider, properties);
-        }
+		public IActionResult OnPost(string provider, string returnUrl = null)
+		{
+			// Request a redirect to the external login provider.
+			var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
+			var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+			return new ChallengeResult(provider, properties);
+		}
 
-        public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
+		public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
@@ -155,7 +162,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
                 ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
-            var info = await _signInManager.GetExternalLoginInfoAsync();
+            var info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync();
 
             if (info == null)
             {
@@ -217,8 +224,8 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            // Get the information about the user from the external login provider
-            var info = await _signInManager.GetExternalLoginInfoAsync();
+			// Get the information about the user from the external login provider
+			var info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync();
             
             if (info == null)
             {
@@ -333,5 +340,5 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
             }
             return email; // Return the original email if "@" is not found
         }
-    }
+	}
 }
