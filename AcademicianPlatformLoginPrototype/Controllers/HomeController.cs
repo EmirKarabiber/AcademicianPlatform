@@ -340,6 +340,7 @@ namespace AcademicianPlatform.Controllers
                 UserId = academician.Id,
                 UserName = academician.UserName,
                 Email = academician.Email,
+                PhoneNumber = academician.PhoneNumber,
                 UserAnnouncements = userAnnouncements,
                 ProfilePhotoPath = academician.ProfilePhotoPath,
                 FullName = FullName,
