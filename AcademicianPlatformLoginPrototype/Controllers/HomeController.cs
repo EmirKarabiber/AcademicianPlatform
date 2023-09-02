@@ -292,10 +292,41 @@ namespace AcademicianPlatform.Controllers
         [Authorize]
         public IActionResult Academians()
         {
+            // Tüm kullanıcıları çekin
+            var allUsers = _userManager.Users.ToList();
 
-            var users = _userManager.Users.OrderBy(u => u.UserName).ToList();
-            return View(users);
+            // Kullanıcıları departmanlarına göre gruplayın, departmanları fakültelere göre eşleyerek
+            var groupedUsers = new List<AcademicianWithDepartment>();
+
+            var departmentToFacultyMapping = DepartmentToFacultyMapping.MapDepartmentsToFaculties();
+
+            foreach (var user in allUsers)
+            {
+                // Kullanıcının departmanını alın
+                var department = user.Department;
+
+                // Eşlenen fakülteyi bulun
+                var faculty = departmentToFacultyMapping.ContainsKey(department) ? departmentToFacultyMapping[department] : "Diğer Fakülteler";
+
+                // Gruplama listesinde ilgili fakülteyi arayın veya oluşturun
+                var group = groupedUsers.FirstOrDefault(g => g.Department == faculty);
+                if (group == null)
+                {
+                    group = new AcademicianWithDepartment
+                    {
+                        Department = faculty,
+                        Users = new List<ApplicationUser>()
+                    };
+                    groupedUsers.Add(group);
+                }
+
+                // Kullanıcıyı ilgili fakülteye ekleyin
+                group.Users.Add(user);
+            }
+
+            return View(groupedUsers);
         }
+
 
         public IActionResult AcademicianDetails(string id)
         {
@@ -303,13 +334,19 @@ namespace AcademicianPlatform.Controllers
             var userAnnouncements = _context.Announcements
                 .Where(a => a.AnnouncementSenderID == id)
                 .ToList();
-
+            var FullName = academician.FirstName + " " + academician.LastName.ToUpper();
             var viewModel = new AcademicianDetailsViewModel
             {
                 UserId = academician.Id,
                 UserName = academician.UserName,
                 Email = academician.Email,
                 UserAnnouncements = userAnnouncements,
+                ProfilePhotoPath = academician.ProfilePhotoPath,
+                FullName = FullName,
+                Department = academician.Department,
+                Title = academician.Title,
+                AboutMeText = academician.AboutMeText,
+                CVPath = academician.CVPath,
                 // Diğer kullanıcı bilgilerini burada doldurun.
             };
 

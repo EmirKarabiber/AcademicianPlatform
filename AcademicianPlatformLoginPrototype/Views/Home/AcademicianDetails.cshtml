@@ -1,15 +1,53 @@
-﻿<h1>@Model.UserName's Academician Details</h1>
-<!-- Kullanıcı bilgileri burada gösterilir -->
-<p>Email: @Model.Email</p>
-<p>Diğer Kullanıcı Bilgileri: ...</p>
+﻿@model AcademicianDetailsViewModel
 
-<!-- Kullanıcının duyurularını listeleyen bir başlık -->
-<h2>@Model.UserName's Announcements</h2>
+@{
+    ViewData["Title"] = $"{Model.FullName}'s Akademisyen Detayları";
+}
 
-<!-- Kullanıcının duyurularını listeleyen bir döngü -->
-<ul>
-    @foreach (var announcement in Model.UserAnnouncements)
-    {
-        <li>@announcement.AnnouncementTitle: @announcement.AnnouncementContent</li>
-    }
-</ul>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3 text-center">
+            <!-- Kullanıcı resmi -->
+            <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" class="img-fluid rounded-circle" style="max-width: 100%;">
+        </div>
+        <div class="col-md-9">
+            <!-- Kullanıcı bilgileri -->
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">@Model.Title @Model.FullName</h2>
+                    <h5 class="row"><p class="card-text">@Model.Department</p></h5>
+                    <p class="card-text"><strong>Email: </strong>@Model.Email</p>
+                    <p class="card-text"><strong>Hakkında: </strong>@Model.AboutMeText</p>
+                    <p class="card-text">
+                        <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına
+                        ulaşabilirsiniz.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <!-- Kullanıcının duyuruları -->
+        <h2>@Model.FullName Duyuruları</h2>
+        <hr />
+        
+            @foreach (var announcement in Model.UserAnnouncements)
+            {
+                <div class="card border-dark mb-3" style="max-width: 100%;">
+                    <div class="card-header">Duyuru (@announcement.AnnouncementFaculty)</div>
+                    <div class="card-body text-dark">
+                    <h5 class="card-title">@announcement.AnnouncementTitle</h5>
+                    <p class="card-text">@announcement.AnnouncementContent</p>
+                    <a class="btn btn-success" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@announcement.ID">Detaylar</a>
+                    </div>
+                <div class="card-footer text-end"><strong>@announcement.AnnouncementSentDate</strong></div>
+                </div>
+
+            }
+        @if (!Model.UserAnnouncements.Any())
+        {
+            <p class="font-italic text-muted mt-3">Henüz duyuru yok.</p>
+        }
+    </div>
+</div>
