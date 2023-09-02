@@ -1,7 +1,10 @@
 using AcademicianPlatform.Areas.Identity.Data;
 using AcademicianPlatform.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Data;
 
 namespace AcademicianPlatform
 {
@@ -15,6 +18,7 @@ namespace AcademicianPlatform
 			var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 			builder.Services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(connectionString));
+			builder.Services.TryAddScoped<MicrosoftSignInManager<ApplicationUser>>();
 			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 			builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -23,7 +27,8 @@ namespace AcademicianPlatform
             {
                 microsoftOptions.ClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
                 microsoftOptions.ClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
-            });
+				microsoftOptions.SignInScheme = "Identity.External";
+			});
             builder.Services.AddControllersWithViews();
 			var app = builder.Build();
             if (args.Length == 1 && args[0].ToLower() == "seeddata")

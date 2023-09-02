@@ -18,10 +18,15 @@ body {
 }
 
 .profilePic {
-    width: 5%;
+    width: 75%;
     height: auto;
     border-radius: 120px;
     display: inline;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.brand-img{
+    width:50%;
+    height:auto;
 }
 
 /*//profiles css codes start*/
@@ -258,10 +263,9 @@ body {
     transform: translate(-50%, -195%);
     position: absolute;
     left: 50%;
-    bottom: 0;
+    bottom: 48px;
     opacity: 0;
     transition: 0.3s ease-out;
-    margin-top: 60px;
     border: 0px solid;
     outline: 2px solid;
     color: black;

@@ -1,0 +1,15 @@
+﻿<h1>@Model.UserName's Academician Details</h1>
+<!-- Kullanıcı bilgileri burada gösterilir -->
+<p>Email: @Model.Email</p>
+<p>Diğer Kullanıcı Bilgileri: ...</p>
+
+<!-- Kullanıcının duyurularını listeleyen bir başlık -->
+<h2>@Model.UserName's Announcements</h2>
+
+<!-- Kullanıcının duyurularını listeleyen bir döngü -->
+<ul>
+    @foreach (var announcement in Model.UserAnnouncements)
+    {
+        <li>@announcement.AnnouncementTitle: @announcement.AnnouncementContent</li>
+    }
+</ul>

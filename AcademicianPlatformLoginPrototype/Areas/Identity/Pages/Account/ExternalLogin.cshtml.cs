@@ -25,6 +25,8 @@ using System.Xml.Linq;
 using MessagePack;
 using Microsoft.CodeAnalysis.Options;
 using System.Reflection.PortableExecutable;
+using Microsoft.AspNetCore.Server.HttpSys;
+using Microsoft.EntityFrameworkCore;
 
 namespace AcademicianPlatform.Areas.Identity.Pages.Account
 {
@@ -32,13 +34,13 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
     public class ExternalLoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly MicrosoftSignInManager<ApplicationUser> _microsoftSignInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
-        private readonly IWebHostEnvironment _environment;
-
+        private readonly IWebHostEnvironment _environment;        
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
@@ -46,7 +48,9 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+			IHttpContextAccessor contextAccessor,
+            MicrosoftSignInManager<ApplicationUser> microsoftSignInManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -55,15 +59,19 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _environment = webHostEnvironment;
+            _microsoftSignInManager = microsoftSignInManager;
         }
         public bool isWhiteListed = false;
+        private static ExternalLoginInfo info { get; set; }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
         public string ProviderDisplayName { get; set; }
+		private const string LoginProviderKey = "LoginProvider";
+		private const string XsrfKey = "XsrfId";
 
-        public string ReturnUrl { get; set; }
+		public string ReturnUrl { get; set; }
         public List<string> Departments = new List<string>
         {
             "",
@@ -139,15 +147,15 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
         }
         public IActionResult OnGet() => RedirectToPage("./Login");
 
-        public async Task<IActionResult> OnPost(string provider, string returnUrl = null)
-        {
-            // Request a redirect to the external login provider.
-            var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return new ChallengeResult(provider, properties);
-        }
+		public IActionResult OnPost(string provider, string returnUrl = null)
+		{
+			// Request a redirect to the external login provider.
+			var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
+			var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+			return new ChallengeResult(provider, properties);
+		}
 
-        public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
+		public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
@@ -155,7 +163,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
                 ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
-            var info = await _signInManager.GetExternalLoginInfoAsync();
+            info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync(null,IdentityConstants.ExternalScheme);
 
             if (info == null)
             {
@@ -217,10 +225,22 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-            // Get the information about the user from the external login provider
-            var info = await _signInManager.GetExternalLoginInfoAsync();
-            
-            if (info == null)
+			// Get the information about the user from the external login provider
+			// var info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync(null,IdentityConstants.ExternalScheme);
+
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// OnGetCallbackAsync() function returns info variable successfully, however in OnPostConfirmationAsync() function returns null.                                  //
+			// Since in both functions we are trying to access same data, I decided to keep the first "info" variable we retrieve from OnGetCallbackAsync() and keep it as a  //
+			// static variable. We are not retrieving the same variable in OnPostConfirmationAsync() anymore because it returns null, we are using the old one.               //
+            //                                                                                                                                                                //
+			// I don't know if it's going to cause problems in the future, but it looks like it's working right now.                                                          //
+			// If you encounter anymore issues related to this problem, try to find another way. Here are the steps to revert back to old version:                            //
+			// 1- Uncomment "var info = await _microsoftSignInManager.GetMicrosoftExternalLoginInfoAsync(null,IdentityConstants.ExternalScheme);" on line 229.                //
+			// 2- Delete the static "info" property of type ExternalLoginInfo.
+            // 3- Put "var" in the beginning of line 166.
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			if (info == null)
             {
                 ErrorMessage = "Error loading external login information during confirmation.";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
@@ -333,5 +353,5 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account
             }
             return email; // Return the original email if "@" is not found
         }
-    }
+	}
 }

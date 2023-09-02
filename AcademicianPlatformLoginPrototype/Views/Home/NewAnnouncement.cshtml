@@ -1,6 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    <script src="https://cdn.tiny.cloud/1/s1xxsaoeo1yfo9x90not7xl265w8u69sjqdh0xtesl04mwxs/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 </head>
 <body>
@@ -9,7 +10,6 @@
             <div class="centered-text">
                 <h2 class="new">Yeni Duyuru Oluştur</h2>
             </div>
-            
             <form method="post" action="/Home/PostNewAnnouncement">
                 <div class="form-group">
                     <label for="AnnouncementTitle">Başlık</label>
@@ -33,6 +33,16 @@
                     <label for="AnnouncementContent">Duyuru İçeriği</label>
                     <textarea class="form-control" id="AnnouncementContent" name="announcementContent" rows="10" cols="18" required></textarea>
                 </div>
+                <script>
+                    tinymce.init({
+                        selector: '#AnnouncementContent',
+                        plugins: 'advtemplate media link linkchecker',
+                        toolbar: "inserttemplate addtemplate link mycustomicon media",  
+                        contextmenu: 'advtemplate',
+                        
+                        
+                    });
+                </script>
                 
 
                 <input type="hidden" name="senderName" id="senderName" value="@User.Identity.Name" />
@@ -41,9 +51,7 @@
                
             </form>
         </div>
-
     </div>
-</body>
-</html>
+
 
 

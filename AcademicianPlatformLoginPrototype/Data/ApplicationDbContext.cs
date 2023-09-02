@@ -1,6 +1,5 @@
 ﻿using AcademicianPlatform.Areas.Identity.Data;
 using AcademicianPlatform.Models;
-using AcademicianPlatform.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

@@ -10,6 +10,10 @@ using System.Diagnostics;
 using System.Net.Mail;
 using MailKit.Security;
 using MailKit.Net.Smtp;
+using Newtonsoft.Json.Linq;
+using System.IO;
+
+
 
 namespace AcademicianPlatform.Controllers
 {
@@ -44,7 +48,7 @@ namespace AcademicianPlatform.Controllers
 		{
 			return View();
 		}
-		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName , string announcementFaculty)
+		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName , string announcementFaculty, bool sendToAll)
 		{
 			var user = await _userManager.FindByNameAsync(senderName);
 			Announcement announcement = new Announcement()
@@ -57,9 +61,66 @@ namespace AcademicianPlatform.Controllers
             };
 			await _context.Announcements.AddAsync(announcement);
 			await _context.SaveChangesAsync();
-			return RedirectToAction("Index");
-		}
-		public async Task<IActionResult> DeleteAnnouncement(int announcementID)
+            if (sendToAll)
+            {
+                return RedirectToAction("SendEmailAll", announcement);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+
+        //-------- bu kısım deneysel, mail eklerken herkese de gönderilsin mi gibi bir seçenek çıkmalı ve
+        //-------- ona göre whitelistdeki herkese mail gönderecek
+        public async Task <IActionResult> SendEmailAll(Announcement announcement)
+        {
+            var jsonPath = "./External/whitelist.json"; // JSON dosyasının yolu
+            var jsonData = System.IO.File.ReadAllText(jsonPath);
+            var json = JObject.Parse(jsonData);
+
+            var emailList = json["emails"].ToObject<string[]>();
+            // emailList içeriğini kullanarak istediğiniz işlemleri gerçekleştirin
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            foreach (var recipientEmail in emailList)
+            {
+                var message = new MimeMessage();
+                var bodyBuilder = new BodyBuilder();
+                message.From.Add(new MailboxAddress("Gönderen : " + user.Email, user.Email));
+                message.To.Add(new MailboxAddress("Alıcı : " + recipientEmail, recipientEmail));
+                message.Subject = announcement.AnnouncementTitle + " Hakkında";
+
+            
+                bodyBuilder.HtmlBody = "(Bu mail yeni bir duyuru eklendiğine dair bilgilendirmedir) " + announcement.AnnouncementContent;
+                message.Body = bodyBuilder.ToMessageBody();
+
+                // E-posta gönderme işlemi için SMTP istemcisini kullanma
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    // SMTP sunucusuna bağlanma
+                    await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                    // Kimlik doğrulama
+                    await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
+                    // E-postayı gönderme
+                    await client.SendAsync(message);
+                    // SMTP sunucusundan çıkma
+                    await client.DisconnectAsync(true);
+                }
+            }
+            var emailModel = new EmailViewModel
+            {
+                RecipientEmail = emailList.ToString(),
+                Subject = "Yeni Duyuru: " + announcement.AnnouncementTitle,
+                Body = announcement.AnnouncementContent
+            };
+            TempData["Message"] = "E-posta başarıyla gönderildi!";
+            return RedirectToAction("EmailSenderResult", emailModel); 
+        }
+
+
+		public IActionResult DeleteAnnouncement(int announcementID)
 		{
 			var announcementToDelete = _context.Announcements.Find(announcementID);
 			if (announcementToDelete != null)
@@ -70,7 +131,7 @@ namespace AcademicianPlatform.Controllers
 			return RedirectToAction("Index");
 		}
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
@@ -81,14 +142,13 @@ namespace AcademicianPlatform.Controllers
 
 		public IActionResult AnnouncementDetails([FromRoute(Name = "ID")] int announcementID)
 		{
+
 			// Mail bilgilerini hazırla
 			string recipientEmail = "destek@example.com";
 			string subject = "Konu";	//şu kısımlar bir şekilde sayfadan çekilecek
 			string body = "İçerik";
-
             // Mailto linki oluştur
             string mailtoLink = $"mailto:{recipientEmail}?subject={subject}&body={body}";
-
             // Mailto linkini View'e taşı
             ViewBag.MailtoLink = mailtoLink;
 
@@ -105,7 +165,6 @@ namespace AcademicianPlatform.Controllers
 
 
         [Authorize]
-
         public async Task<IActionResult> MyAnnouncoments()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -177,6 +236,8 @@ namespace AcademicianPlatform.Controllers
                 bodyBuilder.HtmlBody = model.Body;
                 message.Body = bodyBuilder.ToMessageBody();
 
+                message.ReplyTo.Add(new MailboxAddress("Yanıt Adresi : " + model.SenderEmail, model.SenderEmail));
+
                 // E-posta gönderme işlemi için SMTP istemcisini kullanma
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
@@ -206,6 +267,56 @@ namespace AcademicianPlatform.Controllers
         {
             return View(model);
         }
+
+		// Bu metot, belirli bir fakülte için duyuruları listeleyen bir sayfanın işlemesini sağlar.
+		// İstenilen fakülte adı "announcementFaculty" parametresi ile alınır.
+		public IActionResult IndexFaculty([FromQuery] string announcementFaculty)
+		{
+			// Eğer fakülte adı geçerli bir değere sahipse işlem yapılır.
+			if (!string.IsNullOrEmpty(announcementFaculty))
+			{
+				// Veritabanından belirtilen fakültede yapılan duyuruları çeker.
+				var announcements = _context.Announcements
+					.Where(a => a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler")
+					.OrderByDescending(a => a.ID)
+					.ToList();
+
+				// Duyuruları içeren bir görünümü döndürür.
+				return View("Index", announcements);
+			}
+
+			// Eğer fakülte adı geçerli değilse, genel "Index" sayfasına yönlendirme yapılır.
+			return RedirectToAction("Index");
+		}
+
+        [Authorize]
+        public IActionResult Academians()
+        {
+
+            var users = _userManager.Users.OrderBy(u => u.UserName).ToList();
+            return View(users);
+        }
+
+        public IActionResult AcademicianDetails(string id)
+        {
+            var academician = _userManager.Users.FirstOrDefault(u => u.Id == id);
+            var userAnnouncements = _context.Announcements
+                .Where(a => a.AnnouncementSenderID == id)
+                .ToList();
+
+            var viewModel = new AcademicianDetailsViewModel
+            {
+                UserId = academician.Id,
+                UserName = academician.UserName,
+                Email = academician.Email,
+                UserAnnouncements = userAnnouncements,
+                // Diğer kullanıcı bilgilerini burada doldurun.
+            };
+
+            return View(viewModel);
+        }
+
+
 
     }
 }

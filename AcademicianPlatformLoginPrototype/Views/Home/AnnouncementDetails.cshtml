@@ -14,18 +14,23 @@
     var senderID = Model.AnnouncementSenderID;
     var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
     var AnnouncomentSenderID = Model.AnnouncementSenderID;
+    var currentUser = await UserManager.GetUserAsync(User);
+    var isCurrentUserAnnouncementCreator = currentUser.Id == senderID;
 }
 
 <h2 class="display-4 text-center">Announcement Details</h2>
+
+@*              yedek tasarım olarak dursun
 <p><strong>Title:</strong> @Model.AnnouncementTitle</p>
 <p><strong>Content:</strong> @Model.AnnouncementContent</p>
 <p><strong>Faculty:</strong> @Model.AnnouncementFaculty Fakültesi</p>
 <p><strong>Sent Date:</strong> @Model.AnnouncementSentDate</p>
 <a class="btn btn-warning" asp-action="Index">Back to Main Menu</a>
-
 <hr>
 <p class="display-5 text-center">Veya</p>
 <hr>
+*@
+
 <div class="card text-center">
     <div class="card-header">
         <h4> @user.FirstName @user.LastName</h4>
@@ -43,10 +48,21 @@
 
         <p class="card-text"><a href="@user.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına
             ulaşabilirsiniz.</p>
-        <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID">Send Email</a>
 
-        <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteAnnouncement"
-            asp-route-announcementID="@Model.ID">Delete</a>
+        @if (isCurrentUserAnnouncementCreator)
+        {
+            @*Not: ortak bir servere geçene kadar bu kısımlara ikisini de eklenecek ama daha sonra karmaşa
+                   olmaması adına silinecek *@
+            <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID" class="btn btn-success">Send Email</a>
+
+            <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteAnnouncement"
+               asp-route-announcementID="@Model.ID">Delete</a>
+              
+        }
+        else
+        {
+            <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID" class="btn btn-success">Send Email</a>
+        }
     </div>
 </div>
 
@@ -64,4 +80,10 @@
         
         window.location.href = mailtoLink;
     }
-</script>*@
+</script>
+
+<a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID">Send Email</a>
+
+        <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteAnnouncement"
+            asp-route-announcementID="@Model.ID">Delete</a>
+*@
