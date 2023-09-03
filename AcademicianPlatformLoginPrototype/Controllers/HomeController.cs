@@ -295,9 +295,10 @@ namespace AcademicianPlatform.Controllers
             // Tüm kullanıcıları çekin
             var allUsers = _userManager.Users.ToList();
 
-            // Kullanıcıları departmanlarına göre gruplayın, departmanları fakültelere göre eşleyerek
+            // Kullanıcıları departmanlarına göre gruplayın ve fakültelere göre eşleyin
             var groupedUsers = new List<AcademicianWithDepartment>();
 
+            // Departmanları fakültelere eşleyen bir harita kullanın
             var departmentToFacultyMapping = DepartmentToFacultyMapping.MapDepartmentsToFaculties();
 
             foreach (var user in allUsers)
@@ -305,10 +306,10 @@ namespace AcademicianPlatform.Controllers
                 // Kullanıcının departmanını alın
                 var department = user.Department;
 
-                // Eşlenen fakülteyi bulun
+                // Eşlenen fakülteyi bulun veya "Diğer Fakülteler" olarak kabul edin
                 var faculty = departmentToFacultyMapping.ContainsKey(department) ? departmentToFacultyMapping[department] : "Diğer Fakülteler";
 
-                // Gruplama listesinde ilgili fakülteyi arayın veya oluşturun
+                // İlgili fakülteyi gruplama listesinde arayın veya oluşturun
                 var group = groupedUsers.FirstOrDefault(g => g.Department == faculty);
                 if (group == null)
                 {
@@ -324,8 +325,18 @@ namespace AcademicianPlatform.Controllers
                 group.Users.Add(user);
             }
 
-            return View(groupedUsers);
+            // Her bir fakülte altındaki kullanıcıları alfabetik olarak sıralayın
+            foreach (var group in groupedUsers)
+            {
+                group.Users = group.Users.OrderBy(u => u.Department).ToList();
+            }
+
+            // Fakülteleri alfabetik olarak sıralayın
+            var sortedGroups = groupedUsers.OrderBy(group => group.Department).ToList();
+
+            return View(sortedGroups);
         }
+
 
 
         public IActionResult AcademicianDetails(string id)
