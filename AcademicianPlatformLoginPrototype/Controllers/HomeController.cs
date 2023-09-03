@@ -344,7 +344,9 @@ namespace AcademicianPlatform.Controllers
             var academician = _userManager.Users.FirstOrDefault(u => u.Id == id);
             var userAnnouncements = _context.Announcements
                 .Where(a => a.AnnouncementSenderID == id)
+                .OrderByDescending(a => a.ID)
                 .ToList();
+    
             var FullName = academician.FirstName + " " + academician.LastName.ToUpper();
             var viewModel = new AcademicianDetailsViewModel
             {
