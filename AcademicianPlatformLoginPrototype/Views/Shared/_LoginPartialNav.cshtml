@@ -1,5 +1,7 @@
 ﻿@using AcademicianPlatform.Areas.Identity.Data;
 @using Microsoft.AspNetCore.Identity
+@using Newtonsoft.Json;
+@inject IWebHostEnvironment _environment
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
@@ -8,10 +10,30 @@
         await SignInManager.SignOutAsync();
     }
     var currentUser = await UserManager.GetUserAsync(User);
+    bool isAdmin = false;
+    string adminsContent = System.IO.File.ReadAllText(System.IO.Path.Combine(_environment.ContentRootPath, "External", "admins.json"));
+    var admins = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(adminsContent) ?? throw new ArgumentNullException("Admin listesi bulunamadı!");
+    List<string> emailsInAdmins = admins["emails"];
+    if (currentUser != null)
+    {
+        foreach (var mail in emailsInAdmins)
+        {
+            if (mail == currentUser.Email)
+            {
+                isAdmin = true;
+            }
+        }
+    }
 }
 @if(currentUser != null && SignInManager.IsSignedIn(User))
 {
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        @if (isAdmin)
+        {
+            <div class="container-fluid justify-content-start p-0 m-0">
+                <a class="nav-link text-dark navbar-text text-decoration-none" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin Yönetim Paneli</a>
+            </div>
+        }
         <div class="container-fluid justify-content-end p-0 m-0">
             <p class="nav-link text-dark d-inline p-0 m-0 px-4"> Hoşgeldiniz, <b>@currentUser.FirstName @currentUser.LastName</b></p>
         </div>

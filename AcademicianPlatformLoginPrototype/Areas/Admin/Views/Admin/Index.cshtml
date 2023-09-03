@@ -1,0 +1,38 @@
+﻿@inject UserManager<ApplicationUser> userManager
+@model IEnumerable<ApplicationUser>
+@{
+	Layout = "_Layout.cshtml";
+	ViewData["Title"] = "Kullanıcıları Listele";
+	ViewData["ActivePage"] = AcademicianPlatform.Areas.Admin.ManageNavPages.Index;
+	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
+}
+
+<h4 id="profile-title"><i class="fa-solid fa-users fa" style="color: #BE1622;"></i>   @ViewData["Title"]</h4>
+@*<partial name="_StatusMessage" for="StatusMessage" />*@
+<table class="table table-striped table-bordered table-hover">
+  <thead>
+    <tr>
+        <th>Profil</th>
+        <th>İsim</th>
+        <th>Soyisim</th>
+        <th>Departman</th>
+        <th>Unvan</th>
+        <th>Hakkımda</th>
+        <th>CV</th>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach(var user in Model)
+    {
+        <tr>
+            <th><img src="@user.ProfilePhotoPath" class="profilePic m-0 p-0" style="width:50px; height:auto;"/></th>
+            <td>@user.FirstName</td>
+            <td>@user.LastName</td>
+            <td>@user.Department</td>
+            <td>@user.Title</td>
+            <td><p id="admin-about-me-text">@user.AboutMeText</p></td>
+            <td><a href="@user.CVPath">CV</a></td>
+        </tr>
+        }
+  </tbody>
+</table>

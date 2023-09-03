@@ -224,6 +224,13 @@ body {
     text-overflow: ellipsis;
 }
 
+#admin-about-me-text {
+    width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 #card {
     position: relative;
     transition: all 0.3s ease-in-out;

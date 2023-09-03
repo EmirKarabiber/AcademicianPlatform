@@ -1,0 +1,33 @@
+﻿@{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/webfonts/fa-solid-900.woff2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&family=Open+Sans:ital,wght@1,800&display=swap" rel="stylesheet">
+
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h1 id="hesapAyarlari-title">
+
+    Admin Yönetim Paneli
+</h1>
+
+<div>
+    <!-- Profilinizi düzenleyin yazısını kaldırdım -->
+    <h2 id="profiliniziDuzenleyin-title"></h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <partial name="_ManageNav" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
+
