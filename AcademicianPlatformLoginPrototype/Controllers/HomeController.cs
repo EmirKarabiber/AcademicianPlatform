@@ -76,16 +76,17 @@ namespace AcademicianPlatform.Controllers
         //-------- ona göre whitelistdeki herkese mail gönderecek
         public async Task <IActionResult> SendEmailAll(Announcement announcement)
         {
-            var jsonPath = "./External/whitelist.json"; // JSON dosyasının yolu
-            var jsonData = System.IO.File.ReadAllText(jsonPath);
-            var json = JObject.Parse(jsonData);
+            // Retrieve the list of email addresses from your database
+            var usersWithEmails = await _userManager.Users
+                .Where(u => !string.IsNullOrEmpty(u.Email)) // email adresi girili hesaplara gönder
+                .ToListAsync();
 
-            var emailList = json["emails"].ToObject<string[]>();
-            // emailList içeriğini kullanarak istediğiniz işlemleri gerçekleştirin
-
+            var sentEmails = new List<string>();
+            
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            foreach (var recipientEmail in emailList)
+            foreach (var userWithEmail in usersWithEmails)
             {
+                var recipientEmail = userWithEmail.Email;
                 var message = new MimeMessage();
                 var bodyBuilder = new BodyBuilder();
                 message.From.Add(new MailboxAddress("Gönderen : " + user.Email, user.Email));
@@ -108,10 +109,16 @@ namespace AcademicianPlatform.Controllers
                     // SMTP sunucusundan çıkma
                     await client.DisconnectAsync(true);
                 }
+                sentEmails.Add(recipientEmail);
             }
+
+            var emailAddresses = sentEmails.ToArray(); // Convert the list to an array
+            var recipientEmailsString = string.Join(", ", emailAddresses); // Join the email addresses with a comma and space
+
             var emailModel = new EmailViewModel
             {
-                RecipientEmail = emailList.ToString(),
+                SenderEmail = user.Email,
+                RecipientEmail = recipientEmailsString, // Set the list of recipient email addresses in the model
                 Subject = "Yeni Duyuru: " + announcement.AnnouncementTitle,
                 Body = announcement.AnnouncementContent
             };
