@@ -12,6 +12,7 @@
 <table class="table table-striped table-bordered table-hover">
   <thead>
     <tr>
+        <th>Sil</th>
         <th>Profil</th>
         <th>İsim</th>
         <th>Soyisim</th>
@@ -25,14 +26,38 @@
     @foreach(var user in Model)
     {
         <tr>
-            <th><img src="@user.ProfilePhotoPath" class="profilePic m-0 p-0" style="width:50px; height:auto;"/></th>
+            <form method="post">
+                <th><button type="button"
+                    class="btn delete-user-btn"
+                    data-user-id="@user.Id"><i class="icon-advanced"></i>
+                    </button>
+                </th>
+            </form>
+            <td><img src="@user.ProfilePhotoPath" class="profilePic m-0 p-0" style="width:50px; height:auto;"/></td>
             <td>@user.FirstName</td>
-            <td>@user.LastName</td>
+            <td>@user.LastName.ToUpper()</td>
             <td>@user.Department</td>
             <td>@user.Title</td>
             <td><p id="admin-about-me-text">@user.AboutMeText</p></td>
             <td><a href="@user.CVPath">CV</a></td>
         </tr>
-        }
+    }
   </tbody>
 </table>
+<div class="modal fade shadow-lg justify-content-center" id="deleteUserModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="POST" action="/Admin/Admin/DeleteUser" id="deleteUserForm">
+                    <div class="form-group text-center">
+                        <h2 class="text-danger">Kullanıcıyı Sil</h2>
+                        <h5 class="text-dark">Seçtiğiniz kullanıcıyı silmek üzeresiniz. Devam etmek istiyor musunuz?</h5>
+                        <input name="deleteUserId" type="hidden" id="deleteUserId" />
+                        <button type="submit" class="btn btn-primary text-center">Sil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/site.js"></script>

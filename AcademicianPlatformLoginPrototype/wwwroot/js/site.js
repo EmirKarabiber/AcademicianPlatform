@@ -1,4 +1,5 @@
-﻿$('.edit-btn').click(function () {
+﻿//Announcement edit code
+$('.edit-btn').click(function () {
     var announcementId = $(this).data('id');
     var announcementTitle = $(this).data('title');
     var announcementFaculty = $(this).data('faculty')
@@ -13,6 +14,18 @@ $('#editForm').submit(function (e) {
     $('#editModal').modal('hide');
 });
 
+//User delete confirmation window code
+$('.delete-user-btn').click(function () {
+    var userId = $(this).data('user-id');
+    $('#deleteUserId').val(userId);
+    $('#deleteUserModal').modal('show');
+});
+
+$('#deleteUserForm').submit(function (e) {
+    $('#deleteUserModal').modal('hide');
+});
+
+//Announcement filtering code
 document.getElementById('facultySelect').addEventListener('change', function () {
     var selectedOption = this.options[this.selectedIndex];
     var action = selectedOption.value;

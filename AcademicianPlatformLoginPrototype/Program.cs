@@ -62,10 +62,14 @@ namespace AcademicianPlatform
 				pattern: "{controller=Home}/{action=Index}/{id?}");
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                name: "Admin",
-                pattern: "{area:exists}/{controller=Admin}/{action=Index}/{id?}"
-                );
+                //endpoints.MapControllerRoute(
+                //name: "Admin",
+                //pattern: "{area:exists}/{controller=Admin}/{action=Index}/{id?}"
+                //);
+                endpoints.MapAreaControllerRoute(
+				name: "Admin",
+				areaName: "Admin",
+				pattern: "Admin/{controller=Admin}/{action=Index}/{id?}");
             });
             app.MapRazorPages();
 
