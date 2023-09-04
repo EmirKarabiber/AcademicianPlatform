@@ -7,64 +7,65 @@
 @* bunlardan hangisi gerekli emin değilim o nedenle hepsini aldım *@
 
 @{
-    ViewBag.Title = "Mail Gönder";
+	ViewBag.Title = "Mail Gönder";
 }
 
 @{
-    var senderID = Model.AnnouncementSenderID;
-    var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
-    var AnnouncomentSenderID = Model.AnnouncementSenderID;
-    var currentUser = await UserManager.GetUserAsync(User);
-    var isCurrentUserAnnouncementCreator = currentUser.Id == senderID;
+	var senderID = Model.AnnouncementSenderID;
+	var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
+	var AnnouncomentSenderID = Model.AnnouncementSenderID;
+	var currentUser = await UserManager.GetUserAsync(User);
+	var isCurrentUserAnnouncementCreator = currentUser.Id == senderID;
 }
 
-<h2 class="display-4 text-center">Announcement Details</h2>
-
-@*              yedek tasarım olarak dursun
-<p><strong>Title:</strong> @Model.AnnouncementTitle</p>
-<p><strong>Content:</strong> @Model.AnnouncementContent</p>
-<p><strong>Faculty:</strong> @Model.AnnouncementFaculty Fakültesi</p>
-<p><strong>Sent Date:</strong> @Model.AnnouncementSentDate</p>
-<a class="btn btn-warning" asp-action="Index">Back to Main Menu</a>
-<hr>
-<p class="display-5 text-center">Veya</p>
-<hr>
-*@
-
-<div class="card text-center">
-    <div class="card-header">
-        <h4> @user.FirstName @user.LastName</h4>
-        <p class="card-text">@Model.AnnouncementSentDate</p>
-        <h6><strong>Faculty:</strong> @Model.AnnouncementFaculty Fakültesi</h6>
-    </div>
-    <div class="card-body">
-        <h4 class="card-title">@Model.AnnouncementTitle</h4>
-        <p class="card-text">@Model.AnnouncementContent</p>
-        <a class="btn btn-warning" asp-action="Index">Back to Main Menu</a>
-    </div>
-    <div class="card-footer text-muted">
-        <p class="card-text"><strong>Telefon numarası: </strong>@user.PhoneNumber</p>
-        <p class="card-text"><strong>Mail adresi: </strong>@user.Email</p>
-
-        <p class="card-text"><a href="@user.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına
-            ulaşabilirsiniz.</p>
-
-        @if (isCurrentUserAnnouncementCreator)
-        {
-            @*Not: ortak bir servere geçene kadar bu kısımlara ikisini de eklenecek ama daha sonra karmaşa
-                   olmaması adına silinecek *@
-            <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID" class="btn btn-success">Send Email</a>
-
-            <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteAnnouncement"
-               asp-route-announcementID="@Model.ID">Delete</a>
-              
-        }
-        else
-        {
-            <a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID" class="btn btn-success">Send Email</a>
-        }
+<div class="container mt-2">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-12">
+            <div class="card p-3 py-4 border" id="cardd">
+                <div class="text-center">
+                    <img src="@user.ProfilePhotoPath" style="width: 150px; height: auto;" class="rounded-circle">
+                </div>
+                <div class="text-center mt-3">
+                    <h5 class="mt-0 mb-2">@user.Title @user.FirstName @user.LastName</h5>
+                    <h6 class="mb-2"> @user.Department</h6>
+                </div>
+                <div class="px-4 mt-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fonts mb-4">@Model.AnnouncementTitle</span>
+                        <span class="mb-4" style="color: black; font-size: 14px;">
+                            @Model.AnnouncementSentDate
+                        </span>
+                    </div>
+                    <p>
+                        @Model.AnnouncementContent
+                    </p>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a class="buttonnn mt-4" asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID">
+                        <svg>
+                            <rect x="0" y="0" fill="none" width="100%" height="100%" />
+                        </svg>
+                        Mail Gönder
+                    </a>
+                </div>
+                <div class="card-footer mt-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            Telefon Numarası: @user.PhoneNumber
+                        </span>
+                        <a asp-action="AcademicianDetails" asp-route-id="@user.Id" class="btn btn-primary">@user.FirstName @user.LastName Profili</a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     </div>
 </div>
+
+
+
+
+
 
 @*  Eski sistem kodları (yedek olarak tutuluyor)
 
@@ -75,9 +76,9 @@
         var recipientEmail = "@user.Email"; // Kullanıcının mail adresini alın
         var subject = "@Model.AnnouncementTitle Hk."; // Konu değerini istediğiniz şekilde belirleyin
         var body = "İçerik"; // İçerik değerini istediğiniz şekilde belirleyin
-        
+
         var mailtoLink = "mailto:" + recipientEmail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-        
+
         window.location.href = mailtoLink;
     }
 </script>
