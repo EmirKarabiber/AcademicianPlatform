@@ -556,6 +556,7 @@ header {
 
 .nav-item.custom-item {
     position: relative; 
+}
 
 .sub-menu-1 {
     position: absolute;
@@ -610,4 +611,5 @@ header {
 
 .nav-link.d-inline {
     color: #E33025;
+}
 }
