@@ -386,7 +386,7 @@ body {
 }
 
     #cardd:hover {
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); 
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
     }
 
 
@@ -439,3 +439,93 @@ body {
         stroke: #3d6df2;
         transition: all 2s cubic-bezier(0.22, 1, 0.25, 1);
     }
+
+
+
+
+
+
+header {
+    background-color: #E33025; 
+    
+}
+    .navbar-nav{
+    text-align:center;
+
+    }
+    .navbar-nav li{
+       
+        margin:5px;
+        padding:5px;
+    }
+
+   .navbar-nav li a {
+            text-decoration: none;
+            color: white;
+   }
+.custom-item {
+    color: #333;
+    background-color: #E33025;
+    border-radius: 10px;
+}
+    .custom-item:hover {
+        background-color: darkred; 
+        color: black; 
+        border-radius:10px;
+    }
+.sub-menu-1 {
+    display: none;
+}
+.nav-item.custom-item:hover .sub-menu-1 {
+    display: block;
+}
+.nav-item.custom-item {
+    position: relative; 
+.sub-menu-1 {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #E33025;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px;
+}
+.sub-menu-1 ul {
+    list-style: none; 
+    padding: 0;
+    }
+.sub-menu-1 li {
+    padding: 8px;
+    border-bottom: 1px solid #ddd; 
+    }
+
+.sub-menu-1 li:hover {
+    background-color: darkred;
+    border-radius:10px;
+    }
+
+.animate {
+    animation: heartbeat 1s infinite;
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+#animatedText {
+    color: #E33025; 
+}
+.nav-link.navbar-text {
+    color: #E33025;
+}
+.nav-link.d-inline {
+    color: #E33025;
+}

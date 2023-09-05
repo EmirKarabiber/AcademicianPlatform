@@ -31,11 +31,14 @@
         @if (isAdmin)
         {
             <div class="container-fluid justify-content-start p-0 m-0">
-                <a class="nav-link text-dark navbar-text text-decoration-none" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin Yönetim Paneli</a>
+                <a class="nav-link navbar-text text-decoration-none" asp-area="Admin" asp-controller="Admin" asp-action="Index">
+                    <i class="fa-solid fa-user"></i> Admin Yönetim Paneli
+                </a>
+
             </div>
         }
         <div class="container-fluid justify-content-end p-0 m-0">
-            <p class="nav-link text-dark d-inline p-0 m-0 px-4"> Hoşgeldiniz, <b>@currentUser.FirstName @currentUser.LastName</b></p>
+            <p class="nav-link  d-inline p-0 m-0 px-4"> Hoşgeldiniz, <b>@currentUser.FirstName @currentUser.LastName</b></p>
         </div>
     </nav>
 }
