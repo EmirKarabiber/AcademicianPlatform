@@ -31,14 +31,29 @@ namespace AcademicianPlatform.Controllers
             _userStore = userStore;
             _userManager = userManager;
         }
-        [Authorize]
-        public IActionResult Index()
-        {
+		[Authorize]
+		public async Task<IActionResult> Index()
+		{
+			// İki ay önceki tarihi hesaplayın
+			var twoMonthsAgo = DateTime.Now.AddMonths(-1);
 
-			//	var announcements = _context.Announcements?.ToList();
-			var announcements = _context.Announcements?.OrderByDescending(a => a.ID).ToList();  //duyuruları tersten sıralama eklendi
+			// İki ay öncesinden sonraki duyuruları çekin ve tersten sıralayın.
+			var announcements = _context.Announcements
+				.Where(a => a.AnnouncementSentDate >= twoMonthsAgo)
+				.OrderByDescending(a => a.ID)
+				.ToList();
+
+			// Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			if (user != null)
+			{
+				user.LastLogin = DateTime.Now; // Kullanıcının son giriş tarihini güncelle
+				await _userManager.UpdateAsync(user); // Kullanıcıyı güncelle
+			}
+
 			return View(announcements);
 		}
+
 		[Authorize]
 		public IActionResult Privacy()
 		{
@@ -368,8 +383,9 @@ namespace AcademicianPlatform.Controllers
                 Title = academician.Title,
                 AboutMeText = academician.AboutMeText,
                 CVPath = academician.CVPath,
-                // Diğer kullanıcı bilgilerini burada doldurun.
-            };
+				LastLogin = academician.LastLogin.ToString(),
+				// Diğer kullanıcı bilgilerini burada doldurun.
+			};
 
             return View(viewModel);
         }
