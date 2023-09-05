@@ -26,5 +26,6 @@ namespace AcademicianPlatform.Areas.Identity.Data
 		public override DateTimeOffset? LockoutEnd { get; set; }
 		[NotMapped]
 		public override int AccessFailedCount { get; set; }
+        public DateTime? LastLogin { get; set; }
     }
 }
