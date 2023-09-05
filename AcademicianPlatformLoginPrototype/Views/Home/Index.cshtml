@@ -61,8 +61,9 @@
 					<div class="card border mb-3 shadow" id="card" style="border-radius: 20px;">
 
 						<div class="card-header d-inline align-content-end card-header-with-shadow rounded-top" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1); border-radius: 30px;">
+						
 							<h5>
-								Duyuru (@item.AnnouncementFaculty)
+								Duyuru (@item.AnnouncementFaculty) > <span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate</span>
 							</h5>
 						</div>
 						
@@ -73,32 +74,39 @@
 								<h5 class="card-title">
 									<div class="container">
 										<div class="row">
-											<div class="col-lg-1 col-sm-2">
+											<div class="col-lg-1 col-md-2 col-2">
 												<img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic" style="width: 200px;">
-
 											</div>
-											<div class="col-10" style="margin-top: 10px;">
-
-												<div class="row ml-0">
-
-													<span style="font-size: 22px; ">@user.Title @user.FirstName @user.LastName <span style=" float: right; font-size: 12px;">Gönderim tarihi: @item.AnnouncementSentDate</span></span>
+											
+											<div class="col-lg-10 col-md-10 col-10">
+												<div class="row ml-0 col-10">
+													<div class="col-lg-10 col-md-10 col-10" style="margin-top: 10px;">
+														<span class="indexNames" style="font-size: 22px;">@user.Title @user.FirstName @user.LastName </span>
+													</div>
+													<div class="col-lg-10 col-md-10 col-sm-10">
+														<span id="department" style="font-size: 13px;">@user.Department</span>
+													</div>
 												</div>
-												<div class="row">
-													<span style="font-size: 13px;">@user.Department</span>
-
-												</div>
-
 											</div>
 										</div>
 									</div>
+
 								</h5>
 							</div>
-							<span style="font-size: 24px; color: #85150d;">@item.AnnouncementTitle</span>
+							<span id="cardTitle" style="font-size: 24px; color: #85150d;">@item.AnnouncementTitle</span>
 						
-							<p class="card-text" id="card-text" style="">
+							<p class="card-text" id="card-text">
 								@item.AnnouncementContent
 								</p>
+
+							<div>
+							<a class="btn btn-primary m-0" id="mobileDetails" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+							</div>
+
+
 							<a id ="details" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+							
+							
 						</div>
 					</div>
 					
@@ -108,4 +116,23 @@
 			}
 		}
 	}
+	
 }
+
+<script>
+	
+	if (window.innerWidth <= 768) {
+		var cards = document.querySelectorAll("#card");
+
+		cards.forEach(function (card) {
+			card.addEventListener("mouseenter", function () {
+				card.classList.remove("hovered");
+			});
+
+			card.addEventListener("mouseleave", function () {
+				card.classList.add("hovered");
+			});
+		});
+	}
+</script>
+
