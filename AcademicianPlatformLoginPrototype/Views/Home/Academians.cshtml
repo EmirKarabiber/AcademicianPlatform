@@ -24,7 +24,7 @@
             <div class="row">
                 @foreach (var user in facultyGroup.SelectMany(f => f.Users))
                 {
-                    <div class="col-md-3">
+                    <div class="col-md-3 my-2">
                         <div class="card">
                             <img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic my-2" id="UserPhoto" style="width: 200px;">
                             <h5 class="text-center">@user.Title @user.FirstName @user.LastName</h5>

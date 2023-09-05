@@ -76,16 +76,17 @@ namespace AcademicianPlatform.Controllers
         //-------- ona göre whitelistdeki herkese mail gönderecek
         public async Task <IActionResult> SendEmailAll(Announcement announcement)
         {
-            var jsonPath = "./External/whitelist.json"; // JSON dosyasının yolu
-            var jsonData = System.IO.File.ReadAllText(jsonPath);
-            var json = JObject.Parse(jsonData);
+            // Retrieve the list of email addresses from your database
+            var usersWithEmails = await _userManager.Users
+                .Where(u => !string.IsNullOrEmpty(u.Email)) // email adresi girili hesaplara gönder
+                .ToListAsync();
 
-            var emailList = json["emails"].ToObject<string[]>();
-            // emailList içeriğini kullanarak istediğiniz işlemleri gerçekleştirin
-
+            var sentEmails = new List<string>();
+            
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            foreach (var recipientEmail in emailList)
+            foreach (var userWithEmail in usersWithEmails)
             {
+                var recipientEmail = userWithEmail.Email;
                 var message = new MimeMessage();
                 var bodyBuilder = new BodyBuilder();
                 message.From.Add(new MailboxAddress("Gönderen : " + user.Email, user.Email));
@@ -108,10 +109,16 @@ namespace AcademicianPlatform.Controllers
                     // SMTP sunucusundan çıkma
                     await client.DisconnectAsync(true);
                 }
+                sentEmails.Add(recipientEmail);
             }
+
+            var emailAddresses = sentEmails.ToArray(); // Convert the list to an array
+            var recipientEmailsString = string.Join(", ", emailAddresses); // Join the email addresses with a comma and space
+
             var emailModel = new EmailViewModel
             {
-                RecipientEmail = emailList.ToString(),
+                SenderEmail = user.Email,
+                RecipientEmail = recipientEmailsString, // Set the list of recipient email addresses in the model
                 Subject = "Yeni Duyuru: " + announcement.AnnouncementTitle,
                 Body = announcement.AnnouncementContent
             };
@@ -295,9 +302,10 @@ namespace AcademicianPlatform.Controllers
             // Tüm kullanıcıları çekin
             var allUsers = _userManager.Users.ToList();
 
-            // Kullanıcıları departmanlarına göre gruplayın, departmanları fakültelere göre eşleyerek
+            // Kullanıcıları departmanlarına göre gruplayın ve fakültelere göre eşleyin
             var groupedUsers = new List<AcademicianWithDepartment>();
 
+            // Departmanları fakültelere eşleyen bir harita kullanın
             var departmentToFacultyMapping = DepartmentToFacultyMapping.MapDepartmentsToFaculties();
 
             foreach (var user in allUsers)
@@ -305,10 +313,10 @@ namespace AcademicianPlatform.Controllers
                 // Kullanıcının departmanını alın
                 var department = user.Department;
 
-                // Eşlenen fakülteyi bulun
+                // Eşlenen fakülteyi bulun veya "Diğer Fakülteler" olarak kabul edin
                 var faculty = departmentToFacultyMapping.ContainsKey(department) ? departmentToFacultyMapping[department] : "Diğer Fakülteler";
 
-                // Gruplama listesinde ilgili fakülteyi arayın veya oluşturun
+                // İlgili fakülteyi gruplama listesinde arayın veya oluşturun
                 var group = groupedUsers.FirstOrDefault(g => g.Department == faculty);
                 if (group == null)
                 {
@@ -324,8 +332,18 @@ namespace AcademicianPlatform.Controllers
                 group.Users.Add(user);
             }
 
-            return View(groupedUsers);
+            // Her bir fakülte altındaki kullanıcıları alfabetik olarak sıralayın
+            foreach (var group in groupedUsers)
+            {
+                group.Users = group.Users.OrderBy(u => u.Department).ToList();
+            }
+
+            // Fakülteleri alfabetik olarak sıralayın
+            var sortedGroups = groupedUsers.OrderBy(group => group.Department).ToList();
+
+            return View(sortedGroups);
         }
+
 
 
         public IActionResult AcademicianDetails(string id)
@@ -333,13 +351,16 @@ namespace AcademicianPlatform.Controllers
             var academician = _userManager.Users.FirstOrDefault(u => u.Id == id);
             var userAnnouncements = _context.Announcements
                 .Where(a => a.AnnouncementSenderID == id)
+                .OrderByDescending(a => a.ID)
                 .ToList();
+    
             var FullName = academician.FirstName + " " + academician.LastName.ToUpper();
             var viewModel = new AcademicianDetailsViewModel
             {
                 UserId = academician.Id,
                 UserName = academician.UserName,
                 Email = academician.Email,
+                PhoneNumber = academician.PhoneNumber,
                 UserAnnouncements = userAnnouncements,
                 ProfilePhotoPath = academician.ProfilePhotoPath,
                 FullName = FullName,

@@ -17,12 +17,19 @@ namespace AcademicianPlatform.Data
                 {
                     var newUser1 = new ApplicationUser()
                     {
+                        Id="halisId",
                         UserName = "halis.altun",
                         FirstName = "Halis",
                         LastName = "Altun",
-                        EmailConfirmed = true
+                        Email = user1,
+                        Department = "Yazılım Mühendisliği",
+                        Title = "Prof. Dr.",
+                        AboutMeText = "Yazılım mühendisliği bölüm başkanı.",
+                        ProfilePhotoPath = null,
+                        CVPath = null,
                     };
-                    await userManager.CreateAsync(newUser1, "Halis123_");
+                    await userManager.CreateAsync(newUser1, "123");
+                    await userManager.UpdateAsync(newUser1);
                 }
 
                 string user2 = "nazli.tokatli@istun.edu.tr";
@@ -32,14 +39,20 @@ namespace AcademicianPlatform.Data
                 {
                     var newUser2 = new ApplicationUser()
                     {
+                        Id="nazliId",
                         UserName = "nazli.tokatli",
                         FirstName = "Nazlı",
                         LastName = "Tokatlı",
-                        EmailConfirmed = true
+                        Email = user2,
+                        Department = "Bilgisayar Mühendisliği",
+                        Title = "Dr. Öğr. Üyesi",
+                        AboutMeText = "Bilgisayar mühendisliği bölüm başkanı.",
+                        ProfilePhotoPath = null,
+                        CVPath = null,
                     };
-                    await userManager.CreateAsync(newUser2, "Nazli123_");
+                    await userManager.CreateAsync(newUser2, "123");
+                    await userManager.UpdateAsync(newUser2);
                 }
-
             }
         }
     }
