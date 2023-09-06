@@ -318,7 +318,7 @@ namespace AcademicianPlatform.Controllers
             {
                 Department = academianDepartment
             };
-            if (academianDepartment == "Yabancı Diller")
+            if (academianDepartment == "Sağlık Meslek")
             {
                 var academians = _userManager.Users.Where(u => u.Department == "Anestezi" ||
                 u.Department == "Ağız ve Diş Sağlığı" ||
@@ -328,7 +328,7 @@ namespace AcademicianPlatform.Controllers
                 DepartmentUsers.Users = academians;
                 
             }
-            else if (academianDepartment == "Sağlık Meslek")
+            else if (academianDepartment == "Yabancı Diller")
             {
                var academians = _userManager.Users.Where(u => u.Department == "İngilizce Mütercim-Tercümanlık" ||
                u.Department == "İngilizce Hazırlık Birimi" ||
