@@ -406,7 +406,7 @@ body {
     text-overflow: ellipsis;
     max-width: 100%;
 }
-/* Sayfayý yatayda ve dikeyde ortalama */
+
 .page-center {
     display: flex;
     justify-content: center;
@@ -414,7 +414,7 @@ body {
     min-height: 75vh;
 }
 
-/* Ýçeriði içeren alan */
+
 #container {
     width: 80%;
     background-color: #f7f7f7;
@@ -424,7 +424,7 @@ body {
     text-align: center;
 }
 
-/* Oluþtur butonu */
+
 .custom-button {
     margin-top: 10px;
     background-color: #A82F3A;
@@ -784,3 +784,57 @@ p.duyuru-bulunmuyor {
     font-size: 19px;
     
 }
+.email-gonder {
+    font-size: 35px;
+    text-align: center;
+    margin: revert-layer;
+    color: #a82f3a;
+
+}
+.btn-mailGonder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 320px;
+
+}
+.button-mailGonder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.gonderen-eposta {
+    font-size: 18px;
+    color: #191970;
+}
+
+.gonderen-epostasi {
+    
+    color: #000;
+    font-size: 17px;
+}
+.alici-eposta {
+    font-size: 18px;
+    color: #191970;
+}
+
+.alici-epostasi {
+   
+    color: #000;
+    font-size: 17px;
+}
+.mail-baslik {
+    font-size: 16px;
+}
+.email-container {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+    .email-container:hover {
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
+
+

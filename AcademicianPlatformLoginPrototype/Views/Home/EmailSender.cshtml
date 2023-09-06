@@ -4,27 +4,30 @@
     ViewData["Title"] = "EmailSender";
 }
 
-
-<h1 class="display-4">EmailSender</h1>
+<div class="email-container">
+<h1 class="email-gonder">Mail Gönder</h1>
 <form asp-controller="Home" asp-action="SendEmail" method="post">
     <div class="form-group">
-        <label asp-for="SenderEmail"><strong>Gönderen E-posta</strong></label>
-        <p>@Model.SenderEmail</p>
+        <label asp-for="SenderEmail" class="gonderen-eposta"><strong>Gönderen E-posta</strong></label>
+        <p class="gonderen-epostasi">@Model.SenderEmail</p>
         <input asp-for="SenderEmail" type="hidden" class="form-control" id="SenderEmail" name="SenderEmail" required>
     </div>
     <div class="form-group">
-        <label asp-for="RecipientEmail"><strong>Alıcı E-Posta</strong></label>
-        <p>@Model.RecipientEmail</p>
+        <label asp-for="RecipientEmail" class="alici-eposta"><strong>Alıcı E-Posta</strong></label>
+        <p class="alici-epostasi">@Model.RecipientEmail</p>
         <input asp-for="RecipientEmail" type="hidden" class="form-control" id="RecipientEmail" name="RecipientEmail" required>
     </div>
     <div class="form-group">
-        <label asp-for="Subject">Başlık</label>
+        <label asp-for="Subject" class="mail-baslik">Başlık</label>
         <input asp-for="Subject" type="text" class="form-control" id="Subject" name="Subject" required>
     </div>
     <div class="form-group">
-        <label asp-for="Body">Açıklama</label>
+        <label asp-for="Body" class="mail-baslik">Açıklama</label>
         <textarea asp-for="Body" class="form-control" id="Body" name="Body" rows="5" required></textarea>
     </div>
     <input type="hidden" asp-for="AnnouncementIDForEmail" itemid="AnnouncementIDForEmail" name="AnnouncementIDForEmail" required/>
-    <button type="submit" class="btn btn-primary">Gönder</button>
+    <div class="button-mailGonder">
+    <button type="submit" class="btn btn-primary btn-mailGonder">Gönder</button>
+    </div>
 </form>
+</div>

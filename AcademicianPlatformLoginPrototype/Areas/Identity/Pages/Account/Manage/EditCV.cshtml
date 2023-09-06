@@ -15,7 +15,7 @@
 }
 @if (@user.CVPath != string.Empty)
 {
-	<p>Güncel CV nize <a href="@Model.CVDirectory">buradan</a> ulaşabilirsiniz.</p>
+	<p class="duyuru-bulunmuyor">Güncel CV nize <a class="text-dark"  href="@Model.CVDirectory">buradan</a> ulaşabilirsiniz.</p>
 	<form asp-page-handler="UpdateCV" method="POST" enctype="multipart/form-data">
 		<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 		<div class="form-floating">
