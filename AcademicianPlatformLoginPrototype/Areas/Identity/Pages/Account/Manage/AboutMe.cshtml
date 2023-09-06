@@ -7,7 +7,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
 }
 
-<h4 id="profile-title"><i class="fas fa-id-card fa-sm" style="color: #BE1622;"></i>   @ViewData["Title"]</h4>
+<h4 id="profile-title"><i class="fas fa-id-card fa-sm" style="color: #A82F3A;"></i>   @ViewData["Title"]</h4>
 <partial name="_StatusMessage" for="StatusMessage" />
 <hr />
 @{
@@ -20,5 +20,5 @@
 		<textarea asp-for="Input.AboutMeText" class="form-control"></textarea>
 		<span asp-validation-for="Input.AboutMeText" class="text-danger"></span>
 	</div>
-	<button type="submit" class="w-100 btn btn-lg btn-primary">Güncelle</button>
+	<button type="submit" class="w-100 btn btn-lg btn-primary btn-yeniDuyuruOlustur">Güncelle</button>
 </form>
