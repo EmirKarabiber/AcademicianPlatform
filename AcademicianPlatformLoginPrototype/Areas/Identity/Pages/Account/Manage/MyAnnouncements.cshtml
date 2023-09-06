@@ -1,7 +1,7 @@
 @page
 @model MyAnnouncementsModel
 @{
-    ViewData["Title"] = "Duyurularým";
+    ViewData["Title"] = "Geçmiþ Duyurularým";
     ViewData["ActivePage"] = ManageNavPages.MyAnnouncements;
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
 
@@ -12,19 +12,19 @@
 <hr />
 @if (Model.Announcements.Count > 0)
 {
-    <ul>
+    <ul class="announcement-list">
         @foreach (var announcement in Model.Announcements)
         {
-            <li>
-                <h3>@announcement.AnnouncementTitle</h3>
+            <li class="announcement-item">
+                <h3 class="announcementTitle">@announcement.AnnouncementTitle</h3>
                 <p>@announcement.AnnouncementContent</p>
-                <p><strong>Fakülte: </strong>@announcement.AnnouncementFaculty</p>
-                <p><strong>Tarih: </strong>@announcement.AnnouncementSentDate.ToString("dd-MM-yyyy HH:mm:ss")</p>
+                <p><strong><span class="faculty-label">Fakülte: </span></strong> @announcement.AnnouncementFaculty </p>
+                <p><strong><span class="date-label">Tarih: </span> </strong> @announcement.AnnouncementSentDate.ToString("dd-MM-yyyy HH:mm:ss")</p>
                 <form method="post">
                     <input type="hidden" name="announcementId" value="@announcement.ID" />
-                    <button type="submit" class="btn btn-danger">Sil</button>
+                    <button type="submit" class="btn btn-danger btn-duyuruSil">Sil</button>
                     <br />
-                    <button type="button" class="btn btn-primary edit-btn" data-id="@announcement.ID" data-title="@announcement.AnnouncementTitle" data-faculty="@announcement.AnnouncementFaculty" data-content="@announcement.AnnouncementContent">Düzenle</button>
+                    <button type="button" class="btn btn-primary edit-btn btn-duyuruDuzen" data-id="@announcement.ID" data-title="@announcement.AnnouncementTitle" data-faculty="@announcement.AnnouncementFaculty" data-content="@announcement.AnnouncementContent">Düzenle</button>
                 </form>
                 <div class="modal fade shadow-lg" id="editModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
@@ -32,14 +32,14 @@
                         <div class="modal-body">
                             <form asp-page-handler="Edit" method="post" id="editForm">
                                 <div class="form-group text-center">
-                                    <h2>Düzenle: @announcement.AnnouncementTitle</h2>
+                                        <h2><span class="duyuru-duzenle">Düzenle: </span> <span class="title-text">@announcement.AnnouncementTitle</span></h2>
                                 </div>
                                 <div class="form-group">
-                                    <label for="title">Baþlýk</label>
+                                        <label for="title" class="custom-title">Baþlýk</label>
                                     <input type="text" class="form-control" id="title" name="AnnouncementTitle"/>
                                 </div>
                                 <div class="form-group">
-                                    <label for="faculty">Fakülte</label>
+                                        <label for="faculty" class="custom-faculty">Fakülte</label>
                                     <select class="form-control" id="faculty" name="AnnouncementFaculty" required>
                                         <option value="Tüm Fakülteler">Tüm Fakülteler</option>
                                         <option value="Týp">Týp Fakültesi</option>
@@ -51,7 +51,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="content">Ýçerik</label>
+                                        <label for="content" class="custom-content">Ýçerik</label>
                                     <textarea class="form-control" id="content" name="AnnouncementContent" rows="4"></textarea>
                                 </div>
                                 <input name ="AnnouncementId" type="hidden" value="@announcement.ID">
@@ -68,5 +68,5 @@
 }
 else
 {
-    <p>Hiç duyurunuz bulunmamaktadýr. <a class="text-dark" asp-area="" asp-controller="Home" asp-action="NewAnnouncement">Yeni duyuru</a> oluþturmak ister misiniz?</p>
+    <p class="duyuru-bulunmuyor">Hiç duyurunuz bulunmamaktadýr. <a class="text-dark" asp-area="" asp-controller="Home" asp-action="NewAnnouncement">Yeni duyuru</a> oluþturmak ister misiniz?</p>
 }

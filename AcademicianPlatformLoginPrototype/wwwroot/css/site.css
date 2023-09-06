@@ -700,3 +700,87 @@ header {
             display: none;
         }
     }
+.btn-duyuruSil {
+    border-radius: 10px;
+    width: 80px;
+    color: #000;
+    font-weight: 500;
+}
+
+.btn-duyuruDuzen {
+    font-weight: 500;
+}
+
+.faculty-label {
+    color: #191970;
+}
+
+.date-label {
+    color: #191970;
+}
+
+.announcementTitle {
+    font-size: 30px;
+    color: #000;
+}
+
+
+.duyuru-duzenle {
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.title-text {
+    color: #1c0f45;
+    font-size: 25px;
+}
+
+.custom-title {
+    font-weight: bold;
+    color: #000;
+}
+
+.custom-faculty {
+    font-weight: bold;
+    color: #000;
+}
+
+.custom-content {
+    font-weight: bold;
+    color: #000;
+}
+
+.announcement-list {
+    list-style: none;
+    padding: 0;
+}
+
+.announcement-item {
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Baþlýk, Ýçerik, Fakülte, Tarih ve Butonlar */
+.announcementTitle,
+.AnnouncementContent,
+.faculty-label,
+.date-label,
+.btn-duyuruSil,
+.edit-btn {
+    margin: 5px 0;
+}
+.text-dark {
+    color: #000;
+    font-size: 19px;
+    font-weight: bold;
+}
+p.duyuru-bulunmuyor {
+    color: #000;
+    font-size: 19px;
+    
+}
