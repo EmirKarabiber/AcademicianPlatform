@@ -314,16 +314,37 @@ namespace AcademicianPlatform.Controllers
 
         public IActionResult Academians(string academianDepartment)
         {
-            
-            // Belirtilen bölüme (Department) sahip kullanıcıları çekin
-            var academians = _userManager.Users.Where(u => u.Department == academianDepartment).ToList();
             var DepartmentUsers = new AcademicianWithDepartment
-                        {
-                            Department = academianDepartment,
-                            Users = academians
-                        };
-            // Görünümde bu kullanıcıları listeleyin
+            {
+                Department = academianDepartment
+            };
+            if (academianDepartment == "Yabancı Diller")
+            {
+                var academians = _userManager.Users.Where(u => u.Department == "Anestezi" ||
+                u.Department == "Ağız ve Diş Sağlığı" ||
+                u.Department == "İlk ve Acil Yardım" ||
+                u.Department == "Tıbbi Görüntüleme Teknikleri" ||
+                u.Department == "Tıbbi Laboratuvar Teknikleri").ToList();
+                DepartmentUsers.Users = academians;
+                
+            }
+            else if (academianDepartment == "Sağlık Meslek")
+            {
+               var academians = _userManager.Users.Where(u => u.Department == "İngilizce Mütercim-Tercümanlık" ||
+               u.Department == "İngilizce Hazırlık Birimi" ||
+               u.Department == "Ortak Yabancı Dil Dersleri Birimi").ToList();
+               DepartmentUsers.Users = academians;
+
+            }
+            else
+            {
+                var academians = _userManager.Users.Where(u => u.Department == academianDepartment).ToList();
+                DepartmentUsers.Users = academians;
+            }
+               
             return View(DepartmentUsers);
+
+            
         }
 
 

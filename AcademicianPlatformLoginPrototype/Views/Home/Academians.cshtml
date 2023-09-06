@@ -2,6 +2,15 @@
 
 @{
     ViewData["Title"] = "View";
+    var AcademianDepartmentValue = Model.Department; 
+    if (Model.Department == "Sağlık Meslek")
+    {
+        AcademianDepartmentValue = "Sağlık Meslek Yüksekokulu";
+    }
+    if (Model.Department == "Yabancı Diller")
+    {
+        AcademianDepartmentValue = "Yabancı Diller Yüksekokulu";
+    }
 }
 
 <style>
@@ -13,7 +22,7 @@
         margin: 0 auto;
     }
 </style>
-<h1 class="display-4 text-center">@Model.Department Akademisyenleri </h1>
+<h1 class="display-4 text-center">@AcademianDepartmentValue Akademisyenleri </h1>
 
         <hr />
         <div class="card-container">
