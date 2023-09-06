@@ -12,20 +12,20 @@
     var currentUser = await UserManager.FindByNameAsync(User.Identity.Name);
     @if (SignInManager.IsSignedIn(User) && currentUser != null)
     {
-            <li class="nav-item custom-item"><a href="#"><i class="fa-solid fa-user-doctor"></i> TIP FAKÜLTESİ</a></li>
-            <li class="nav-item custom-item"><a href="#"><i class="fa-solid fa-tooth"></i> DİŞ HEKİMLİĞİ FAKÜLTESİ</a></li>
-            <li class="nav-item custom-item"><a href="#"><i class="fa-solid fa-capsules"></i> ECZACILIK FAKÜLTESİ</a></li>
+            <li class="nav-item custom-item"><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Tıp"><i class="fa-solid fa-user-doctor"></i> TIP FAKÜLTESİ</a></li>
+            <li class="nav-item custom-item"><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Diş Hekimliği"><i class="fa-solid fa-tooth"></i> DİŞ HEKİMLİĞİ FAKÜLTESİ</a></li>
+            <li class="nav-item custom-item"><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Eczacılık"><i class="fa-solid fa-capsules"></i> ECZACILIK FAKÜLTESİ</a></li>
             <li class="nav-item custom-item"><a href="#">MÜHENDİSLİK VE DOĞA BİLİMLERİ FAKÜLTESİ</a>
                 <div class="sub-menu-1">
                     <ul>
-                        <li><a class="" asp-area="" asp-controller="Home" asp-action="Academians"><i class="fa-solid fa-computer"></i> Bilgisayar mühendisliği</a></li>
-                        <li><a href="#"><i class="fa-solid fa-industry"></i> Endüstri mühendisliği</a></li>
-                        <li><a href="#"><i class="fa-solid fa-flask-vial"></i> Kimya mühendisliği</a></li>
-                        <li><a href="#"><i class="fa-solid fa-screwdriver-wrench"></i> Makine mühendisliği</a></li>
-                        <li><a href="#"><i class="fa-solid fa-toolbox"></i> Mekatronik mühendisliği</a></li>
-                        <li><a href="#"><i class="fa-solid fa-compass-drafting"></i> Mimarlık</a></li>
-                        <li><a href="#"><i class="fa-solid fa-dna"></i> Moleküler Biyoloji ve Genetik</a></li>
-                        <li><a href="#"><i class="fa-solid fa-code"></i> Yazılım mühendisliği</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Bilgisayar Mühendisliği"><i class="fa-solid fa-computer"></i> Bilgisayar mühendisliği</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Endüstri Mühendisliği"><i class="fa-solid fa-industry"></i> Endüstri mühendisliği</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Kimya mühendisliği"><i class="fa-solid fa-flask-vial"></i> Kimya mühendisliği</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Makine Mühendisliği"><i class="fa-solid fa-screwdriver-wrench"></i> Makine mühendisliği</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Mekatronik Mühendisliği"><i class="fa-solid fa-toolbox"></i> Mekatronik mühendisliği</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Mimarlık"><i class="fa-solid fa-compass-drafting"></i> Mimarlık</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Moleküler Biyoloji ve Genetika"><i class="fa-solid fa-dna"></i> Moleküler Biyoloji ve Genetik</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Yazılım Mühendisliği"><i class="fa-solid fa-code"></i> Yazılım mühendisliği</a></li>
                     </ul>
                 </div>
                 
@@ -34,11 +34,11 @@
                 <a href="#"><i class="fa-solid fa-user-nurse"></i> SAĞLIK BİLİMLERİ FAKÜLTESİ</a>
                 <div class="sub-menu-1">
                     <ul>
-                        <li><a href="#"><i class="fa-solid fa-utensils"></i> Beslenme ve Diyetetik</a></li>
-                        <li><a href="#"><i class="fa-solid fa-puzzle-piece"></i> Ergoterapi</a></li>
-                        <li><a href="#"><i class="fa-solid fa-bed"></i> Fizyoterapi ve Rehabilitasyon</a></li>
-                        <li><a href="#"><i class="fa-solid fa-user-nurse"></i> Hemşirelik</a></li>
-                        <li><a href="#"><i class="fa-solid fa-ear-listen"></i> Odyoloji</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Beslenme ve Diyetetik"><i class="fa-solid fa-utensils"></i> Beslenme ve Diyetetik</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Ergoterapi"><i class="fa-solid fa-puzzle-piece"></i> Ergoterapi</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Fizyoterapi ve Rehabilitasyon"><i class="fa-solid fa-bed"></i> Fizyoterapi ve Rehabilitasyon</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Hemşirelik"><i class="fa-solid fa-user-nurse"></i> Hemşirelik</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Odyoloji"><i class="fa-solid fa-ear-listen"></i> Odyoloji</a></li>
                     
                     </ul>
                 </div>
@@ -47,9 +47,9 @@
             <li class="nav-item custom-item"><a href="#">İKTİSADİ,İDARİ VE SOSYAL BİLİMLER FAKÜLTESİ</a>
                 <div class="sub-menu-1">
                     <ul>
-                        <li><a href="#"><i class="fa-solid fa-book"></i> İngiliz Dili ve Edebiyatı</a></li>
-                        <li><a href="#"><i class="fa-solid fa-briefcase"></i> İşletme</a></li>
-                        <li><a href="#"><i class="fa-solid fa-brain"></i> Psikoloji</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="İngiliz Dili ve Edebiyatı"><i class="fa-solid fa-book"></i> İngiliz Dili ve Edebiyatı</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="İşletme"><i class="fa-solid fa-briefcase"></i> İşletme</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Psikoloji"><i class="fa-solid fa-brain"></i> Psikoloji</a></li>
                         
                     </ul>
                 </div>
@@ -58,16 +58,16 @@
             <li class="nav-item custom-item"><a href="#"><i class="fa-solid fa-graduation-cap"></i> YÜKSEKOKULLAR</a>
                 <div class="sub-menu-1">
                     <ul>
-                        <li><a href="#">Yabancı Diller Yüksekokulu</a></li>
-                        <li><a href="#">Sağlık Meslek Yüksekokulu</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Tıp">Yabancı Diller Yüksekokulu</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Tıp">Sağlık Meslek Yüksekokulu</a></li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item custom-item"><a href="#"><i class="fa-solid fa-user-graduate"></i> ENSTİTÜLER</a>
                 <div class="sub-menu-1">
                     <ul>
-                        <li><a href="#">İlaç Araştırma ve Geliştirme Enstitüsü</a></li>
-                        <li><a href="#">Lisansüstü Eğitim Enstitüsü</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Tıp">İlaç Araştırma ve Geliştirme Enstitüsü</a></li>
+                        <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Tıp">Lisansüstü Eğitim Enstitüsü</a></li>
                     </ul>
                 </div>
             

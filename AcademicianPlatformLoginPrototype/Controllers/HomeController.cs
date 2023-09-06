@@ -311,53 +311,21 @@ namespace AcademicianPlatform.Controllers
 			return RedirectToAction("Index");
 		}
 
-        [Authorize]
-        public IActionResult Academians()
+
+        public IActionResult Academians(string academianDepartment)
         {
-            // Tüm kullanıcıları çekin
-            var allUsers = _userManager.Users.ToList();
-
-            // Kullanıcıları departmanlarına göre gruplayın ve fakültelere göre eşleyin
-            var groupedUsers = new List<AcademicianWithDepartment>();
-
-            // Departmanları fakültelere eşleyen bir harita kullanın
-            var departmentToFacultyMapping = DepartmentToFacultyMapping.MapDepartmentsToFaculties();
-
-            foreach (var user in allUsers)
-            {
-                // Kullanıcının departmanını alın
-                var department = user.Department;
-
-                // Eşlenen fakülteyi bulun veya "Diğer Fakülteler" olarak kabul edin
-                var faculty = departmentToFacultyMapping.ContainsKey(department) ? departmentToFacultyMapping[department] : "Diğer Fakülteler";
-
-                // İlgili fakülteyi gruplama listesinde arayın veya oluşturun
-                var group = groupedUsers.FirstOrDefault(g => g.Department == faculty);
-                if (group == null)
-                {
-                    group = new AcademicianWithDepartment
-                    {
-                        Department = faculty,
-                        Users = new List<ApplicationUser>()
-                    };
-                    groupedUsers.Add(group);
-                }
-
-                // Kullanıcıyı ilgili fakülteye ekleyin
-                group.Users.Add(user);
-            }
-
-            // Her bir fakülte altındaki kullanıcıları alfabetik olarak sıralayın
-            foreach (var group in groupedUsers)
-            {
-                group.Users = group.Users.OrderBy(u => u.Department).ToList();
-            }
-
-            // Fakülteleri alfabetik olarak sıralayın
-            var sortedGroups = groupedUsers.OrderBy(group => group.Department).ToList();
-
-            return View(sortedGroups);
+            
+            // Belirtilen bölüme (Department) sahip kullanıcıları çekin
+            var academians = _userManager.Users.Where(u => u.Department == academianDepartment).ToList();
+            var DepartmentUsers = new AcademicianWithDepartment
+                        {
+                            Department = academianDepartment,
+                            Users = academians
+                        };
+            // Görünümde bu kullanıcıları listeleyin
+            return View(DepartmentUsers);
         }
+
 
 
 

@@ -1,4 +1,4 @@
-﻿@model List<AcademicianWithDepartment>
+﻿@model AcademicianWithDepartment
 
 @{
     ViewData["Title"] = "View";
@@ -13,16 +13,12 @@
         margin: 0 auto;
     }
 </style>
-<h1 class="display-4 text-center">Akademisyenler</h1>
+<h1 class="display-4 text-center">@Model.Department Akademisyenleri </h1>
 
-<div class="faculty-container">
-    @foreach (var facultyGroup in Model.GroupBy(x => x.Department))
-    {
-        <h3>@facultyGroup.Key</h3>
         <hr />
         <div class="card-container">
             <div class="row">
-                @foreach (var user in facultyGroup.SelectMany(f => f.Users))
+                @foreach (var user in Model.Users)
                 {
                     <div class="col-md-3 my-2">
                         <div class="card">
@@ -35,5 +31,32 @@
                 }
             </div>
         </div>
-    }
-</div>
+   
+
+
+@*@model List<ApplicationUser>
+
+<h1>Kullanıcılar</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <th>Email</th>
+            <th>Departman</th>
+            <!-- Diğer kullanıcı özelliklerini buraya ekleyebilirsiniz -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.Department</td>
+                <!-- Diğer kullanıcı özelliklerini buraya ekleyebilirsiniz -->
+            </tr>
+        }
+    </tbody>
+</table>
+*@
