@@ -63,7 +63,7 @@
 						<div class="card-header d-inline align-content-end card-header-with-shadow rounded-top" style="box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1); border-radius: 30px;">
 						
 							<h5>
-								Duyuru (@item.AnnouncementFaculty) > <span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate</span>
+								Duyuru (@item.AnnouncementFaculty)<span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate</span>
 							</h5>
 						</div>
 						
@@ -93,20 +93,20 @@
 
 								</h5>
 							</div>
-							<span id="cardTitle" style="font-size: 24px; color: #85150d;">@item.AnnouncementTitle</span>
+							<span id="cardTitle" style="font-size: 24px; color: #85150d;"><p class="m-0 p-0" id="titleP">@item.AnnouncementTitle</p></span>
 						
 							<p class="card-text" id="card-text">
-								@item.AnnouncementContent
+								@item.AnnouncementContent 
 								</p>
 
 							<div>
-							<a class="btn btn-primary m-0" id="mobileDetails" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+							<a class="btn btn-outline-danger m-0" id="mobileDetails" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 							</div>
 
 
 							<a id ="details" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 							
-							
+						
 						</div>
 					</div>
 					
@@ -119,20 +119,4 @@
 	
 }
 
-<script>
-	
-	if (window.innerWidth <= 768) {
-		var cards = document.querySelectorAll("#card");
-
-		cards.forEach(function (card) {
-			card.addEventListener("mouseenter", function () {
-				card.classList.remove("hovered");
-			});
-
-			card.addEventListener("mouseleave", function () {
-				card.classList.add("hovered");
-			});
-		});
-	}
-</script>
 

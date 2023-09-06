@@ -312,6 +312,7 @@ body {
     #card:hover::before,
     #card:hover::after {
         opacity: 1;
+        
     }
 }
 
@@ -320,10 +321,13 @@ body {
     #card:hover::before,
     #card:hover::after {
         opacity: 0;
+        display: none;
+       
     }
 
     #card:hover #details {
         display: none;
+        
     }
 }
 
@@ -337,7 +341,11 @@ body {
     }
 
     #cardTitle {
-        font-size: 16px !important;
+        font-size: 24px !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
 
     #card-text {
@@ -385,10 +393,19 @@ body {
     }
 }
 
+#cardTitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
 
-
-
-
+#titleP {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
 /* Sayfayý yatayda ve dikeyde ortalama */
 .page-center {
     display: flex;
@@ -640,3 +657,18 @@ header {
         color: #A82F3A; 
     }
 }
+
+
+@media (max-width: 768px) {
+    .btn-outline-danger {
+        color: #a82f3a !important;
+        background-color: white !important;
+    }
+
+    .btn-outline-danger:hover {
+        color: white !important;
+        background-color: #a82f3a !important;
+    }
+
+}
+    
