@@ -342,6 +342,10 @@ body {
 
     #cardTitle {
         font-size: 24px !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
 
     #card-text {
@@ -389,10 +393,19 @@ body {
     }
 }
 
+#cardTitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
 
-
-
-
+#titleP {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
 /* Sayfayý yatayda ve dikeyde ortalama */
 .page-center {
     display: flex;
@@ -656,5 +669,6 @@ header {
         color: white !important;
         background-color: #a82f3a !important;
     }
+
 }
     
