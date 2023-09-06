@@ -410,7 +410,7 @@ body {
 /* Oluþtur butonu */
 .custom-button {
     margin-top: 10px;
-    background-color: #dc3545;
+    background-color: #A82F3A;
     border-radius: 10px;
     color: white;
 }
@@ -428,7 +428,7 @@ body {
 }
 
 .new {
-    color: #dc3545;
+    color: #A82F3A;
 }
 
 .centered-text {
@@ -516,7 +516,7 @@ body {
     }
 
 header {
-    background-color: #E33025; 
+    background-color: #A82F3A;
     
 }
 
@@ -536,7 +536,7 @@ header {
 
 .custom-item {
     color: #333;
-    background-color: #E33025;
+    background-color: #A82F3A;
     border-radius: 10px;
 }
 
@@ -562,9 +562,9 @@ header {
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #E33025; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-    z-index: 1; 
+    background-color: #A82F3A;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
     border-radius: 10px;
 }
 
@@ -602,14 +602,41 @@ header {
 }
 
 #animatedText {
-    color: #E33025;
+    color: #A82F3A;
 }
 
 .nav-link.navbar-text {
-    color: #E33025;
+    color: #A82F3A;
 }
 
 .nav-link.d-inline {
-    color: #E33025;
+    color: #A82F3A;
 }
+
+.text-animation {
+    animation: bounce 3s infinite, colorChange 2s infinite alternate;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-30px);
+    }
+
+    60% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes colorChange {
+    0% {
+        color: #E33025; 
+    }
+
+    100% {
+        color: #A82F3A; 
+    }
 }
