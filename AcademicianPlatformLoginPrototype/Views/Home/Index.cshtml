@@ -100,13 +100,13 @@
 								</p>
 
 							<div>
-							<a class="btn btn-primary m-0" id="mobileDetails" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+							<a class="btn btn-outline-danger m-0" id="mobileDetails" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 							</div>
 
 
 							<a id ="details" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 							
-							
+						
 						</div>
 					</div>
 					
@@ -119,20 +119,4 @@
 	
 }
 
-<script>
-	
-	if (window.innerWidth <= 768) {
-		var cards = document.querySelectorAll("#card");
-
-		cards.forEach(function (card) {
-			card.addEventListener("mouseenter", function () {
-				card.classList.remove("hovered");
-			});
-
-			card.addEventListener("mouseleave", function () {
-				card.classList.add("hovered");
-			});
-		});
-	}
-</script>
 
