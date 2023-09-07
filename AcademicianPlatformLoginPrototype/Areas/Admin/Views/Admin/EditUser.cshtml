@@ -39,27 +39,30 @@
             </div>
         </div>
         <br />
-        <div class="row">
-            <div class="col-md-3 text-center">
-                <!-- Kullanıcı resmi -->
-                <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" class="img-fluid rounded-circle" style="max-width: 100%;">
-            </div>
-            <div class="col-md-9">
-                <!-- Kullanıcı bilgileri -->
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title">@Model.Title @Model.FullName</h2>
-                        <h5 class="row"><p class="card-text">@Model.Department</p></h5>
-                        <p class="card-text"><strong>Email: </strong>@Model.Email</p>
-                        <p class="card-text"><b>Telefon Numarası: </b>@Model.PhoneNumber</p>
-                        <p class="card-text"><strong>Hakkında: </strong>@Model.AboutMeText</p>
-                        <p class="card-text">
-                            <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına
-                            ulaşabilirsiniz.
-                        </p>
+        <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card card-academician">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+
+                        <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" class="img-fluid rounded-circle profile-photo">
+                        <h2 class="card-title custom-title">@Model.Title @Model.FullName</h2>
+                        <h5 class="card-text custom-department">@Model.Department</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Email: </strong>@Model.Email</p>
+                            <p class="card-text"><b>Telefon Numarası: </b>@Model.PhoneNumber</p>
+                            <p class="card-text"><strong>Hakkında: </strong>@Model.AboutMeText</p>
+                            <p class="card-text">
+                                <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.
+                            </p>
+                            <p><strong>Son Giriş Tarihi:</strong> @Model.LastLogin</p>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         <br />
         <div class="row">
