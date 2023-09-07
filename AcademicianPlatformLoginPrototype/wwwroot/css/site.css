@@ -687,6 +687,15 @@ header {
     }
 
 }
+.btn-outline-danger {
+    color: #a82f3a !important;
+    background-color: white !important;
+}
+
+    .btn-outline-danger:hover {
+        color: white !important;
+        background-color: #a82f3a !important;
+    }
 
 .scroll-top-button {
     position: fixed;
@@ -1047,3 +1056,4 @@ p.duyuru-bulunmuyor {
     border: none;
     background-color: white;
 }
+
