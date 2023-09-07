@@ -1,5 +1,9 @@
-﻿using AcademicianPlatform.Data;
+﻿using AcademicianPlatform.Areas.Identity.Data;
+using AcademicianPlatform.Data;
+using AcademicianPlatform.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AcademicianPlatform.Areas.Admin.Controllers
@@ -9,9 +13,15 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public AdminController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _environment;
+        public AdminController(ApplicationDbContext context,
+        UserManager<ApplicationUser> userManager,
+        IWebHostEnvironment environment)
         {
+            _userManager = userManager;
             _context = context;
+            _environment = environment;
         }
     
         public IActionResult Index()
@@ -23,12 +33,228 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteUser(string deleteUserId)
         {
             var userToDelete = _context.Users.FirstOrDefault(p => p.Id == deleteUserId);
+            var announcementsOfDeletedUser = _context.Announcements.Where(p => p.AnnouncementSenderID == deleteUserId).ToList();
+            if(announcementsOfDeletedUser.Count() != 0)
+            {
+                foreach(var item in announcementsOfDeletedUser)
+                {
+					_context.Announcements.Remove(item);
+				}
+            }
             if (userToDelete != null)
             {
                 _context.Users.Remove(userToDelete);
             }
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult GetSpecificUser(string firstName, string lastName)
+        {
+            var user = _context.Users.FirstOrDefault(p => p.FirstName.ToLower() == firstName.ToLower());
+            if(user == null)
+            {
+                user = _context.Users.FirstOrDefault(p => p.LastName.ToLower() == lastName.ToLower());
+            }
+            if(user == null)
+            {
+                return NotFound();
+            }
+            var userAnnouncements = _context.Announcements
+                .Where(a => a.AnnouncementSenderID == user.Id)
+                .OrderByDescending(a => a.ID)
+                .ToList();
+
+            var fullName = user.FirstName + " " + user.LastName.ToUpper();
+            var model = new AcademicianDetailsViewModel
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                UserAnnouncements = userAnnouncements,
+                ProfilePhotoPath = user.ProfilePhotoPath,
+                FullName = fullName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Department = user.Department,
+                Title = user.Title,
+                AboutMeText = user.AboutMeText,
+                CVPath = user.CVPath,
+                LastLogin = user.LastLogin.ToString(),
+            };
+            return View("EditUser", model);
+        }
+        public IActionResult EditUser()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditUserInformation(
+            string Id = null,
+            IFormFile profilePhoto = null,
+            string title = null,
+            string firstName = null,
+            string lastName = null,
+            string department = null,
+            string phoneNumber = null,
+            string aboutMe = null,
+            IFormFile cv = null,
+            string cvPath = null,
+            string profilePhotoPath = null)
+        {
+            Console.WriteLine(Id);
+            Console.WriteLine(title);
+            Console.WriteLine(firstName);
+            Console.WriteLine(lastName);
+            Console.WriteLine(department);
+            Console.WriteLine(phoneNumber);
+            Console.WriteLine(aboutMe);
+            Console.WriteLine(cvPath);
+            Console.WriteLine(profilePhotoPath);
+            var user = await _userManager.FindByIdAsync(Id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+            if(profilePhoto != null)
+            {
+                //Receive previous profile picture path
+                string previousProfilePictureDirectory = user.ProfilePhotoPath ?? string.Empty;
+                if (previousProfilePictureDirectory == null)
+                {
+                    return NotFound();
+                }
+                //Let's delete the previous profile photo from the system
+                try
+                {
+                    System.IO.File.Delete(_environment.WebRootPath + previousProfilePictureDirectory);
+                }
+                catch (Exception e)
+                {
+                    BadRequest(e.ToString());
+                }
+                //Now let's create new directory and copy the new profile picture to directory
+                string profilePhotoName = profilePhoto.FileName;
+                string profilePhoto_Path = Path.Combine(_environment.WebRootPath, "profilephotos", profilePhotoName);
+                string relativeProfilePhotoPath = Path.GetRelativePath(_environment.WebRootPath, profilePhoto_Path);
+                using (var fileStream = new FileStream(profilePhoto_Path, FileMode.Create))
+                {
+                    await profilePhoto.CopyToAsync(fileStream);
+                }
+                profilePhotoPath = "/" + relativeProfilePhotoPath;
+            }
+            if(cv != null)
+            {
+                //Receive previous profile picture path
+                string previousCVDirectory = user.CVPath ?? string.Empty;
+                if (previousCVDirectory == null)
+                {
+                    return NotFound();
+                }
+                //Let's delete the previous profile photo from the system
+                try
+                {
+                    System.IO.File.Delete(_environment.WebRootPath + previousCVDirectory);
+                }
+                catch (Exception e)
+                {
+                    BadRequest(e.ToString());
+                }
+                //Now let's create new directory and copy the new profile picture to directory
+                string CVName = cv.FileName;
+                string CVPath = Path.Combine(_environment.WebRootPath, "cvs", CVName);
+                string relativeCVPath = Path.GetRelativePath(_environment.WebRootPath, CVPath);
+                using (var fileStream = new FileStream(CVPath, FileMode.Create))
+                {
+                    await cv.CopyToAsync(fileStream);
+                }
+                cvPath = "/" + relativeCVPath;
+            }
+            if (profilePhotoPath != null)
+            {
+                user.ProfilePhotoPath = profilePhotoPath;
+            }
+            if (title != null)
+            {
+                user.Title = title;
+            }
+            if (firstName != null)
+            {
+                user.FirstName = firstName;
+            }
+            if (lastName != null)
+            {
+                user.LastName = lastName;
+            }
+            if (department != null)
+            {
+                user.Department = department;
+            }
+            if (phoneNumber != null)
+            {
+                user.PhoneNumber = phoneNumber;
+            }
+            if (aboutMe != null)
+            {
+                user.AboutMeText = aboutMe;
+            }
+            if (cvPath != null)
+            {
+                user.CVPath = cvPath;
+            }
+            await _userManager.UpdateAsync(user);
+            var userAnnouncements = _context.Announcements
+                .Where(a => a.AnnouncementSenderID == user.Id)
+                .OrderByDescending(a => a.ID)
+                .ToList();
+
+            var fullName = user.FirstName + " " + user.LastName.ToUpper();
+            var model = new AcademicianDetailsViewModel
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                UserAnnouncements = userAnnouncements,
+                ProfilePhotoPath = user.ProfilePhotoPath,
+                FullName = fullName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Department = user.Department,
+                Title = user.Title,
+                AboutMeText = user.AboutMeText,
+                CVPath = user.CVPath,
+                LastLogin = user.LastLogin.ToString(),
+            };
+            return View("EditUser", model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditAnnouncement(string AnnouncementTitle, string AnnouncementFaculty, string AnnouncementContent, int AnnouncementId)
+        {
+            var announcementToEdit = _context.Announcements.FirstOrDefault(a => a.ID == AnnouncementId);
+            if (announcementToEdit == null)
+            {
+                return NotFound();
+            }
+            announcementToEdit.AnnouncementTitle = AnnouncementTitle;
+            announcementToEdit.AnnouncementFaculty = AnnouncementFaculty;
+            announcementToEdit.AnnouncementContent = AnnouncementContent;
+            await _context.SaveChangesAsync();
+            return View("EditUser");
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteAnnouncement(int announcementId)
+        {
+            var announcementToDelete = _context.Announcements.FirstOrDefault(a => a.ID == announcementId);
+            Console.WriteLine(announcementToDelete);
+            if (announcementToDelete == null)
+            {
+                return NotFound();
+            }
+            _context.Announcements.Remove(announcementToDelete);
+            await _context.SaveChangesAsync();
+            return View("EditUser");
         }
     }
 }

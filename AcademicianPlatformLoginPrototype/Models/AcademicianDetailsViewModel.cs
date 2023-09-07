@@ -14,6 +14,8 @@
         public string? CVPath { get; set; }
         public string? LastLogin { get; set; }
         // Diğer kullanıcı bilgileri eklemek için gerekli özellikleri ekleyin.
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         public List<Announcement> UserAnnouncements { get; set; }
     }

@@ -336,7 +336,7 @@ body {
     #card {
         
         width: 100% !important;
-        height: 265px !important;
+        height: 280px !important;
 
     }
 
@@ -708,9 +708,8 @@ header {
         }
     }
 .btn-duyuruSil {
-    border-radius: 10px;
+    border-radius: 7px;
     width: 80px;
-    color: #000;
     font-weight: 500;
 }
 

@@ -14,7 +14,8 @@
 {
     <ul class="announcement-list">
         @foreach (var announcement in Model.Announcements)
-        {
+        { 
+
             <li class="announcement-item">
                 <h3 class="announcementTitle">@announcement.AnnouncementTitle</h3>
                 <p>@announcement.AnnouncementContent</p>
@@ -22,9 +23,9 @@
                 <p><strong><span class="date-label">Tarih: </span> </strong> @announcement.AnnouncementSentDate.ToString("dd-MM-yyyy HH:mm:ss")</p>
                 <form method="post">
                     <input type="hidden" name="announcementId" value="@announcement.ID" />
-                    <button type="submit" class="btn btn-danger btn-duyuruSil">Sil</button>
+                    <button type="submit" class="btn btn-outline-danger btn-duyuruSil">Sil</button>
                     <br />
-                    <button type="button" class="btn btn-primary edit-btn btn-duyuruDuzen" data-id="@announcement.ID" data-title="@announcement.AnnouncementTitle" data-faculty="@announcement.AnnouncementFaculty" data-content="@announcement.AnnouncementContent">Düzenle</button>
+                    <button type="button" class="btn btn-outline-primary edit-btn btn-duyuruDuzen" data-id="@announcement.ID" data-title="@announcement.AnnouncementTitle" data-faculty="@announcement.AnnouncementFaculty" data-content="@announcement.AnnouncementContent">Düzenle</button>
                 </form>
                 <div class="modal fade shadow-lg" id="editModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
