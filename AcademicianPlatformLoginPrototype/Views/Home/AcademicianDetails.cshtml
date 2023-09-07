@@ -5,51 +5,60 @@
 }
 
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-3 text-center">
-            <!-- Kullanıcı resmi -->
-            <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" class="img-fluid rounded-circle" style="max-width: 100%;">
-        </div>
+    <div class="row justify-content-center">
         <div class="col-md-9">
-            <!-- Kullanıcı bilgileri -->
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title">@Model.Title @Model.FullName</h2>
-                    <h5 class="row"><p class="card-text">@Model.Department</p></h5>
-                    <p class="card-text"><strong>Email: </strong>@Model.Email</p>
-                    <p class="card-text"><b>Telefon Numarası: </b>@Model.PhoneNumber</p>
-                    <p class="card-text"><strong>Hakkında: </strong>@Model.AboutMeText</p>
-                    <p class="card-text">
-                        <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına
-                        ulaşabilirsiniz.
-                    </p>
-                    <p><strong>Son Giriş Tarihi:</strong> @Model.LastLogin</p>
+            
+            <div class="card card-academician">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                       
+                        <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" class="img-fluid rounded-circle profile-photo">
+                        <h2 class="card-title custom-title">@Model.Title @Model.FullName</h2>
+                        <h5 class="card-text custom-department">@Model.Department</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text"><strong>Email: </strong>@Model.Email</p>
+                            <p class="card-text"><b>Telefon Numarası: </b>@Model.PhoneNumber</p>
+                            <p class="card-text"><strong>Hakkında: </strong>@Model.AboutMeText</p>
+                            <p class="card-text">
+                                <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.
+                            </p>
+                            <p><strong>Son Giriş Tarihi:</strong> @Model.LastLogin</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="mt-4">
-        <!-- Kullanıcının duyuruları -->
-        <h2>@Model.FullName Duyuruları</h2>
-        <hr />
-        
-            @foreach (var announcement in Model.UserAnnouncements)
-            {
-                <div class="card border-dark mb-3" style="max-width: 100%;">
-                    <div class="card-header">Duyuru (@announcement.AnnouncementFaculty)</div>
-                    <div class="card-body text-dark">
-                    <h5 class="card-title">@announcement.AnnouncementTitle</h5>
-                    <p class="card-text">@announcement.AnnouncementContent</p>
-                    <a class="btn btn-success" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@announcement.ID">Detaylar</a>
-                    </div>
-                <div class="card-footer text-end"><strong>@announcement.AnnouncementSentDate</strong></div>
-                </div>
-
-            }
-        @if (!Model.UserAnnouncements.Any())
-        {
-            <p class="font-italic text-muted mt-3">Henüz duyuru yok.</p>
-        }
-    </div>
+    
 </div>
+
+
+<div class="mt-4 custom-announcement-section">
+    
+    <h2 class="name">@Model.FullName Duyuruları</h2>
+    <hr />
+
+    @foreach (var announcement in Model.UserAnnouncements)
+    {
+        <div class="card custom-announcement-card  mb-3" style="max-width: 100%;">
+            <div class="card-header">Duyuru (@announcement.AnnouncementFaculty)</div>
+            <div class="card-body text-dark">
+                <h5 class="card-title">@announcement.AnnouncementTitle</h5>
+                <p class="card-text">@announcement.AnnouncementContent</p>
+                <a class="btn  custom-announcement-btn shake" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@announcement.ID">Detaylar</a>
+
+            </div>
+            <div class="card-footer text-end custom-announcement-footer"><strong>@announcement.AnnouncementSentDate</strong></div>
+        </div>
+
+    }
+    @if (!Model.UserAnnouncements.Any())
+    {
+        <p class="font-italic text-muted mt-3 custom-announcement-no-content">Henüz duyuru yok.</p>
+    }
+</div>
+</div>
+

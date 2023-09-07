@@ -858,4 +858,165 @@ p.duyuru-bulunmuyor {
     align-items: center;
     width: 320px;
     font-weight:500;
+    margin-top:0px;
+}
+
+.profile-photo {
+    max-width: 150px;
+    border: 3px solid #A82F3A;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    background-color: #fff;
+    position: relative;
+    margin: 0 auto;
+}
+
+
+/* Kullanýcý bilgileri kartý */
+.card-academician {
+    border: 2px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 10px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.name {
+    color: #A82F3A;
+}
+
+/* Duyuru Kartlarý */
+.custom-announcement-card {
+    border: 2px solid #A82F3A;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+    .custom-announcement-card .card-header {
+        background-color: #A82F3A;
+        color: #fff;
+    }
+
+    .custom-announcement-card .card-title {
+        font-size: 1.25rem;
+        color: #E33025;
+    }
+
+    .custom-announcement-card .card-body {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custom-announcement-card .btn {
+        background-color: #1e3799;
+        border-color: #1e3799;
+        color: #fff;
+    }
+
+    .custom-announcement-card .card-footer.text-end {
+        background-color: #f8f9fa;
+        text-align: right;
+    }
+
+    .custom-announcement-card .font-italic.text-muted {
+        font-style: italic;
+        color: #6c757d;
+    }
+
+
+/* Kullanýcý Adý */
+.card-title {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
+
+
+.custom-title {
+    font-size: 24px;
+    color: #A82F3A;
+    font-weight: bold;
+}
+
+
+.custom-department {
+    font-size: 18px;
+    color: #666;
+}
+
+
+/* Card içerisindeki metin stil */
+.card-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.card-text strong {
+        font-weight: bold;
+}
+
+
+.card-text a {
+        color: #1e3799;
+        text-decoration: none;
+        font-weight: bold;
+}
+
+
+.card-text a:hover {
+            text-decoration: underline;
+}
+
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    50% {
+        transform: translateX(5px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.shake {
+    animation: shake 2s ease-in-out infinite;
+}
+
+
+
+
+/* Sayfayý yatayda ve dikeyde ortalama */
+.page-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 65vh;
+    
+}
+
+/* Ýçeriði içeren alan */
+#container {
+    width: 80%;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
 }
