@@ -1,0 +1,206 @@
+﻿@inject UserManager<ApplicationUser> userManager
+@model AcademicianPlatform.Models.AcademicianDetailsViewModel
+@{
+	Layout = "_Layout.cshtml";
+	ViewData["Title"] = "Kullanıcıyı Düzenle";
+	ViewData["ActivePage"] = AcademicianPlatform.Areas.Admin.ManageNavPages.EditUser;
+	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
+}
+
+<h4 id="profile-title"><i class="fa-solid fa-user-pen fa" style="color: #BE1622;"></i>   @ViewData["Title"]</h4>
+@if(Model == null)
+{
+    <h5 style="color: #BE1622;">Düzenlemek istediğiniz akademisyenin isim ve soyismini aşağıdaki alana giriniz.</h5>
+}
+@*<partial name="_StatusMessage" for="StatusMessage" />*@
+@if (Model == null)
+{
+    <form action="/Admin/Admin/GetSpecificUser" method="post">
+        <div class="form-group">
+            <label for="firstName">İsim:</label>
+            <input type="text" id="firstName" name="firstName" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label for="lastName">Soyisim:</label>
+            <input type="text" id="lastName" name="lastName" class="form-control" required />
+        </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-outline-danger text-center">Akademisyeni Getir</button>
+        </div>
+    </form>
+}
+@if (Model != null)
+{
+        <div class="row justify-content-end my-0 py-0">
+            <div class="col-md-3">
+                <form method="post" action="/Admin/Admin/EditUser">
+                    <button type="submit" class="btn btn-outline-danger">Yeni Akademisyen Getir</button>
+                </form>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <!-- Kullanıcı resmi -->
+                <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" class="img-fluid rounded-circle" style="max-width: 100%;">
+            </div>
+            <div class="col-md-9">
+                <!-- Kullanıcı bilgileri -->
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">@Model.Title @Model.FullName</h2>
+                        <h5 class="row"><p class="card-text">@Model.Department</p></h5>
+                        <p class="card-text"><strong>Email: </strong>@Model.Email</p>
+                        <p class="card-text"><b>Telefon Numarası: </b>@Model.PhoneNumber</p>
+                        <p class="card-text"><strong>Hakkında: </strong>@Model.AboutMeText</p>
+                        <p class="card-text">
+                            <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına
+                            ulaşabilirsiniz.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-5">
+            <h3 class="text-center">Akademisyenin Profilini Güncelle</h3>
+            <form action="/Admin/Admin/EditUserInformation" method="POST" enctype="multipart/form-data">
+                <input type="hidden" value="@Model.UserId" name="Id" />
+                <div class="form-floating">
+                    <label for="profilePhoto" class="form-label">Profil Fotoğrafı:</label>
+                    <input type="hidden" name="profilePhotoPath" value="@Model.ProfilePhotoPath" />
+                    <input type="file" name="profilePhoto" class="form-control" />
+                </div>
+                <div class="form-floating">
+                    <label for="title" class="form-label">Unvan:</label>
+                    <select for="title" name="title"  class="form-select">
+                        <option value=""></option>
+                        <option value="Prof. Dr.">Prof. Dr.</option>
+                        <option value="Doç. Dr.">Doç. Dr.</option>
+                        <option value="Yrd. Doç. Dr.">Yrd. Doç. Dr.</option>
+                        <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
+                        <option value="Öğr. Üyesi">Öğr. Üyesi</option>
+                        <option value="Arş. Gör.">Arş. Gör.</option>
+                </select>
+                </div>
+                <div class="form-floating">
+                    <label for="firstName" class="form-label">İsim:</label>
+                    <input type="text" id="firstName" name="firstName" class="form-control" />
+                </div>
+                <div class="form-floating">
+                    <label for="lastName" class="form-label">Soyisim:</label>
+                    <input type="text" id="lastName" name="lastName" class="form-control"/>
+                </div>
+                <div class="form-floating">
+                    <label for="department" class="form-label">Departman:</label>
+                    <select for="department" name="department" class="form-select">
+                        <option value=""></option>
+                        <option value="Tıp">Tıp</option>
+                        <option value="Diş Hekimliği">Diş Hekimliği</option>
+                        <option value="Eczacılık">Eczacılık</option>
+                        <option value="Bilgisayar Mühendisliği">Bilgisayar Mühendisliği</option>
+                        <option value="Endüstri Mühendisliği">Endüstri Mühendisliği</option>
+                        <option value="Endüstriyel Tasarım Mühendisliği">Endüstriyel Tasarım Mühendisliği</option>
+                        <option value="Kimya Mühendisliği">Kimya Mühendisliği</option>
+                        <option value="Makine Mühendisliği">Makine Mühendisliği</option>
+                        <option value="Mekatronik Mühendisliği">Mekatronik Mühendisliği</option>
+                        <option value="Mimarlık">Mimarlık</option>
+                        <option value="Moleküler Biyoloji ve Genetik">Moleküler Biyoloji ve Genetik</option>
+                        <option value="Yazılım Mühendisliği">Yazılım Mühendisliği</option>
+                        <option value="Beslenme ve Diyetetik">Beslenme ve Diyetetik</option>
+                        <option value="Ergoterapi">Ergoterapi</option>
+                        <option value="Fizyoterapi ve Rehabilitasyon">Fizyoterapi ve Rehabilitasyon</option>
+                        <option value="Hemşirelik">Hemşirelik</option>
+                        <option value="Odyoloji">Odyoloji</option>
+                        <option value="İngiliz Dili ve Edebiyatı">İngiliz Dili ve Edebiyatı</option>
+                        <option value="İşletme">İşletme</option>
+                        <option value="Psikoloji">Psikoloji</option>
+                        <option value="İngilizce Mütercim-Tercümanlık">İngilizce Mütercim-Tercümanlık</option>
+                        <option value="İngilizce Hazırlık Birimi">İngilizce Hazırlık Birimi</option>
+                        <option value="Ortak Yabancı Dil Dersleri Birimi">Ortak Yabancı Dil Dersleri Birimi</option>
+                        <option value="Anestezi">Anestezi</option>
+                        <option value="Ağız ve Diş Sağlığı">Ağız ve Diş Sağlığı</option>
+                        <option value="İlk ve Acil Yardım">İlk ve Acil Yardım</option>
+                        <option value="Tıbbi Görüntüleme Teknikleri">Tıbbi Görüntüleme Teknikleri</option>
+                    </select>
+                </div>
+                <div class="form-floating">
+                    <label for="phoneNumber" class="form-label">Telefon Numarası:</label>
+                    <input type="tel" name="phoneNumber" class="form-control"/>
+                </div>
+                <div class="form-floating">
+                    <label for="aboutMe" class="form-label">Hakkımda:</label>
+                    <textarea class="form-control" name="aboutMe"></textarea>
+                </div>
+                <div class="form-floating">
+                    <label for="cv" class="form-label">CV:</label>
+                    <input type="hidden" name="cvPath" value="@Model.CVPath" />
+                    <input type="file" name="cv" class="form-control" />
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary btn-yeniDuyuruOlustur">Güncelle</button>
+            </form>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-6">
+            <h3 class="text-center">Akademisyenin Duyuruları</h3>
+            <ul class="announcement-list">
+                @{
+                    var announcements = Model.UserAnnouncements;
+                }
+                @foreach (var announcement in announcements)
+                {
+                    <li class="announcement-item">
+                        <h3 class="announcementTitle">@announcement.AnnouncementTitle</h3>
+                        <p>@announcement.AnnouncementContent</p>
+                        <p><strong><span class="faculty-label">Fakülte: </span></strong> @announcement.AnnouncementFaculty </p>
+                        <p><strong><span class="date-label">Tarih: </span> </strong> @announcement.AnnouncementSentDate.ToString("dd-MM-yyyy HH:mm:ss")</p>
+                        <form method="post" action="/Admin/Admin/DeleteAnnouncement">
+                            <input type="hidden" name="announcementId" value="@announcement.ID" />
+                            <button type="submit" class="btn btn-danger btn-duyuruSil">Sil</button>
+                            <br />
+                            <button type="button" class="btn btn-primary edit-btn btn-duyuruDuzen" data-id="@announcement.ID" data-title="@announcement.AnnouncementTitle" data-faculty="@announcement.AnnouncementFaculty" data-content="@announcement.AnnouncementContent">Düzenle</button>
+                        </form>
+                        <div class="modal fade shadow-lg" id="editModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <form action="/Admin/Admin/EditAnnouncement" method="post" id="editForm">
+                                            <div class="form-group text-center">
+                                                <h2><span class="duyuru-duzenle">Düzenle: </span> <span class="title-text">@announcement.AnnouncementTitle</span></h2>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="title" class="custom-title">Başlık</label>
+                                                <input type="text" class="form-control" id="title" name="AnnouncementTitle" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="faculty" class="custom-faculty">Fakülte</label>
+                                                <select class="form-control" id="faculty" name="AnnouncementFaculty" required>
+                                                    <option value="Tüm Fakülteler">Tüm Fakülteler</option>
+                                                    <option value="Tıp">Tıp Fakültesi</option>
+                                                    <option value="Diş Hekimliği">Diş Hekimliği Fakültesi</option>
+                                                    <option value="Eczacılık">Eczacılık Fakültesi</option>
+                                                    <option value="Mühendislik ve Doğa Bilimleri">Mühendislik ve Doğa Bilimleri Fakültesi</option>
+                                                    <option value="Sağlık Bilimleri">Sağlık Bilimleri Fakültesi</option>
+                                                    <option value="İktisadi, İdari ve Sosyal Bilimler">İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="content" class="custom-content">İçerik</label>
+                                                <textarea class="form-control" id="content" name="AnnouncementContent" rows="4"></textarea>
+                                            </div>
+                                            <input name="AnnouncementId" type="hidden" value="@announcement.ID">
+                                            <button type="submit" class="btn btn-primary text-center">Kaydet</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+            </div>
+        </div>
+}
+
+
