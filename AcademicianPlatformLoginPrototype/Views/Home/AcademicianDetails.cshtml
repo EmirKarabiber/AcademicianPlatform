@@ -31,8 +31,6 @@
             </div>
         </div>
     </div>
-
-    
 </div>
 
 
@@ -48,7 +46,8 @@
             <div class="card-body text-dark">
                 <h5 class="card-title">@announcement.AnnouncementTitle</h5>
                 <p class="card-text">@announcement.AnnouncementContent</p>
-                <a class="btn  custom-announcement-btn shake" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@announcement.ID">Detaylar</a>
+                <a class="btn btn-outline-danger m-0" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@announcement.ID">Detaylar</a>
+                
 
             </div>
             <div class="card-footer text-end custom-announcement-footer"><strong>@announcement.AnnouncementSentDate</strong></div>

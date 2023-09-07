@@ -3,13 +3,29 @@
     ViewData["Title"] = "EmailSenderResult";
 }
 
-<h1 class="display-5 text-center">Mailiniz Başarıyla gönderildi</h1>
-<p><strong>Gönderen : </strong>@Model.SenderEmail</p>
-<p><strong>Alıcı : </strong>@Model.RecipientEmail</p>
-<p><strong>Başlık : </strong>@Model.Subject</p>
-<p><strong>Açıklama : </strong>@Model.Body</p>
+<div class="email-container" style="height: 400px !important;">
+    <h1 class="email-gonder" style="color: #23c438 !important;">Mail Başarıyla Gönderildi!</h1>
+    <br />
+    <br />
+    <form asp-controller="Home" asp-action="SendEmail" method="post">
+        <div class="form-group d-flex justify-content-between">
+            <div>
+                <label asp-for="SenderEmail" class="gonderen-eposta"><strong>Gönderen E-posta</strong></label>
+                <p class="gonderen-epostasi">@Model.SenderEmail</p>
+                <input asp-for="SenderEmail" type="hidden" class="form-control" id="SenderEmail" name="SenderEmail" required>
+            </div>
+            <div>
+                <label asp-for="RecipientEmail" class="alici-eposta"><strong>Alıcı E-Posta</strong></label>
+                <p class="alici-epostasi">@Model.RecipientEmail</p>
+                <input asp-for="RecipientEmail" type="hidden" class="form-control" id="RecipientEmail" name="RecipientEmail" required>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="form-group d-flex justify-content-center">
+            <a class="btn btn-outline-danger" asp-action="Index" asp-controller="Home">Ana Sayfaya dön</a>
+        </div>
 
-<div class="btn-group">
-    <a class="btn btn-primary" asp-action="Index" asp-controller="Home">Ana Sayfaya dön</a>
-    <a class="btn btn-outline-danger" asp-action="AnnouncementDetails" asp-route-id="@Model.AnnouncementIDForEmail" asp-controller="Home">İlgili Duyuruya git</a>
+
+    </form>
 </div>
