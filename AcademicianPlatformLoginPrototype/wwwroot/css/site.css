@@ -1020,3 +1020,9 @@ p.duyuru-bulunmuyor {
     padding: 20px;
     text-align: center;
 }
+
+#mailSender {
+    filter: none;
+    border: none;
+    background-color: white;
+}
