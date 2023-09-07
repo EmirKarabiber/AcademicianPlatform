@@ -393,11 +393,20 @@ body {
     }
 }
 
+#department {
+    margin-bottom: 5px;
+    transform: scale(0.1);
+}
+
 #cardTitle {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     max-width: 100%;
+}
+
+.indexNames {
+    font-size: 21px;
 }
 
 #titleP {
@@ -716,6 +725,18 @@ header {
 .btn-duyuruDuzen {
     font-weight: 500;
     border-radius: 7px;
+}
+
+#annHeader {
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.1);
+    height: 40px;
+    background-color: #A82F3A !important;
+    color: #A82F3A !important;
+}
+
+#annHeaderContent{
+    color: white !important;
+    font-size: 15px !important;
 }
 
 .faculty-label {
