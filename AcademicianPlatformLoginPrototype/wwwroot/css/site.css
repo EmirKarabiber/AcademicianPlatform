@@ -715,6 +715,7 @@ header {
 
 .btn-duyuruDuzen {
     font-weight: 500;
+    border-radius: 7px;
 }
 
 .faculty-label {
