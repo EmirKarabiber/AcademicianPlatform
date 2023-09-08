@@ -943,11 +943,15 @@ header {
     align-items: center;
     height: 100%;
     padding: 0;
-    .nav-item
+}
 
-{
+
+.nav-item {
     margin: 0 10px;
 }
+    }
+     
+     
 
 
 .navbar {
