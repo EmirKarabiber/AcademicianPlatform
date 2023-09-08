@@ -861,21 +861,21 @@ p.duyuru-bulunmuyor {
     margin-bottom: 10px;
 }
 
-.card-text strong {
+    .card-text strong {
         font-weight: bold;
-}
+    }
 
 
-.card-text a {
+    .card-text a {
         color: #1e3799;
         text-decoration: none;
         font-weight: bold;
-}
+    }
 
 
-.card-text a:hover {
+        .card-text a:hover {
             text-decoration: underline;
-}
+        }
 
 
 @keyframes shake {
@@ -913,7 +913,6 @@ p.duyuru-bulunmuyor {
     justify-content: center;
     align-items: center;
     min-height: 65vh;
-    
 }
 
 /* Ýçeriði içeren alan */
@@ -943,9 +942,10 @@ header {
     justify-content: center;
     align-items: center;
     height: 100%;
-    padding: 0; 
+    padding: 0;
+    .nav-item
 
-.nav-item {
+{
     margin: 0 10px;
 }
 
@@ -1058,12 +1058,12 @@ header {
 .hover-me:hover .sub-menu-3 {
     position: absolute;
     display: block;
-    margin-top: -50px; 
-    margin-left: 140px; 
+    margin-top: -50px;
+    margin-left: 140px;
     background-color: #A82F3A;
     border-radius: 10px;
-    width: 200px; 
-    padding: 10px; 
+    width: 200px;
+    padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -1079,7 +1079,7 @@ header {
     font-size: 14px;
     color: #fff;
     position: relative;
-    top: -6px; 
+    top: -6px;
     float: right;
 }
 
@@ -1143,14 +1143,15 @@ header {
     font-size: 14px;
     text-align: center;
     text-decoration: none;
-    background-color: #A82F3A; 
-    color: #FFFFFF; 
+    background-color: #A82F3A;
+    color: #FFFFFF;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease; 
+    transition: background-color 0.3s ease;
 }
 
     .btn-details:hover {
-        background-color: darkred; 
+        background-color: darkred;
     }
+
