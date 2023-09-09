@@ -8,5 +8,4 @@
 
         // Diğer özellikler veya ilişkiler
     }
-
 }

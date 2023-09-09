@@ -437,7 +437,59 @@ namespace AcademicianPlatform.Controllers
             return RedirectToAction("AcademicianDetails", new { id = userIdToUnfollow });
         }
 
+        public async Task<IActionResult> FollowerFollowing(string id)
+        {
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                var _currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
 
+                var followersList = await _context.Follows
+                   .Where(f => f.FollowedUserId == id)
+                   .Select(f => f.FollowerId)
+                   .ToListAsync();
+                
+                var followingsList = await _context.Follows
+                    .Where(f => f.FollowerId == id)
+                    .Select(f => f.FollowedUserId)
+                    .ToListAsync();
+
+            var CurrentUserFollowList = await _context.Follows
+                    .Where(f => f.FollowerId == _currentUser.Id)
+                    .Join(_userManager.Users,
+                        follow => follow.FollowedUserId,
+                        user => user.Id,
+                        (follow, user) => user)
+                    .ToListAsync();
+
+
+
+            var followers = await _userManager.Users
+                    .Where(u => followersList.Contains(u.Id))
+                    .ToListAsync();
+
+                var following = await _userManager.Users
+                    .Where(u => followingsList.Contains(u.Id))
+                    .ToListAsync();
+
+        
+
+            var FollowModel = new FollowersFollowingModel
+                {
+                    UserId = user,
+                    CurrentUser = _currentUser,
+                    Followers = followers,
+                    Following = following,
+                    UserFullName = user.FirstName + " " + user.LastName.ToUpper(),
+                    CurrentUserFollowList = CurrentUserFollowList
+            };
+        
+            return View(FollowModel);
+        }
+    
+        
 
     }
 }

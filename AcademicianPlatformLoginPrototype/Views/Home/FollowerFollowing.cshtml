@@ -1,0 +1,47 @@
+﻿<h2>Followers</h2>
+<hr />
+<ul>
+    @foreach (var follower in Model.Followers)
+    {
+        <li>@follower.FirstName @follower.LastName.ToUpper()</li>
+        @if (Model.CurrentUser != follower && Model.CurrentUserFollowList.Contains(follower))
+        {
+            <form method="post" asp-controller="Home" asp-action="UnfollowUser">
+                <input type="hidden" name="userIdToUnfollow" value="@follower.Id" />
+                <button class="btn btn-success" type="submit">Unfollow</button>
+            </form>
+        }
+        else
+       if (Model.CurrentUser != follower && !Model.CurrentUserFollowList.Contains(follower))
+        {
+            <form method="post" asp-controller="Home" asp-action="FollowUser">
+                <input type="hidden" name="userIdToFollow" value="@follower.Id" />
+                <button class="btn btn-primary" type="submit">Follow</button>
+            </form>
+        }
+    }
+</ul>
+
+<h2>Following</h2>
+<hr />
+<ul>
+    @foreach (var following in Model.Following)
+    {
+        <li>@following.FirstName @following.LastName.ToUpper()</li>
+        @if (Model.CurrentUser != following && Model.CurrentUserFollowList.Contains(following))
+        {
+            <form method="post" asp-controller="Home" asp-action="UnfollowUser">
+                <input type="hidden" name="userIdToUnfollow" value="@following.Id" />
+                <button class="btn btn-success" type="submit">Unfollow</button>
+            </form>
+        }
+        else
+       if (Model.CurrentUser != following && !Model.CurrentUserFollowList.Contains(following))
+        {
+            <form method="post" asp-controller="Home" asp-action="FollowUser">
+                <input type="hidden" name="userIdToFollow" value="@following.Id" />
+                <button class="btn btn-primary" type="submit">Follow</button>
+            </form>
+        }
+    }
+</ul>
