@@ -25,6 +25,24 @@
                                 <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.
                             </p>
                             <p><strong>Son Giriş Tarihi:</strong> @Model.LastLogin</p>
+                            @if (Model.IsCurrentUser == false)
+                            {
+                                @if (Model.IsFollowing == true)
+                                {
+                                    <form asp-controller="Home" asp-action="UnfollowUser" method="post">
+                                        <input type="hidden" name="userIdToUnfollow" value="@Model.UserId" />
+                                        <button type="submit" class="btn btn-danger">Takibi Bırak</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-controller="Home" asp-action="FollowUser" method="post">
+                                        <input type="hidden" name="userIdToFollow" value="@Model.UserId" />
+                                        <button type="submit" class="btn btn-primary">Takip Et</button>
+                                    </form>
+                                }
+                            }
+
                         </div>
                     </div>
                 </div>

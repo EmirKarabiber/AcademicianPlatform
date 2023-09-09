@@ -357,7 +357,16 @@ namespace AcademicianPlatform.Controllers
                 .Where(a => a.AnnouncementSenderID == id)
                 .OrderByDescending(a => a.ID)
                 .ToList();
-    
+
+            string followerId = User.Identity.Name;
+            string followingId = id;
+
+            var follow = _context.Follows
+                .FirstOrDefault(f => f.FollowerId == followerId && f.FollowedUserId == followingId);
+
+            var isFollowing = (follow != null);
+
+
             var FullName = academician.FirstName + " " + academician.LastName.ToUpper();
             var viewModel = new AcademicianDetailsViewModel
             {
@@ -373,10 +382,56 @@ namespace AcademicianPlatform.Controllers
                 AboutMeText = academician.AboutMeText,
                 CVPath = academician.CVPath,
 				LastLogin = academician.LastLogin.ToString(),
-				// Diğer kullanıcı bilgilerini burada doldurun.
-			};
+                IsCurrentUser = (User.Identity.Name == academician.UserName),
+                IsFollowing = isFollowing
+
+                // Diğer kullanıcı bilgilerini burada doldurun.
+            };
 
             return View(viewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> FollowUser(string userIdToFollow)
+        {
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            if (currentUser != null)
+            {
+                // Kullanıcıyı takip etme işlemi
+                var follow = new Follow
+                {
+                    FollowerId = currentUser.Id,
+                    FollowedUserId = userIdToFollow
+                };
+
+                _context.Follows.Add(follow);
+                await _context.SaveChangesAsync();
+            }
+
+            // İşlem tamamlandığında kullanıcıyı doğru sayfaya yönlendirin
+            return RedirectToAction("AcademicianDetails",new { id = userIdToFollow });
+        }
+        [HttpPost]
+        public async Task<IActionResult> UnfollowUser(string userIdToUnfollow)
+        {
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            if (currentUser != null)
+            {
+                // Kullanıcıyı takip etmeyi bırakma işlemi
+                var follow = await _context.Follows
+                    .Where(f => f.FollowerId == currentUser.Id && f.FollowedUserId == userIdToUnfollow)
+                    .FirstOrDefaultAsync();
+
+                if (follow != null)
+                {
+                    _context.Follows.Remove(follow);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            // İşlem tamamlandığında kullanıcıya geri dön
+            return RedirectToAction("AcademicianDetails", new { id = userIdToUnfollow });
         }
 
 

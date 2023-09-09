@@ -12,5 +12,6 @@ namespace AcademicianPlatform.Data
 		{
 		}
 		public DbSet<Announcement>? Announcements { get; set; }
-	}
+        public DbSet<Follow> Follows { get; set; }
+    }
 }
