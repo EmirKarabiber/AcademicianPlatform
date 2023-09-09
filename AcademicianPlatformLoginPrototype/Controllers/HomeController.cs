@@ -350,7 +350,7 @@ namespace AcademicianPlatform.Controllers
 
 
 
-        public IActionResult AcademicianDetails(string id)
+        public async Task<IActionResult> AcademicianDetails(string id)
         {
             var academician = _userManager.Users.FirstOrDefault(u => u.Id == id);
             var userAnnouncements = _context.Announcements
@@ -358,7 +358,10 @@ namespace AcademicianPlatform.Controllers
                 .OrderByDescending(a => a.ID)
                 .ToList();
 
-            string followerId = User.Identity.Name;
+            string userName = User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(userName);
+
+            string followerId = user.Id;
             string followingId = id;
 
             var follow = _context.Follows
