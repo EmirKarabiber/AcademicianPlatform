@@ -1,9 +1,11 @@
-﻿<h2>Followers</h2>
+﻿@model FollowersFollowingModel
+
+<h2>Followers</h2>
 <hr />
 <ul>
     @foreach (var follower in Model.Followers)
     {
-        <li>@follower.FirstName @follower.LastName.ToUpper()</li>
+        <li><a asp-action="AcademicianDetails" asp-route-id="@follower.Id" style="text-decoration:none">@follower.FirstName @follower.LastName.ToUpper()</a></li>
         @if (Model.CurrentUser != follower && Model.CurrentUserFollowList.Contains(follower))
         {
             <form method="post" asp-controller="Home" asp-action="UnfollowUser">
@@ -27,7 +29,8 @@
 <ul>
     @foreach (var following in Model.Following)
     {
-        <li>@following.FirstName @following.LastName.ToUpper()</li>
+
+        <li><a asp-action="AcademicianDetails" asp-route-id="@following.Id" style="text-decoration:none">@following.FirstName @following.LastName.ToUpper()</a></li>
         @if (Model.CurrentUser != following && Model.CurrentUserFollowList.Contains(following))
         {
             <form method="post" asp-controller="Home" asp-action="UnfollowUser">
