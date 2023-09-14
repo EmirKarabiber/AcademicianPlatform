@@ -31,30 +31,44 @@ namespace AcademicianPlatform.Controllers
             _userStore = userStore;
             _userManager = userManager;
         }
-		[Authorize]
-		public async Task<IActionResult> Index()
-		{
-			// İki ay önceki tarihi hesaplayın
-			var twoMonthsAgo = DateTime.Now.AddMonths(-1);
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            // İki ay önceki tarihi hesaplayın
+            var twoMonthsAgo = DateTime.Now.AddMonths(-1);
 
-			// İki ay öncesinden sonraki duyuruları çekin ve tersten sıralayın.
-			var announcements = _context.Announcements
-				.Where(a => a.AnnouncementSentDate >= twoMonthsAgo)
+            // İki ay öncesinden sonraki tüm duyuruları çekin ve tersten sıralayın
+            var allAnnouncements = await _context.Announcements
+                .Where(a => a.AnnouncementSentDate >= twoMonthsAgo)
+                .OrderByDescending(a => a.ID)
+                .ToListAsync();
+
+            //------- bu kısım ayarlanacak -----
+            // Sadece özel duyuruları çekin
+			var specialAnnouncements = await _context.Announcements
+				.Where(a => a.AnnouncementSentDate >= twoMonthsAgo && a.AnnouncementSpecial == true)
 				.OrderByDescending(a => a.ID)
-				.ToList();
+				.ToListAsync();
+			//------------------
 
-			// Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
-			var user = await _userManager.FindByNameAsync(User.Identity.Name);
-			if (user != null)
-			{
-				user.LastLogin = DateTime.Now; // Kullanıcının son giriş tarihini güncelle
-				await _userManager.UpdateAsync(user); // Kullanıcıyı güncelle
-			}
+			var Model = new IndexModel
+            {
+                AllAnnouncement=allAnnouncements,
+                SpecialAnnouncement=specialAnnouncements
+            };
+            // Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (user != null)
+            {
+                user.LastLogin = DateTime.Now; // Kullanıcının son giriş tarihini güncelle
+                await _userManager.UpdateAsync(user); // Kullanıcıyı güncelle
+            }
 
-			return View(announcements);
-		}
+            return View(Model);
+        }
 
-		[Authorize]
+
+        [Authorize]
 		public IActionResult Privacy()
 		{
 			return View();
@@ -63,7 +77,7 @@ namespace AcademicianPlatform.Controllers
 		{
 			return View();
 		}
-		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName , string announcementFaculty, bool sendToAll)
+		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName , string announcementFaculty, bool sendToAll,bool isSpeacialAnnouncement)
 		{
 			var user = await _userManager.FindByNameAsync(senderName);
 			Announcement announcement = new Announcement()
@@ -72,7 +86,8 @@ namespace AcademicianPlatform.Controllers
 				AnnouncementContent = announcementContent,
 				AnnouncementSentDate = DateTime.Now,
 				AnnouncementSenderID = user.Id,
-                AnnouncementFaculty = announcementFaculty
+                AnnouncementFaculty = announcementFaculty,
+                AnnouncementSpecial = isSpeacialAnnouncement
             };
 			await _context.Announcements.AddAsync(announcement);
 			await _context.SaveChangesAsync();

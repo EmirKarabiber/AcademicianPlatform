@@ -1,9 +1,9 @@
 ﻿@using AcademicianPlatform.Areas.Identity.Data;
 @using Microsoft.AspNetCore.Identity
-@model IEnumerable<Announcement>
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
 @inject SignInManager<ApplicationUser> SignInManager
+@model IndexModel
 @{
 	ViewData["Title"] = "Home Page";
 }
@@ -45,9 +45,89 @@
 	</div>
 </div>*@
 
-@if (Model != null)
+<!--   bu kısım deneysel , SpecialAnnouncement için -->
+@if (Model.SpecialAnnouncement != null)
 {
-	@foreach (var item in Model)
+	<h3 class="text-center display-4"> Acil duyurular </h3>
+	<hr />
+	@foreach (var item in Model.SpecialAnnouncement)
+	{
+		@if (item != null)
+		{
+
+			var senderID = item.AnnouncementSenderID;
+			var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
+			if (user != null)
+			{
+
+				<div class="container" style=" height:50%">
+					<div class="card border mb-3 shadow" id="card" style="border-radius: 15px;">
+
+						<div id="annHeader" class="card-header d-inline align-content-end card-header-with-shadow ann-header">
+							<h5 id="annHeaderContent">
+								Acil Duyuru (@item.AnnouncementFaculty)<span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate</span>
+							</h5>
+						</div>
+
+
+
+						<div class="card-body" style="height: 175px;">
+
+							<div>
+								<h5 class="card-title m-0 p-0">
+									<div class="container">
+										<div class="row">
+											<div class="col-lg-1 col-md-2 col-2 m-0 p-2 pt-0">
+												<img src="@user.ProfilePhotoPath" class="img-fluid display-inline profilePic" style="width: 200px;">
+											</div>
+											<div class="col-lg-10 col-md-10 col-10">
+												<div class="row ml-0 col-10">
+													<div class="col-lg-10 col-md-10 col-10 m-0 p-0">
+														<span class="indexNames">@user.Title @user.FirstName @user.LastName </span>
+
+													</div>
+													<div class="col-lg-3 col-md-10 col-sm-10 m-0 p-0">
+														<span id="department" style="font-size: 13px;"> @user.Department</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</h5>
+							</div>
+							<span id="cardTitle" style="font-size: 24px; color: #85150d;"><p class="m-0 p-0" id="titleP">@item.AnnouncementTitle</p></span>
+
+							<p class="card-text" id="card-text">
+								@item.AnnouncementContent
+							</p>
+
+							<div>
+								<a class="btn btn-outline-danger m-0" id="mobileDetails" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+							</div>
+
+							<a id="details" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+
+							<button onclick="scrollToTop()"
+									id="scroll-top-button"
+									class="scroll-top-button"
+									type="button">
+								<span class="material-symbols-outlined"> arrow_upward </span>
+							</button>
+						</div>
+					</div>
+
+					<br />
+
+				</div>
+			}
+		}
+	}
+	<hr />
+}
+<!--   ----------------------------------------  -->
+@if (Model.AllAnnouncement != null)
+{
+	@foreach (var item in Model.AllAnnouncement)
 	{
 		@if (item != null)
 		{

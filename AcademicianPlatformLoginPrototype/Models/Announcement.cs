@@ -19,5 +19,7 @@ namespace AcademicianPlatform.Models
         public DateTime AnnouncementSentDate { get; set; }
         
         public string? AnnouncementFaculty { get; set; }
+
+        public bool? AnnouncementSpecial { get; set; }
     }
 }
