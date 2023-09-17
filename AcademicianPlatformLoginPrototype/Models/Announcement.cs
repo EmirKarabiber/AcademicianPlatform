@@ -2,6 +2,8 @@
 using MessagePack;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection.Metadata.Ecma335;
+using System;
+using System.Collections.Generic;
 
 namespace AcademicianPlatform.Models
 {
@@ -21,5 +23,6 @@ namespace AcademicianPlatform.Models
         public string? AnnouncementFaculty { get; set; }
 
         public bool? AnnouncementSpecial { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

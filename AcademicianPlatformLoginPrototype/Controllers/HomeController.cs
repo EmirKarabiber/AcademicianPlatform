@@ -34,11 +34,19 @@ namespace AcademicianPlatform.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            // İki ay önceki tarihi hesaplayın
-            var twoMonthsAgo = DateTime.Now.AddMonths(-1);
+			var announcements = GetRecentAnnouncements();
+			var twoMonthsAgo = DateTime.Now.AddMonths(-1);
 
-            // İki ay öncesinden sonraki tüm duyuruları çekin ve tersten sıralayın
-            var allAnnouncements = await _context.Announcements
+            /* Hatayı çözmek için kaldırıldı. Umarım önemli bir parça değildir 
+             
+			var model = new IndexModel
+			{
+				AllAnnouncement = announcements
+				
+			};
+            */
+			// İki ay öncesinden sonraki tüm duyuruları çekin ve tersten sıralayın
+			var allAnnouncements = await _context.Announcements
                 .Where(a => a.AnnouncementSentDate >= twoMonthsAgo)
                 .OrderByDescending(a => a.ID)
                 .ToListAsync();
@@ -114,6 +122,7 @@ namespace AcademicianPlatform.Controllers
             var sentEmails = new List<string>();
             
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
             foreach (var userWithEmail in usersWithEmails)
             {
                 var recipientEmail = userWithEmail.Email;
@@ -173,12 +182,29 @@ namespace AcademicianPlatform.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
         [Authorize]
-
-
-
 		public IActionResult AnnouncementDetails([FromRoute(Name = "ID")] int announcementID)
 		{
+
+			var announcement = _context.Announcements
+		.Include(a => a.Comments) // Yorumları dahil et
+		.FirstOrDefault(a => a.ID == announcementID);
+
+
+			if (announcement == null)
+			{
+				return NotFound();
+			}
+
+			var announcementViewModel = new AnnouncementViewModel
+			{
+				Announcement = announcement,
+                
+				
+				// Diğer özellikleri burada doldurun
+			};
+
 
 			// Mail bilgilerini hazırla
 			string recipientEmail = "destek@example.com";
@@ -190,14 +216,7 @@ namespace AcademicianPlatform.Controllers
             ViewBag.MailtoLink = mailtoLink;
 
 
-
-            var announcement = _context.Announcements.FirstOrDefault(a => a.ID == announcementID);  //duyuruları başka ekranda açma
-            if (announcement == null)
-            {
-                return NotFound();
-            }
-
-            return View(announcement);
+            return View(announcementViewModel);
         }
 
 
@@ -317,7 +336,11 @@ namespace AcademicianPlatform.Controllers
 					.Where(a => a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler")
 					.OrderByDescending(a => a.ID)
 					.ToList();
-
+				var model = new IndexModel
+				{
+					AllAnnouncement = announcements,
+					// SpecialAnnouncement ve diğer özellikleri doldurabilirsiniz.
+				};
 				// Duyuruları içeren bir görünümü döndürür.
 				return View("Index", announcements);
 			}
@@ -503,8 +526,45 @@ namespace AcademicianPlatform.Controllers
         
             return View(FollowModel);
         }
-    
-        
 
-    }
+		private List<Announcement> GetRecentAnnouncements()
+		{
+			var twoMonthsAgo = DateTime.Now.AddMonths(-2);
+			var announcements = _context.Announcements
+				.Where(a => a.AnnouncementSentDate >= twoMonthsAgo)
+				.OrderByDescending(a => a.AnnouncementSentDate)
+				.Include(a => a.Comments) // Yorumları dahil et
+				.ToList();
+
+			return announcements;
+		}
+
+		[HttpPost]
+
+		public async Task<IActionResult> AddComment(int announcementID, string commentContent)
+		{
+			// Kullanıcıyı bul
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+			// Yorum oluştur
+			var comment = new Comment
+			{
+				AnnouncementId = announcementID,
+				Text = commentContent,
+				UserId = user.Id,
+				DatePosted = DateTime.Now
+			};
+
+			// Yorumu veritabanına ekleyin
+			_context.Comments.Add(comment);
+			await _context.SaveChangesAsync();
+
+			// Yorum ekledikten sonra aynı sayfaya geri dön
+			return RedirectToAction("AnnouncementDetails", new { ID = announcementID });
+		}
+
+
+	}
+
 }
+

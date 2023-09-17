@@ -4,6 +4,7 @@ using AcademicianPlatform.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AcademicianPlatform.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230916184839_AddDatePostedAndTextColumns")]
+    partial class AddDatePostedAndTextColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,7 +127,7 @@ namespace AcademicianPlatform.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Announcements", (string)null);
+                    b.ToTable("Announcements");
                 });
 
             modelBuilder.Entity("AcademicianPlatform.Models.Comment", b =>
@@ -155,7 +158,7 @@ namespace AcademicianPlatform.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("AcademicianPlatform.Models.Follow", b =>
@@ -176,7 +179,7 @@ namespace AcademicianPlatform.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Follows", (string)null);
+                    b.ToTable("Follows");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
