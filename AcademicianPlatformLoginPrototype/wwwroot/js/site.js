@@ -41,3 +41,4 @@ document.getElementById('facultySelect').addEventListener('change', function () 
 
 
 
+

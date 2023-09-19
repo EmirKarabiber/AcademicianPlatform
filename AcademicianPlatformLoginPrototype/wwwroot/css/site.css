@@ -947,11 +947,10 @@ header {
 
 
 .nav-item {
-    margin: 0 10px;
+    margin: 0 10px; 
+   
 }
-    }
-     
-     
+       
 
 
 .navbar {
@@ -963,21 +962,26 @@ header {
 .nav-item a {
     display: flex;
     align-items: center;
+    width: 200px; 
+   
 }
 
 .nav-item.custom-item {
     position: relative;
+    
 }
 
 
 .navbar-nav li {
     margin: 5px;
     padding: 5px;
+   
 }
 
     .navbar-nav li a {
         text-decoration: none;
         color: white;
+        
     }
 
 .custom-item {
@@ -991,6 +995,8 @@ header {
         color: black;
         border-radius: 10px;
     }
+
+
 
 .sub-menu-1 {
     display: none;
@@ -1066,7 +1072,7 @@ header {
     margin-left: 140px;
     background-color: #A82F3A;
     border-radius: 10px;
-    width: 200px;
+    width: 210px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -1159,3 +1165,47 @@ header {
         background-color: darkred;
     }
 
+
+.sub-menu-4 {
+    display: none; 
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #A82F3A;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 5px;
+    margin-left: -15px;
+    font-size: 10px;
+    z-index: 1; 
+}
+
+
+.nav-link:hover .sub-menu-4 {
+    display: block;
+}
+
+.sub-menu-4 ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sub-menu-4 li {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+li a i {
+    margin-right: 8px; 
+}
+
+
+.custom-item a i {
+    margin-right: 9px; 
+}
+
+.sub-menu-4 li:hover {
+    background-color: darkred;
+    border-radius: 10px;
+}

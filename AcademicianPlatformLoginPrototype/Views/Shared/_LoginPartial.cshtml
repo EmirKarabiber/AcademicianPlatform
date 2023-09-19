@@ -12,9 +12,9 @@
         var currentUser = await UserManager.FindByNameAsync(User.Identity.Name);
         @if (SignInManager.IsSignedIn(User) && currentUser != null)
         {
-            <li class="nav-item custom-item"><a asp-area="" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-bullhorn"></i> DUYURULAR</a></li>
+            <li class="nav-item custom-item"><a asp-area="" asp-controller="Home" asp-action="Index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-bullhorn"></i> DUYURULAR</a></li>
             <li class="nav-item custom-item">
-                <a href=""> AKADEMİSYENLER</a>
+                <a href="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-user-graduate"></i> AKADEMİSYENLER</a>
                 <div class="sub-menu-1">
                     <ul>
                         <li class="nav-item custom-item"><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Tıp"><i class="fa-solid fa-user-doctor"></i> TIP FAKÜLTESİ</a></li>
@@ -73,7 +73,7 @@
 
             </li>
             <li class="nav-item custom-item">
-                <a href="#"><i class="fa-solid fa-graduation-cap"></i> YÜKSEKOKULLAR</a>
+                <a href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-graduation-cap"></i> YÜKSEKOKULLAR</a>
                 <div class="sub-menu-1">
                     <ul>
                         <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Yabancı Diller">Yabancı Diller Yüksekokulu</a></li>
@@ -82,7 +82,7 @@
                 </div>
             </li>
             <li class="nav-item custom-item">
-                <a href="#"><i class="fa-solid fa-user-graduate"></i> ENSTİTÜLER</a>
+                <a href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-user-graduate"></i> ENSTİTÜLER</a>
                 <div class="sub-menu-1">
                     <ul>
                         <li><a asp-controller="Home" asp-action="Academians" asp-route-academianDepartment="Tıp">Lisansüstü Eğitim Enstitüsü</a></li>
@@ -92,17 +92,28 @@
             </li>
             <li class="nav-item custom-item">
                 <a href="/Home/NewAnnouncement">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <i class="fa-solid fa-bullhorn"></i> YENİ DUYURU
                 </a>
             </li>
 
 
             <li class="nav-item p-0 m-0 justify-content-center p-0 m-0">
-                <a class="nav-link text-dark nav-text text-decoration-none p-0 m-0" style="width:50px;" asp-area="Identity" asp-page="/Account/Manage/Index" title="Hesap Ayarları">
-                    <img src="@currentUser.ProfilePhotoPath" class="profilePic p-0 m-0" style="margin-top: 5px; width: 50px; height: auto;" />
+                <div class="nav-link text-dark nav-text text-decoration-none p-0 m-2" style="width:50px; position: relative;" asp-area="Identity" asp-page="/Account/Manage/Index" >
+                    <img src="@currentUser.ProfilePhotoPath" class="profilePic p-0 m-0" style="margin-top: 10px; width: 50px; height: auto;" />
 
-                </a>
+                    <div class="sub-menu-4">
+                        <ul>
+                            <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Hesap Ayarları</a></li>
+                            <li><a asp-area="Identity" asp-page="/Account/Manage/MyAnnouncements">Duyurularım</a></li>
+                        </ul>
+                    </div>
+                </div>
             </li>
+
+
+            
+
         }
     }
 </ul>
