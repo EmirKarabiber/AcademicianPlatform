@@ -8,11 +8,6 @@ namespace AcademicianPlatform.Models
 		public string Text { get; set; }
 		public string UserId { get; set; }
 		public ApplicationUser User { get; set; }
-		public ApplicationUser FirstName { get; set; }
-		public ApplicationUser LastName { get; set; }
-		public ApplicationUser Department { get; set; }
-		public ApplicationUser Title { get; set; }
-		public ApplicationUser ProfilePhotoPath { get; set; }
 		public bool IsDeleted { get; set; }
 
 

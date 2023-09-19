@@ -85,18 +85,24 @@
 	<ul>
 		@foreach (var comment in Model.Announcement.Comments)
 {
-    <li>
-        <strong>@comment.User.Title @comment.User.FirstName @comment.User.LastName</strong>
-        <span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
-        <p>@comment.Text</p>
-        @if (User.Identity.Name == comment.User.UserName)
-    {
-        <form asp-controller="Home" asp-action="DeleteComment" method="post">
-            <input type="hidden" name="commentID" value="@comment.Id" />
-            <button type="submit" class="btn btn-sm btn-danger">Sil</button>
-        </form>
-    }
-    </li>
+			@if (comment.User != null)
+			{
+				<li>
+					<strong>@comment.User.Title @comment.User.FirstName @comment.User.LastName</strong>
+					<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
+					<p>@comment.Text</p>
+					@if (User.Identity.Name == comment.User.UserName)
+					{
+						<form asp-controller="Home" asp-action="DeleteComment" method="post">
+							<input type="hidden" name="commentID" value="@comment.Id" />
+							<button type="submit" class="btn btn-sm btn-danger">Sil</button>
+						</form>
+					}
+				</li>
+	}
+	else{
+		<span>Bu bir hata mesajıdır :(</span>
+	}
 }
 
 	</ul>
