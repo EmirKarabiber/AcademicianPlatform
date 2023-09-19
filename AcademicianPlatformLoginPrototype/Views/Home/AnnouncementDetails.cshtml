@@ -88,7 +88,7 @@
 			@if (comment.User != null)
 			{
 				<li>
-					<strong>@comment.User.Title @comment.User.FirstName @comment.User.LastName</strong>
+					<strong>@user.Title @user.FirstName @user.LastName</strong>
 					<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
 					<p>@comment.Text</p>
 					@if (User.Identity.Name == comment.User.UserName)
