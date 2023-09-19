@@ -1,50 +1,73 @@
 ﻿@model FollowersFollowingModel
 
-<h2>Followers</h2>
+<h2 class ="text-center"><i class="fa-solid fa-users fa" style="color: #A82F3A;"></i>&nbsp;Takipçi Listesi</h2>
+
 <hr />
-<ul>
+<div class="followers-list">
     @foreach (var follower in Model.Followers)
     {
-        <li><a asp-action="AcademicianDetails" asp-route-id="@follower.Id" style="text-decoration:none">@follower.FirstName @follower.LastName.ToUpper()</a></li>
-        @if (Model.CurrentUser != follower && Model.CurrentUserFollowList.Contains(follower))
-        {
-            <form method="post" asp-controller="Home" asp-action="UnfollowUser">
-                <input type="hidden" name="userIdToUnfollow" value="@follower.Id" />
-                <button class="btn btn-success" type="submit">Unfollow</button>
-            </form>
-        }
-        else
-       if (Model.CurrentUser != follower && !Model.CurrentUserFollowList.Contains(follower))
-        {
-            <form method="post" asp-controller="Home" asp-action="FollowUser">
-                <input type="hidden" name="userIdToFollow" value="@follower.Id" />
-                <button class="btn btn-primary" type="submit">Follow</button>
-            </form>
-        }
-    }
-</ul>
+        <div class="follower-item">
+            <img src="@follower.ProfilePhotoPath" class="profilePicture" />
+            <div class="follower-details">
+                <span class="user-name">
+                    <a asp-action="AcademicianDetails" asp-route-id="@follower.Id" style="text-decoration:none">
 
-<h2>Following</h2>
+                        @follower.FirstName @follower.LastName.ToUpper()
+                    </a>
+                </span>
+                <span class="user-department">@follower.Department</span>
+                
+            </div>
+
+            @if (Model.CurrentUser != follower && Model.CurrentUserFollowList.Contains(follower))
+            {
+                <form method="post" asp-controller="Home" asp-action="UnfollowUser">
+                    <input type="hidden" name="userIdToUnfollow" value="@follower.Id" />
+                    <button class="buton buton-success" type="submit">Takibi Bırak</button>
+                </form>
+            }
+            else if (Model.CurrentUser != follower && !Model.CurrentUserFollowList.Contains(follower))
+            {
+                <form method="post" asp-controller="Home" asp-action="FollowUser">
+                    <input type="hidden" name="userIdToFollow" value="@follower.Id" />
+                    <button class="buton buton-primary" type="submit">Takip</button>
+                </form>
+            }
+        </div>
+    }
+</div>
+
+<h2 class="text-center"><i class="fa-solid fa-users fa" style="color: #A82F3A;"></i>&nbsp;Takip Edilenler Listesi</h2>
 <hr />
-<ul>
+<div class="user-list">
     @foreach (var following in Model.Following)
     {
+        <div class="user-item">
+            <img src="@following.ProfilePhotoPath" class="profilePicture" />
+            <div class="user-details">
+                <span class="user-name">
+                    <a asp-action="AcademicianDetails" asp-route-id="@following.Id" style="text-decoration:none">
+                        @following.FirstName @following.LastName.ToUpper()
+                    </a>
+                </span>
+                <span class="user-department">@following.Department</span>
+               
+            </div>
 
-        <li><a asp-action="AcademicianDetails" asp-route-id="@following.Id" style="text-decoration:none">@following.FirstName @following.LastName.ToUpper()</a></li>
-        @if (Model.CurrentUser != following && Model.CurrentUserFollowList.Contains(following))
-        {
-            <form method="post" asp-controller="Home" asp-action="UnfollowUser">
-                <input type="hidden" name="userIdToUnfollow" value="@following.Id" />
-                <button class="btn btn-success" type="submit">Unfollow</button>
-            </form>
-        }
-        else
-       if (Model.CurrentUser != following && !Model.CurrentUserFollowList.Contains(following))
-        {
-            <form method="post" asp-controller="Home" asp-action="FollowUser">
-                <input type="hidden" name="userIdToFollow" value="@following.Id" />
-                <button class="btn btn-primary" type="submit">Follow</button>
-            </form>
-        }
+            @if (Model.CurrentUser != following && Model.CurrentUserFollowList.Contains(following))
+            {
+                <form method="post" asp-controller="Home" asp-action="UnfollowUser">
+                    <input type="hidden" name="userIdToUnfollow" value="@following.Id" />
+                    <button class="buton buton-success" type="submit">Takibi Bırak</button>
+                </form>
+            }
+            else if (Model.CurrentUser != following && !Model.CurrentUserFollowList.Contains(following))
+            {
+                <form method="post" asp-controller="Home" asp-action="FollowUser">
+                    <input type="hidden" name="userIdToFollow" value="@following.Id" />
+                    <button class="buton buton-primary" type="submit">Takip</button>
+                </form>
+            }
+        </div>
     }
-</ul>
+</div>
