@@ -1235,7 +1235,7 @@ li a i {
 
 .user-name {
     font-weight: bold;
-    margin-right: 15px; /* Ýsim ve fotoðraf arasýna boþluk ekler */
+    margin-right: 15px; 
 }
 
 
@@ -1244,12 +1244,12 @@ li a i {
         color: #A82F3A;
         font-weight: bold;
         display: inline-block;
-        margin-bottom: 5px; /* Ýsim ve bölüm arasýna boþluk ekler */
+        margin-bottom: 5px; 
     }
 
 .user-department {
     color: #666;
-    margin-right: 15px; /* Ýsim ve fotoðraf arasýna boþluk ekler */
+    margin-right: 15px; 
 }
 
 .user-list {
