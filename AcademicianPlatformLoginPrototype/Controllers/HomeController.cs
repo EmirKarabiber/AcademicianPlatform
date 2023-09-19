@@ -573,7 +573,9 @@ namespace AcademicianPlatform.Controllers
 				AnnouncementId = announcementID,
 				Text = commentContent,
 				UserId = user.Id,
+				User = user,
 				DatePosted = DateTime.Now
+                
 			};
 
 			_context.Comments.Add(comment);
@@ -606,7 +608,6 @@ namespace AcademicianPlatform.Controllers
 
 			return RedirectToAction("AnnouncementDetails", new { ID = commentToDelete.AnnouncementId });
 		}
-
 
 
 
