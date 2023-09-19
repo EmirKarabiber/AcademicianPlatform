@@ -326,23 +326,44 @@ namespace AcademicianPlatform.Controllers
 
 		// Bu metot, belirli bir fakülte için duyuruları listeleyen bir sayfanın işlemesini sağlar.
 		// İstenilen fakülte adı "announcementFaculty" parametresi ile alınır.
-		public IActionResult IndexFaculty([FromQuery] string announcementFaculty)
+		public async Task<IActionResult> IndexFaculty([FromQuery] string announcementFaculty)
 		{
 			// Eğer fakülte adı geçerli bir değere sahipse işlem yapılır.
 			if (!string.IsNullOrEmpty(announcementFaculty))
 			{
-				// Veritabanından belirtilen fakültede yapılan duyuruları çeker.
-				var announcements = _context.Announcements
+                //------------------------------------------------------
+                var announcements = GetRecentAnnouncements();
+                var twoMonthsAgo = DateTime.Now.AddMonths(-1);
+
+                var allAnnouncements = await _context.Announcements
+                    .Where(a => a.AnnouncementSentDate >= twoMonthsAgo &&
+                        (a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
+                        .OrderByDescending(a => a.ID)
+                        .ToListAsync();
+
+                // Sadece özel duyuruları çekin
+                var specialAnnouncements = await _context.Announcements
+                    .Where(a => a.AnnouncementSentDate >= twoMonthsAgo && a.AnnouncementSpecial == true &&
+                        (a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
+                        .OrderByDescending(a => a.ID)
+                        .ToListAsync();
+                
+
+                var Model = new IndexModel
+                {
+                    AllAnnouncement = allAnnouncements,
+                    SpecialAnnouncement = specialAnnouncements
+                };
+            
+              /*  
+                 var announcements = _context.Announcements
 					.Where(a => a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler")
 					.OrderByDescending(a => a.ID)
 					.ToList();
-				var model = new IndexModel
-				{
-					AllAnnouncement = announcements,
-					// SpecialAnnouncement ve diğer özellikleri doldurabilirsiniz.
-				};
+              */
+				
 				// Duyuruları içeren bir görünümü döndürür.
-				return View("Index", announcements);
+				return View("Index", Model);
 			}
 
 			// Eğer fakülte adı geçerli değilse, genel "Index" sayfasına yönlendirme yapılır.
