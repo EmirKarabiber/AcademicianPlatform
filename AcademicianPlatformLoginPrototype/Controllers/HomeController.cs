@@ -543,10 +543,10 @@ namespace AcademicianPlatform.Controllers
 
 		public async Task<IActionResult> AddComment(int announcementID, string commentContent)
 		{
-			// Kullanıcıyı bul
+			
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-			// Yorum oluştur
+			
 			var comment = new Comment
 			{
 				AnnouncementId = announcementID,
@@ -555,13 +555,38 @@ namespace AcademicianPlatform.Controllers
 				DatePosted = DateTime.Now
 			};
 
-			// Yorumu veritabanına ekleyin
 			_context.Comments.Add(comment);
 			await _context.SaveChangesAsync();
 
-			// Yorum ekledikten sonra aynı sayfaya geri dön
 			return RedirectToAction("AnnouncementDetails", new { ID = announcementID });
 		}
+
+
+		[HttpPost]
+		[Authorize]
+		public async Task<IActionResult> DeleteComment(int commentID)
+		{
+			var commentToDelete = await _context.Comments.FindAsync(commentID);
+
+			if (commentToDelete == null)
+			{
+				return NotFound(); 
+			}
+
+			var user = await _userManager.GetUserAsync(User);
+
+			if (commentToDelete.UserId != user.Id)
+			{
+				return Unauthorized(); 
+			}
+
+			_context.Comments.Remove(commentToDelete);
+			await _context.SaveChangesAsync();
+
+			return RedirectToAction("AnnouncementDetails", new { ID = commentToDelete.AnnouncementId });
+		}
+
+
 
 
 	}

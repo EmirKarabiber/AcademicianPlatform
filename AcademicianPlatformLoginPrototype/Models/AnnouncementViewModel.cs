@@ -11,6 +11,7 @@ namespace AcademicianPlatform.Models
 		public string UserId { get; set; }
 		public ApplicationUser User { get; set; }
 		public DateTime DatePosted { get; set; }
+		public bool IsDeleted { get; set; }
 
 		[System.ComponentModel.DataAnnotations.Key]
 		

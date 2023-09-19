@@ -69,7 +69,7 @@
 </div>
 <br />
 
-<!-- Yorum Ekleme Formu -->
+
 <form asp-controller="Home" asp-action="AddComment" method="post">
 	<input type="hidden" name="announcementID" value="@Model.Announcement.ID" />
 	<div class="form-group">
@@ -79,21 +79,29 @@
 	<button type="submit" class="btn btn-primary">Yorum Ekle</button>
 </form>
 
-<!-- Yorumları Gösterme Bölümü -->
 @if (Model.Announcement.Comments != null && Model.Announcement.Comments.Count > 0)
 {
 	<h4>Yorumlar</h4>
 	<ul>
 		@foreach (var comment in Model.Announcement.Comments)
-		{
-			<li>
-				<strong>@comment.User.UserName</strong>
-				<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
-				<p>@comment.Text</p>
-			</li>
-		}
+{
+    <li>
+        <strong>@comment.User.Title @comment.User.FirstName @comment.User.LastName</strong>
+        <span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
+        <p>@comment.Text</p>
+        @if (User.Identity.Name == comment.User.UserName)
+    {
+        <form asp-controller="Home" asp-action="DeleteComment" method="post">
+            <input type="hidden" name="commentID" value="@comment.Id" />
+            <button type="submit" class="btn btn-sm btn-danger">Sil</button>
+        </form>
+    }
+    </li>
+}
+
 	</ul>
 }
+
 
 
 
