@@ -1284,3 +1284,11 @@ li a i {
     color: #A82F3A;
     border: 1px solid #000000;
 }
+
+.commentContsd {
+    
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}

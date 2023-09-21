@@ -69,37 +69,6 @@
 </div>
 <br />
 
-@if (Model.Announcement.Comments != null && Model.Announcement.Comments.Count > 0)
-{
-	<h4>Yorumlar</h4>
-	<ul>
-		@foreach (var comment in Model.Announcement.Comments)
-		{
-			var commentedUser = await UserManager.FindByIdAsync(comment.UserId);
-			@if (commentedUser != null)
-			{
-				<li>
-					<strong>@commentedUser.Title @commentedUser.FirstName @commentedUser.LastName</strong>
-					<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
-					<p>@comment.Text</p>
-					@if (User.Identity.Name == commentedUser.UserName)
-					{
-						<form asp-controller="Home" asp-action="DeleteComment" method="post">
-							<input type="hidden" name="commentID" value="@comment.Id" />
-							<button type="submit" class="btn btn-sm btn-danger">Sil</button>
-						</form>
-					}
-				</li>
-			}
-			else
-			{
-				<span>Yorum Görüntülenemiyor</span>
-			}
-		}
-
-	</ul>
-}
-
 <form asp-controller="Home" asp-action="AddComment" method="post">
 	<input type="hidden" name="announcementID" value="@Model.Announcement.ID" />
 	<div class="form-group">
@@ -110,6 +79,54 @@
 </form>
 
 
+@if (Model.Announcement.Comments != null && Model.Announcement.Comments.Count > 0)
+{
+	<h4>Yorumlar</h4>
+	<ul>
+		@foreach (var comment in Model.Announcement.Comments)
+		{
+			var commentedUser = await UserManager.FindByIdAsync(comment.UserId);
+			@if (commentedUser != null)
+			{
+				<li>
+					<div class="container commentCont">
+						<div class="row">
+							<div class= "col-lg-1">
+							 <img src="@commentedUser.ProfilePhotoPath" style="width: 75px; height: auto;" class="rounded-circle col-lg-1">
+							 </div>
+							 <div class="col-lg-10">
+					<span><strong>@commentedUser.Title @commentedUser.FirstName @commentedUser.LastName</strong></span>
+					<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
+					<p>@comment.Text</p>
+					</div>
+					<div class="col-lg-1">
+					@if (User.Identity.Name == commentedUser.UserName)
+					{
+						<form asp-controller="Home" asp-action="DeleteComment" method="post">
+							<input type="hidden" name="commentID" value="@comment.Id" />
+							<button type="submit" class="btn btn-sm ">
+								 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                </svg>
+							</button>
+						</form>
+					}
+							</div>
+						</div>
+					</div>
+					
+					<hr>
+					
+				</li>
+			}
+			else
+			{
+				<span>Yorum Görüntülenemiyor</span>
+			}
+		}
+		
+	</ul>
+}
 
 
 @*  Eski sistem kodları (yedek olarak tutuluyor)
