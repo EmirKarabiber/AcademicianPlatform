@@ -83,7 +83,7 @@
 {
 	<h4>Yorumlar</h4>
 	<ul>
-		@foreach (var comment in Model.Announcement.Comments)
+		@foreach (var comment in Model.Announcement.Comments.OrderByDescending(c => c.DatePosted))
 		{
 			var commentedUser = await UserManager.FindByIdAsync(comment.UserId);
 			@if (commentedUser != null)
