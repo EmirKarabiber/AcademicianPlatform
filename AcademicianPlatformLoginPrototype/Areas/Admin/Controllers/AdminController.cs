@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AcademicianPlatform.Areas.Admin.Controllers
 {
@@ -23,16 +24,25 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
             _context = context;
             _environment = environment;
         }
-    
+        public bool isAdmin = false;
+
         public IActionResult Index()
         {
-            var users = _context.Users.ToList();
+            if(CheckIfAdmin() == false)
+            {
+                return NotFound();
+            }
+			var users = _context.Users.ToList();
             return View(users);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string deleteUserId)
         {
-            var userToDelete = _context.Users.FirstOrDefault(p => p.Id == deleteUserId);
+			if (CheckIfAdmin() == false)
+			{
+				return NotFound();
+			}
+			var userToDelete = _context.Users.FirstOrDefault(p => p.Id == deleteUserId);
             var announcementsOfDeletedUser = _context.Announcements.Where(p => p.AnnouncementSenderID == deleteUserId).ToList();
             if(announcementsOfDeletedUser.Count() != 0)
             {
@@ -51,7 +61,11 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult GetSpecificUser(string firstName, string lastName)
         {
-            var user = _context.Users.FirstOrDefault(p => p.FirstName.ToLower() == firstName.ToLower());
+			if (CheckIfAdmin() == false)
+			{
+				return NotFound();
+			}
+			var user = _context.Users.FirstOrDefault(p => p.FirstName.ToLower() == firstName.ToLower());
             if(user == null)
             {
                 user = _context.Users.FirstOrDefault(p => p.LastName.ToLower() == lastName.ToLower());
@@ -87,7 +101,11 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
         }
         public IActionResult EditUser()
         {
-            return View();
+			if (CheckIfAdmin() == false)
+			{
+				return NotFound();
+			}
+			return View();
         }
         [HttpPost]
         public async Task<IActionResult> EditUserInformation(
@@ -103,16 +121,11 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
             string cvPath = null,
             string profilePhotoPath = null)
         {
-            Console.WriteLine(Id);
-            Console.WriteLine(title);
-            Console.WriteLine(firstName);
-            Console.WriteLine(lastName);
-            Console.WriteLine(department);
-            Console.WriteLine(phoneNumber);
-            Console.WriteLine(aboutMe);
-            Console.WriteLine(cvPath);
-            Console.WriteLine(profilePhotoPath);
-            var user = await _userManager.FindByIdAsync(Id);
+			if (CheckIfAdmin() == false)
+			{
+				return NotFound();
+			}
+			var user = await _userManager.FindByIdAsync(Id);
             if(user == null)
             {
                 return NotFound();
@@ -232,7 +245,11 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditAnnouncement(string AnnouncementTitle, string AnnouncementFaculty, string AnnouncementContent, int AnnouncementId)
         {
-            var announcementToEdit = _context.Announcements.FirstOrDefault(a => a.ID == AnnouncementId);
+			if (CheckIfAdmin() == false)
+			{
+				return NotFound();
+			}
+			var announcementToEdit = _context.Announcements.FirstOrDefault(a => a.ID == AnnouncementId);
             if (announcementToEdit == null)
             {
                 return NotFound();
@@ -246,7 +263,11 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteAnnouncement(int announcementId)
         {
-            var announcementToDelete = _context.Announcements.FirstOrDefault(a => a.ID == announcementId);
+			if (CheckIfAdmin() == false)
+			{
+				return NotFound();
+			}
+			var announcementToDelete = _context.Announcements.FirstOrDefault(a => a.ID == announcementId);
             Console.WriteLine(announcementToDelete);
             if (announcementToDelete == null)
             {
@@ -256,5 +277,34 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
             await _context.SaveChangesAsync();
             return View("EditUser");
         }
-    }
+        public bool CheckIfAdmin()
+        {
+			string adminsContent = System.IO.File.ReadAllText(System.IO.Path.Combine(_environment.ContentRootPath, "External", "admins.json"));
+			var admins = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(adminsContent) ?? throw new ArgumentNullException("Admin listesi bulunamadı!");
+			List<string> emailsInAdmins = admins["emails"];
+            List<string> adminUserNames = new List<string>();
+            foreach(var email in emailsInAdmins)
+            {
+                adminUserNames.Add(TruncateEmail(email));
+            }
+            if (adminUserNames.Contains(User.Identity.Name))
+            {
+                isAdmin = true;
+            }
+            else
+            {
+                isAdmin = false;
+            }
+            return isAdmin;
+		}
+		static string TruncateEmail(string email)
+		{
+			int atIndex = email.IndexOf('@');
+			if (atIndex != -1)
+			{
+				return email.Substring(0, atIndex);
+			}
+			return email; // Return the original email if "@" is not found
+		}
+	}
 }
