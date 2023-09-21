@@ -69,6 +69,36 @@
 </div>
 <br />
 
+@if (Model.Announcement.Comments != null && Model.Announcement.Comments.Count > 0)
+{
+	<h4>Yorumlar</h4>
+	<ul>
+		@foreach (var comment in Model.Announcement.Comments)
+		{
+			var commentedUser = await UserManager.FindByIdAsync(comment.UserId);
+			@if (commentedUser != null)
+			{
+				<li>
+					<strong>@commentedUser.Title @commentedUser.FirstName @commentedUser.LastName</strong>
+					<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
+					<p>@comment.Text</p>
+					@if (User.Identity.Name == commentedUser.UserName)
+					{
+						<form asp-controller="Home" asp-action="DeleteComment" method="post">
+							<input type="hidden" name="commentID" value="@comment.Id" />
+							<button type="submit" class="btn btn-sm btn-danger">Sil</button>
+						</form>
+					}
+				</li>
+			}
+			else
+			{
+				<span>Bu bir hata mesajıdır :(</span>
+			}
+		}
+
+	</ul>
+}
 
 <form asp-controller="Home" asp-action="AddComment" method="post">
 	<input type="hidden" name="announcementID" value="@Model.Announcement.ID" />
@@ -78,35 +108,6 @@
 	</div>
 	<button type="submit" class="btn btn-primary">Yorum Ekle</button>
 </form>
-
-@if (Model.Announcement.Comments != null && Model.Announcement.Comments.Count > 0)
-{
-	<h4>Yorumlar</h4>
-	<ul>
-		@foreach (var comment in Model.Announcement.Comments)
-{
-			@if (comment.User != null)
-			{
-				<li>
-					<strong>@user.Title @user.FirstName @user.LastName</strong>
-					<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
-					<p>@comment.Text</p>
-					@if (User.Identity.Name == comment.User.UserName)
-					{
-						<form asp-controller="Home" asp-action="DeleteComment" method="post">
-							<input type="hidden" name="commentID" value="@comment.Id" />
-							<button type="submit" class="btn btn-sm btn-danger">Sil</button>
-						</form>
-					}
-				</li>
-	}
-	else{
-		<span>Bu bir hata mesajıdır :(</span>
-	}
-}
-
-	</ul>
-}
 
 
 
