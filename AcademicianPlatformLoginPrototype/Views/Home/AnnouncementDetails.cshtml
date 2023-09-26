@@ -95,22 +95,22 @@
 							 <img src="@commentedUser.ProfilePhotoPath" style="width: 75px; height: auto;" class="rounded-circle col-lg-1">
 							 </div>
 							 <div class="col-lg-10">
-					<span><strong>@commentedUser.Title @commentedUser.FirstName @commentedUser.LastName</strong></span>
-					<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
-					<p>@comment.Text</p>
-					</div>
-					<div class="col-lg-1">
-					@if (User.Identity.Name == commentedUser.UserName)
-					{
-						<form asp-controller="Home" asp-action="DeleteComment" method="post">
-							<input type="hidden" name="commentID" value="@comment.Id" />
-							<button type="submit" class="btn btn-sm ">
-								 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
-                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
-                </svg>
-							</button>
-						</form>
-					}
+								<span><strong>@commentedUser.Title @commentedUser.FirstName @commentedUser.LastName</strong></span>
+								<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
+								<p>@comment.Text</p>
+							</div>
+							<div class="col-lg-1">
+								@if (User.Identity.Name == commentedUser.UserName)
+								{
+									<form asp-controller="Home" asp-action="DeleteComment" method="post">
+										<input type="hidden" name="commentID" value="@comment.Id" />
+										<button type="submit" class="btn btn-sm ">
+											 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+												<path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+											</svg>
+										</button>
+									</form>
+								}
 							</div>
 						</div>
 					</div>

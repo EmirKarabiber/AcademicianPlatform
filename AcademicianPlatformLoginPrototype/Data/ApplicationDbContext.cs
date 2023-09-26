@@ -14,6 +14,7 @@ namespace AcademicianPlatform.Data
 		public DbSet<Announcement>? Announcements { get; set; }
         public DbSet<Follow> Follows { get; set; }
 		public DbSet<Comment> Comments { get; set; }
+		public DbSet<Ticket> Tickets { get; set; }
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);

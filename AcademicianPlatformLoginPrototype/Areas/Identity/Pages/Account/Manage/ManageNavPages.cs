@@ -20,7 +20,9 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
         public static string DeletePersonalData => "DeletePersonalData";
         public static string ExternalLogins => "ExternalLogins";
         public static string PersonalData => "PersonalData";
+        public static string Support => "Support";
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
+        public static string SupportNavClass(ViewContext viewContext) => PageNavClass(viewContext, Support);
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
         public static string ProfilePictureNavClass(ViewContext viewContext) => PageNavClass(viewContext, ProfilePicture);
         public static string EditCVNavClass(ViewContext viewContext) => PageNavClass(viewContext, EditCV);

@@ -1,0 +1,151 @@
+﻿@page
+@using AcademicianPlatform.Data
+@model AcademicianPlatform.Areas.Identity.Pages.Account.Manage.SupportModel
+@inject UserManager<ApplicationUser> UserManager
+@inject ApplicationDbContext _context
+@{
+    ViewData["Title"] = "Destek Ekibine Ulaş";
+    ViewData["ActivePage"] = ManageNavPages.Support;
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
+
+}
+@{
+    var user = await UserManager.FindByNameAsync(User.Identity.Name);
+    List<AcademicianPlatform.Models.Ticket> allTickets = new List<AcademicianPlatform.Models.Ticket>();
+    List<AcademicianPlatform.Models.Ticket> Tickets = new List<AcademicianPlatform.Models.Ticket>();
+    allTickets = _context.Tickets.ToList();
+    foreach (var ticket in allTickets)
+    {
+        if (ticket.TicketSenderId == user.Id)
+        {
+            Tickets.Add(ticket);
+        }
+    }
+}
+
+<h4 id="profile-title"><i class="fas fa-headset fa-sm" style="color: #A82F3A;"></i>   @ViewData["Title"]</h4>
+<partial name="_StatusMessage" for="StatusMessage" />
+<p>Karşılaştığınız sorunlar ve önerileriniz için bizimle iletişime geçin.</p>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-page-handler="SubmitTicket" method="POST">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <label asp-for="Input.TicketType" class="form-label"></label>
+                <select asp-for="Input.TicketType" class="form-select">
+                    <option value=""></option>
+                    <option value="Öneri">Öneri</option>
+                    <option value="Sorun">Sorun</option>
+                    <option value="Acil Sorun">Acil Sorun</option>
+                </select>
+                <span asp-validation-for="Input.TicketType" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.TicketTitle" class="form-control" autocomplete="ticketTitle"/>
+                <label asp-for="Input.TicketTitle" class="form-label"></label>
+                <span asp-validation-for="Input.TicketTitle" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <textarea asp-for="Input.TicketContent" class="form-control" autocomplete="ticketContent" rows="5"></textarea>
+                <label asp-for="Input.TicketContent" class="form-label"></label>
+                <span asp-validation-for="Input.TicketContent" class="text-danger"></span>
+                <input type="hidden" name="userName" value="@User.Identity.Name" />
+            </div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Gönder</button>
+        </form>
+    </div>
+</div>
+<hr />
+<h4 id="profile-title"><i class="fas fa-headset fa-sm" style="color: #A82F3A;"></i>   Aktif Destek Bildirimleriniz</h4>
+@if (Tickets.Count == 0)
+{
+    <p>Aktif destek bildiriminiz bulunmamaktadır.</p>
+}
+else{
+    foreach (var ticket in Tickets)
+    {
+        if (@ticket.TicketType == "Öneri")
+        {
+            <div class="card bg-info mb-3" style="max-width: 100%;">
+                <div class="card-header text-white">
+                    <div class="row">
+                        <div class="col-lg-10 text-start" style="display:inline;">
+                            <i class="fas fa-circle-info fa-lg" style="color: #54B4D3; display:inline;"></i><b>          @ticket.TicketType</b>
+                        </div>
+                        <div class="col-lg-2 text-end" style="display:inline;">
+                            <form asp-page-handler="DeleteComment" method="post" style="display:inline;" class="text-end">
+                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body text-dark bg-white">
+                    <h5 class="card-title">@ticket.TicketTitle</h5>
+                    <p class="card-text">@ticket.TicketContent</p>
+                </div>
+                <div class="card-footer text-end text-white  custom-announcement-footer"><strong>@ticket.TicketDate</strong></div>
+            </div>
+        }
+        if (@ticket.TicketType == "Sorun")
+        {
+            <div class="card bg-warning mb-3" style="max-width: 100%;">
+                <div class="card-header text-white">
+                    <div class="row">
+                        <div class="col-lg-10 text-start" style="display:inline;">
+                            <i class="fas fa-triangle-exclamation fa-lg" style="color: #E4A11B; display:inline;"></i><b>          @ticket.TicketType</b>
+                        </div>
+                        <div class="col-lg-2 text-end" style="display:inline;">
+                            <form asp-page-handler="DeleteComment" method="post" style="display:inline;" class="text-end">
+                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body text-dark bg-white">
+                    <h5 class="card-title">@ticket.TicketTitle</h5>
+                    <p class="card-text">@ticket.TicketContent</p>
+                </div>
+                <div class="card-footer text-end text-white  custom-announcement-footer"><strong>@ticket.TicketDate</strong></div>
+            </div>
+        }
+        if (@ticket.TicketType == "Acil Sorun")
+        {
+            <div class="card bg-danger mb-3" style="max-width: 100%;">
+                <div class="card-header text-white">
+                    <div class="row">
+                        <div class="col-lg-10 text-start" style="display:inline;">
+                            <i class="fas fa-circle-exclamation fa-lg" style="color: #DC4C64; display:inline;"></i><b>          @ticket.TicketType</b>
+                        </div>
+                            <div class="col-lg-2 text-end" style="display:inline;">
+                            <form asp-page-handler="DeleteComment" method="post" style="display:inline;" class="text-end">
+                                            <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                            <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+                                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                <div class="card-body text-dark bg-white">
+                    <h5 class="card-title">@ticket.TicketTitle</h5>
+                    <p class="card-text">@ticket.TicketContent</p>
+                </div>
+            <div class="card-footer text-end text-white custom-announcement-footer"><strong>@ticket.TicketDate</strong></div>
+            </div>
+        }
+    }
+}
+    
