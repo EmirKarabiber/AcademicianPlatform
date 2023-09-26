@@ -16,7 +16,7 @@
     allTickets = _context.Tickets.ToList();
     foreach (var ticket in allTickets)
     {
-        if (ticket.TicketSenderId == user.Id)
+        if (ticket.TicketSenderUserName == user.UserName)
         {
             Tickets.Add(ticket);
         }

@@ -35,6 +35,15 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
 			var users = _context.Users.ToList();
             return View(users);
         }
+        public IActionResult Support()
+        {
+			if (CheckIfAdmin() == false)
+			{
+				return NotFound();
+			}
+            var tickets = _context.Tickets.ToList();
+            return View(tickets);
+		}
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string deleteUserId)
         {
@@ -57,6 +66,21 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
             }
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ReplyToTicket(int replyTicketId,string reply, string userNameWhoReplies)
+        {
+            if (CheckIfAdmin() == false)
+            {
+                return NotFound();
+            }
+            var ticket = _context.Tickets.FirstOrDefault(p => p.TicketId == replyTicketId);
+            ticket.TicketRespondContent = reply;
+            ticket.TicketRespondSenderUserName = userNameWhoReplies;
+            ticket.isResolved = true;
+            _context.Tickets.Update(ticket);
+            await _context.SaveChangesAsync();
+            return RedirectToPage("/Admin/Admin/Support");
         }
         [HttpPost]
         public IActionResult GetSpecificUser(string firstName, string lastName)

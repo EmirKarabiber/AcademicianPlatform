@@ -57,16 +57,16 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
         //}
         public async Task<IActionResult> OnPostSubmitTicketAsync(string userName)
         {
-            var user = await _userManager.FindByNameAsync(userName);
             Ticket ticket = new()
             {
                 TicketType = Input.TicketType,
                 TicketTitle = Input.TicketTitle,
                 TicketContent = Input.TicketContent,
                 TicketDate = DateTime.Now,
-                TicketSenderId = user.Id,
+                TicketSenderUserName = userName,
                 TicketRespondContent = " ",
-                TicketRespondSenderId = " ",
+                TicketRespondSenderUserName = " ",
+                isResolved = false
             };
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
@@ -84,7 +84,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
 
             var user = await _userManager.GetUserAsync(User);
 
-            if (ticketToDelete.TicketSenderId != user.Id)
+            if (ticketToDelete.TicketSenderUserName != user.UserName)
             {
                 return Unauthorized();
             }

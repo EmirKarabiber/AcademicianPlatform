@@ -7,7 +7,7 @@ namespace AcademicianPlatform.Models
         [Key]
         public int TicketId { get; set; }
         [Required]
-        public string TicketSenderId { get; set; }
+        public string TicketSenderUserName { get; set; }
         [Required]
         public string TicketType { get; set; }
         [Required]
@@ -16,7 +16,8 @@ namespace AcademicianPlatform.Models
         public string TicketContent { get; set; }
         [Required]
         public DateTime TicketDate { get; set; }
-        public string TicketRespondSenderId { get; set; }
+        public string TicketRespondSenderUserName { get; set; }
         public string TicketRespondContent { get; set; }
+        public bool isResolved { get; set; }
     }
 }
