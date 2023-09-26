@@ -41,7 +41,9 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
 			{
 				return NotFound();
 			}
-            var tickets = _context.Tickets.ToList();
+            IEnumerable<Ticket> tickets = _context.Tickets
+                .OrderByDescending(p => p.TicketId)
+                .ToList();
             return View(tickets);
 		}
         [HttpPost]
@@ -80,7 +82,10 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
             ticket.isResolved = true;
             _context.Tickets.Update(ticket);
             await _context.SaveChangesAsync();
-            return RedirectToPage("/Admin/Admin/Support");
+            IEnumerable<Ticket> tickets = _context.Tickets
+                .OrderByDescending(p => p.TicketId)
+                .ToList();
+            return View("Support",tickets);
         }
         [HttpPost]
         public IActionResult GetSpecificUser(string firstName, string lastName)

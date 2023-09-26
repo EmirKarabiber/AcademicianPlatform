@@ -39,6 +39,8 @@
                         <p>Evet</p>
                     }
                 </td>
+                @if(ticket.isResolved == false)
+                {
                 <form method="POST">
                     <td>
                         <button type="button"
@@ -49,6 +51,11 @@
                         </button>
                     </td>
                 </form>
+                }
+                else
+                {
+                    <td></td>
+                }
             </tr>
         }
     </tbody>

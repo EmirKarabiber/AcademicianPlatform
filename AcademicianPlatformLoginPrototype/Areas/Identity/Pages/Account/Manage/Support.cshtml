@@ -13,7 +13,7 @@
     var user = await UserManager.FindByNameAsync(User.Identity.Name);
     List<AcademicianPlatform.Models.Ticket> allTickets = new List<AcademicianPlatform.Models.Ticket>();
     List<AcademicianPlatform.Models.Ticket> Tickets = new List<AcademicianPlatform.Models.Ticket>();
-    allTickets = _context.Tickets.ToList();
+    allTickets = _context.Tickets.Where(p => p.TicketSenderUserName == user.UserName).OrderByDescending(p => p.TicketId).ToList();
     foreach (var ticket in allTickets)
     {
         if (ticket.TicketSenderUserName == user.UserName)
