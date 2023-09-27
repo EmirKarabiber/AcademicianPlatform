@@ -46,6 +46,28 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
                 .ToList();
             return View(tickets);
 		}
+        public IActionResult EditMarqueeText()
+        {
+			if (CheckIfAdmin() == false)
+			{
+				return NotFound();
+			}
+            var marqueeText = _context.MarqueeText.FirstOrDefault(p => p.Id == 1);
+            return View(marqueeText);
+		}
+        [HttpPost]
+        public async Task<IActionResult> UpdateMarqueeText(string marqueeText)
+        {
+            if (CheckIfAdmin() == false)
+            {
+                return NotFound();
+            }
+            var currentMarqueeText = _context.MarqueeText.FirstOrDefault(p => p.Id == 1);
+            currentMarqueeText.Text = marqueeText;
+            _context.MarqueeText.Update(currentMarqueeText);
+            await _context.SaveChangesAsync();
+            return View("EditMarqueeText",currentMarqueeText);
+        }
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string deleteUserId)
         {

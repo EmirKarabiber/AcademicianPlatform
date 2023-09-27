@@ -73,7 +73,7 @@ namespace AcademicianPlatform.Areas.Identity.Pages.Account.Manage
             
             return RedirectToPage("Support");
         }
-        public async Task<IActionResult> OnPostDeleteCommentAsync(int ticketId)
+        public async Task<IActionResult> OnPostDeleteTicketAsync(int ticketId)
         {
             var ticketToDelete = await _context.Tickets.FindAsync(ticketId);
 

@@ -1,0 +1,28 @@
+﻿@inject UserManager<ApplicationUser> userManager
+@model AcademicianPlatform.Models.MarqueeText
+@{
+	Layout = "_Layout.cshtml";
+	ViewData["Title"] = "Kayan Yazıyı Düzenle";
+	ViewData["ActivePage"] = AcademicianPlatform.Areas.Admin.ManageNavPages.EditMarqueeText;
+	<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap" rel="stylesheet">
+}
+
+<h4 id="profile-title"><i class="fa-solid fa-text-width fa" style="color: #A82F3A;"></i>   @ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" action="/Admin/Admin/UpdateMarqueeText" method="post">
+            <div class="form-floating">
+                <textarea class="form-control" name="marqueeText" id="marqueeText" rows="3">@Model.Text</textarea>
+                <label class="form-label">Kayan Yazı Metni</label>
+            </div>
+            <br />
+            <div class="form-floating">
+                 <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary btn-yeniDuyuruOlustur">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

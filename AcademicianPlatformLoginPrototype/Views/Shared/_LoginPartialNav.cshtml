@@ -4,6 +4,7 @@
 @inject IWebHostEnvironment _environment
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject AcademicianPlatform.Data.ApplicationDbContext _context
 @{
     if(User.Identity.Name == string.Empty || User.Identity.Name == null)
     {
@@ -24,10 +25,11 @@
             }
         }
     }
+    var marqueeText = _context.MarqueeText.FirstOrDefault(p => p.Id == 1);
 }
 @if(currentUser != null && SignInManager.IsSignedIn(User))
 {
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
         @if (isAdmin)
         {
             <div class="container-fluid justify-content-start p-0 m-0">
@@ -43,3 +45,6 @@
         </div>
     </nav>
 }
+<div class="container-fluid slider-div m-0 p-0 justify-content-center">
+    <marquee direction="left"><p class="text-white m-0 p-0"><i class="fas fa-bullhorn fa"></i><strong>    @marqueeText.Text</strong></p></marquee>
+</div>
