@@ -12,7 +12,14 @@
     <div class="col-md-6">
         <form id="profile-form" action="/Admin/Admin/UpdateMarqueeText" method="post">
             <div class="form-floating">
-                <textarea class="form-control" name="marqueeText" id="marqueeText" rows="3">@Model.Text</textarea>
+                @if(Model != null)
+                {
+                    <textarea class="form-control" name="marqueeText" id="marqueeText" rows="3">@Model.Text</textarea>
+                }
+                else
+                {
+                    <textarea class="form-control" name="marqueeText" id="marqueeText" rows="3">Kayan yazıyı girin</textarea>
+                }
                 <label class="form-label">Kayan Yazı Metni</label>
             </div>
             <br />

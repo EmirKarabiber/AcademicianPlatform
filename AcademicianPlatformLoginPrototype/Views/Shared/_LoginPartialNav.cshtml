@@ -36,7 +36,6 @@
                 <a class="nav-link navbar-text text-decoration-none" asp-area="Admin" asp-controller="Admin" asp-action="Index">
                     <i class="fa-solid fa-user"></i> Admin Yönetim Paneli
                 </a>
-
             </div>
         }
         <div class="container-fluid justify-content-end p-0 m-0">
@@ -44,7 +43,16 @@
 
         </div>
     </nav>
+    @if (marqueeText != null)
+    {
+        <div class="container-fluid slider-div m-0 p-0 justify-content-center">
+            <marquee direction="left"><p class="text-white m-0 p-0"><i class="fas fa-bullhorn fa"></i><strong>    @marqueeText.Text</strong></p></marquee>
+        </div>
+    }
+    else
+    {
+        <div class="container-fluid slider-div m-0 p-0 justify-content-center">
+            <marquee direction="left"><p class="text-white m-0 p-0"><i class="fas fa-bullhorn fa"></i><strong>    Kayan yazı bulunamadı. Admin panelinden kayan yazıyı ekleyebilirsiniz! </strong></p></marquee>
+        </div>
+    }
 }
-<div class="container-fluid slider-div m-0 p-0 justify-content-center">
-    <marquee direction="left"><p class="text-white m-0 p-0"><i class="fas fa-bullhorn fa"></i><strong>    @marqueeText.Text</strong></p></marquee>
-</div>

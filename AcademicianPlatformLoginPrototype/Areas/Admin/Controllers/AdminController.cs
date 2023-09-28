@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace AcademicianPlatform.Areas.Admin.Controllers
@@ -63,10 +64,22 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
                 return NotFound();
             }
             var currentMarqueeText = _context.MarqueeText.FirstOrDefault(p => p.Id == 1);
-            currentMarqueeText.Text = marqueeText;
-            _context.MarqueeText.Update(currentMarqueeText);
-            await _context.SaveChangesAsync();
-            return View("EditMarqueeText",currentMarqueeText);
+            if(currentMarqueeText != null)
+            {
+                currentMarqueeText.Text = marqueeText;
+                _context.MarqueeText.Update(currentMarqueeText);
+                await _context.SaveChangesAsync();
+                return View("EditMarqueeText", currentMarqueeText);
+            }
+            else
+            {
+                    MarqueeText newMarqueeText = new MarqueeText();
+                    newMarqueeText.Text = marqueeText;
+                    _context.MarqueeText.Add(newMarqueeText);
+                    await _context.SaveChangesAsync();
+                    return View("EditMarqueeText", newMarqueeText);
+            }
+
         }
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string deleteUserId)
