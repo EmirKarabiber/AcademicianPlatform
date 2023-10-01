@@ -102,7 +102,7 @@
 							<div class="col-lg-1">
 								@if (User.Identity.Name == commentedUser.UserName)
 								{
-									<form asp-controller="Home" asp-action="DeleteComment" method="post">
+									<form asp-controller="Home" asp-action="DeleteComment" method="post" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
 										<input type="hidden" name="commentID" value="@comment.Id" />
 										<button type="submit" class="btn btn-sm ">
 											 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
