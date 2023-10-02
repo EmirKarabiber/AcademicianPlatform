@@ -12,13 +12,23 @@
 @{
     var user = await UserManager.FindByNameAsync(User.Identity.Name);
     List<AcademicianPlatform.Models.Ticket> allTickets = new List<AcademicianPlatform.Models.Ticket>();
-    List<AcademicianPlatform.Models.Ticket> Tickets = new List<AcademicianPlatform.Models.Ticket>();
+    List<AcademicianPlatform.Models.Ticket> unansweredTickets = new List<AcademicianPlatform.Models.Ticket>();
+    List<AcademicianPlatform.Models.Ticket> answeredTickets = new List<AcademicianPlatform.Models.Ticket>();
+    List<AcademicianPlatform.Models.Ticket> userTickets = new List<AcademicianPlatform.Models.Ticket>();
     allTickets = _context.Tickets.Where(p => p.TicketSenderUserName == user.UserName).OrderByDescending(p => p.TicketId).ToList();
     foreach (var ticket in allTickets)
     {
         if (ticket.TicketSenderUserName == user.UserName)
         {
-            Tickets.Add(ticket);
+            userTickets.Add(ticket);
+            if(ticket.isResolved == true)
+            {
+                answeredTickets.Add(ticket);
+            }
+            else if(ticket.isResolved == false)
+            {
+                unansweredTickets.Add(ticket);    
+            }
         }
     }
 }
@@ -57,13 +67,154 @@
     </div>
 </div>
 <hr />
+<h4 id="profile-title"><i class="fas fa-headset fa-sm" style="color: #A82F3A;"></i>   Cevaplanmış Destek Bildirimleriniz</h4>
+@if (answeredTickets.Count == 0)
+{
+    <p>Cevaplanmış destek bildiriminiz bulunmamaktadır.</p>
+}
+else{
+    foreach (var ticket in answeredTickets)
+    {
+        if (@ticket.TicketType == "Öneri")
+        {
+            <div class="card mb-3" style="max-width: 100%; background-color: #4755d1;">
+                <div class="card-header text-white">
+                    <div class="row">
+                        <div class="col-lg-11 text-start" style="display:inline;">
+                            <i class="fas fa-circle-exclamation fa-lg" style="color: #161891; display: inline;"></i><b>          @ticket.TicketType</b>
+                            <span style="float: right;">@ticket.TicketDate</span>
+                        </div>
+                        <div class="col-lg-1 text-end" style="display:inline;">
+                            <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
+                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body text-dark bg-white">
+                    <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <br />
+                    @if (@ticket.isResolved)
+                    {
+                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                        <div>
+                            <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
+                            <p class="card-text text-dark" style="display: inline-block; vertical-align: top;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
+                            <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
+                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
+                    }
+
+                </div>
+
+            </div>
+        }
+        if (@ticket.TicketType == "Sorun")
+        {
+            <div class="card mb-3" style="max-width: 100%; background-color: #b5cf36;">
+                <div class="card-header text-white">
+                    <div class="row">
+                        <div class="col-lg-11 text-start" style="display:inline;">
+                            <i class="fa-solid fa-circle-exclamation fa-lg" style="color: #536b0f; display: inline; "></i><b>          @ticket.TicketType</b>
+                            <span style="float: right;">@ticket.TicketDate</span>
+                        </div>
+                        <div class="col-lg-1 text-end" style="display:inline;">
+                            <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
+                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body text-dark bg-white">
+                    <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <br />
+                    @if (@ticket.isResolved)
+                    {
+                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical"></i>
+                        <p class="card-text" style="display: inline-block; vertical-align: top; max-height: 100px; overflow-y: auto;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
+                        <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
+
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical"></i>
+                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
+                    }
+
+                </div>
+
+            </div>
+        }
+        if (@ticket.TicketType == "Acil Sorun")
+        {
+            <div class="card mb-3" style="max-width: 100%; background-color: #de0f00;">
+                <div class="card-header text-white">
+                    <div class="row">
+                        <div class="col-lg-11 text-start" style="display:inline;">
+                            <i class="fas fa-circle-exclamation fa-lg" style="color: #DC4C64; display:inline;"></i><b>          @ticket.TicketType</b>
+                            <span style="float: right;">@ticket.TicketDate</span>
+                        </div>
+                        <div class="col-lg-1 text-end" style="display:inline;">
+                            <form asp-page-handler="DeleteTicket" method="post" style="display:inline;" class="text-end" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
+                                <input type="hidden" name="ticketId" value="@ticket.TicketId" />
+                                <button type="submit" class="btn btn-sm text-end text-white" style="display:inline;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg d-inline" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body text-dark bg-white">
+                    <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <br />
+                    @if (@ticket.isResolved)
+                    {
+                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
+                        <div>
+                            <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
+                            <p class="card-text" style="display: inline-block; vertical-align: top;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
+                            <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
+                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
+                    }
+
+                </div>
+
+            </div>
+        }
+    }
+}
 <h4 id="profile-title"><i class="fas fa-headset fa-sm" style="color: #A82F3A;"></i>   Aktif Destek Bildirimleriniz</h4>
-@if (Tickets.Count == 0)
+@if (userTickets.Count == 0)
 {
     <p>Aktif destek bildiriminiz bulunmamaktadır.</p>
 }
 else{
-    foreach (var ticket in Tickets)
+    foreach (var ticket in unansweredTickets)
     {
         if (@ticket.TicketType == "Öneri")
         {
