@@ -96,11 +96,11 @@ else{
                            <div>
                                <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
                                <p class="card-text text-dark" style="display: inline-block; vertical-align: top;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
-                               <p class="card-text text-dark" style="display: inline-block; vertical-align: top;">Sorununuz çözülmedi mi? Yeni destek bildirimi oluşturun veya adminimizin sorununuzla daha detaylı ilgilenebilmesi için @respondSender.Email adresine mail atın.</p>
+                               <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
                            </div>
                             }else{
                            <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                           <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.</p>
+                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
                             }
 
                        </div>
@@ -134,13 +134,14 @@ else{
                            <br />
                            @if(@ticket.isResolved)
                             {
+                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
                            <i class="fa-solid fa-arrows-turn-right fa-flip-vertical"></i>
-                           <p class="card-text" style="display: inline-block; vertical-align: top; max-height: 100px; overflow-y: auto;">Yanıt: @ticket.TicketRespondContent <span style="opacity: 0;">@ticket.TicketRespondSenderUserName</span></p>
-                           
+                        <p class="card-text" style="display: inline-block; vertical-align: top; max-height: 100px; overflow-y: auto;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
+                           <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
 
                            }else{
                            <i class="fa-solid fa-arrows-turn-right fa-flip-vertical"></i>
-                           <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor...</p>
+                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
                             }
 
                        </div>
@@ -174,13 +175,15 @@ else{
                            <br />
                            @if(@ticket.isResolved)
                            {
+                        var respondSender = await UserManager.FindByNameAsync(ticket.TicketRespondSenderUserName);
                            <div>
                                <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                               <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt: @ticket.TicketRespondContent <span style="opacity:0;">@ticket.TicketRespondSenderUserName</span></p>
+                            <p class="card-text" style="display: inline-block; vertical-align: top;">@respondSender.FirstName @respondSender.LastName yanıt verdi: @ticket.TicketRespondContent</p>
+                               <p class="card-text" style="display: inline-block; vertical-align: top; float: right; font-weight: normal; color: #A82F3A;">İletişim: @respondSender.Email</p>
                            </div>
                            }else{
                            <i class="fa-solid fa-arrows-turn-right fa-flip-vertical" style="display: inline-block;"></i>
-                           <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor...</p>
+                        <p class="card-text" style="display: inline-block; vertical-align: top;">Yanıt Bekleniyor... <span style="font-size: 13px; font-weight: normal; color: #666666;">(Destek ekibimiz tarafından cevap gönderildiğinde burada gözükecektir.)</span></p>
                            }
 
                        </div>
