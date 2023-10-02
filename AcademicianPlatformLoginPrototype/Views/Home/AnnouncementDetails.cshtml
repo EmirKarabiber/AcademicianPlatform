@@ -74,33 +74,37 @@
 	<input type="hidden" name="announcementID" value="@Model.Announcement.ID" />
 	<div class="form-group">
 		<label for="commentContent">Yorumunuzu Girin:</label>
-		<textarea class="form-control" id="commentContent" name="commentContent" rows="3"></textarea>
+		<textarea class="form-control" id="commentContent" name="commentContent" rows="2"></textarea>
+	<br />
+	<button type="submit" class="btn btn-success">Yorum Ekle</button>
 	</div>
-	<button type="submit" class="btn btn-primary">Yorum Ekle</button>
 </form>
-
 
 @if (Model.Announcement.Comments != null && Model.Announcement.Comments.Count > 0)
 {
-	<h4>Yorumlar</h4>
+	<h2 class="text-center" style="color: #A82F3A;">Yorumlar</h2>
+	<br />
 	<ul>
 		@foreach (var comment in Model.Announcement.Comments.OrderByDescending(c => c.DatePosted))
 		{
 			var commentedUser = await UserManager.FindByIdAsync(comment.UserId);
 			@if (commentedUser != null)
 			{
-				<li>
+				<li class="custom-list-item">
 					<div class="container commentCont">
 						<div class="row">
-							<div class= "col-lg-1">
-							 <img src="@commentedUser.ProfilePhotoPath" style="width: 75px; height: auto;" class="rounded-circle col-lg-1">
+					<div class="col-lg-1 col-1 col-md-1 col-sm-1">
+						<i class="fa-regular fa-comment fa-lg" style="margin-left: 50%; margin-top: 50%; color: #A82F3A;"></i>
+					</div>
+							<div class= "col-lg-1 col-md-2 col-sm-2 col-2">
+							 <img src="@commentedUser.ProfilePhotoPath" style="width: 75px; height: auto; border-radius: 50%;">
 							 </div>
-							 <div class="col-lg-10">
+							 <div class="col-lg-9 col-8 col-md-8 col-sm-8">
 								<span><strong>@commentedUser.Title @commentedUser.FirstName @commentedUser.LastName</strong></span>
-								<span class="comment-date">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
-								<p>@comment.Text</p>
+								<span class="comment-date" style="color: #666666;">@comment.DatePosted.ToString("dd/MM/yyyy HH:mm")</span>
+								<div class="comment-text">@comment.Text</div>
 							</div>
-							<div class="col-lg-1">
+							<div class="col-lg-1 col-1 col-md-1 col-sm-1">
 								@if (User.Identity.Name == commentedUser.UserName)
 								{
 									<form asp-controller="Home" asp-action="DeleteComment" method="post" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
@@ -112,10 +116,11 @@
 										</button>
 									</form>
 								}
+
 							</div>
 						</div>
 					</div>
-					
+			
 					<hr>
 					
 				</li>
@@ -125,8 +130,8 @@
 				<span>Yorum Görüntülenemiyor</span>
 			}
 		}
-		
 	</ul>
+	
 }
 
 

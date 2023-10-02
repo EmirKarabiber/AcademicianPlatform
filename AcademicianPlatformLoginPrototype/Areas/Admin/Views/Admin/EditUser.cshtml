@@ -32,7 +32,7 @@
 @if (Model != null)
 {
         <div class="row justify-content-end my-0 py-0">
-            <div class="col-md-3">
+            <div class="col-lg-3 col-md-12">
                 <form method="post" action="/Admin/Admin/EditUser">
                     <button type="submit" class="btn btn-outline-danger">Yeni Akademisyen Getir</button>
                 </form>
@@ -40,16 +40,16 @@
         </div>
         <br />
         <div class="row justify-content-center">
-        <div class="col-md-9">
+        <div class="col-lg-9 col-md-12">
             <div class="card card-academician">
                 <div class="row">
-                    <div class="col-md-3 text-center">
+                    <div class="col-lg-3 col-md-12 text-center">
 
                         <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" class="img-fluid rounded-circle profile-photo">
                         <h2 class="card-title custom-title">@Model.Title @Model.FullName</h2>
                         <h5 class="card-text custom-department">@Model.Department</h5>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-lg-6 col-md-12">
                         <div class="card-body">
                             <p class="card-text"><strong>Email: </strong>@Model.Email</p>
                             <p class="card-text"><b>Telefon Numarası: </b>@Model.PhoneNumber</p>
@@ -66,7 +66,7 @@
         </div>
         <br />
         <div class="row">
-            <div class="col-5">
+            <div class="col-lg-5 col-md-12 col-12">
             <h3 class="text-center">Akademisyenin Profilini Güncelle</h3>
             <form action="/Admin/Admin/EditUserInformation" method="POST" enctype="multipart/form-data">
                 <input type="hidden" value="@Model.UserId" name="Id" />
@@ -144,8 +144,10 @@
                 <button type="submit" class="w-100 btn btn-lg btn-primary btn-yeniDuyuruOlustur">Güncelle</button>
             </form>
             </div>
-            <div class="col-1"></div>
-            <div class="col-6">
+            <div class="col-lg-1"></div>
+            <br>
+            <br>
+            <div class="col-lg-6 col-md-12 col-12">
             <h3 class="text-center">Akademisyenin Duyuruları</h3>
             <ul class="announcement-list">
                 @{

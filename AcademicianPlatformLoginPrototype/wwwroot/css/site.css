@@ -1292,3 +1292,13 @@ li a i {
     border: 1px solid #ddd;
     border-radius: 5px;
 }
+
+.custom-list-item {
+    list-style: none; /* Baþýndaki noktayý kaldýrýr */
+}
+
+.comment-text {
+    word-wrap: break-word; /* Uzun kelimeleri kýrmak için */
+    overflow-wrap: break-word; /* Uzun kelimeleri kýrmak için (Modern tarayýcýlarda kullanýlýyor) */
+}
+
