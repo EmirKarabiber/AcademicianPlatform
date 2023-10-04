@@ -12,6 +12,7 @@
         var currentUser = await UserManager.FindByNameAsync(User.Identity.Name);
         @if (SignInManager.IsSignedIn(User) && currentUser != null)
         {
+            <li class="nav-item custom-item"><a asp-area="" asp-controller="Home" asp-action="News">Takipçilerin Duyuruları</a></li>
             <li class="nav-item custom-item"><a asp-area="" asp-controller="Home" asp-action="Index">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-bullhorn"></i> DUYURULAR</a></li>
             <li class="nav-item custom-item">
                 <a href="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-user-graduate"></i> AKADEMİSYENLER</a>

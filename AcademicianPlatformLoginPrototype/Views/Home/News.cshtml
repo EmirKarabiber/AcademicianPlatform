@@ -1,0 +1,42 @@
+﻿@model NewAnnouncementsViewModel
+
+@{
+    ViewData["Title"] = "News";
+}
+
+<h2 class="display-4 text-center">News</h2>
+<h1>Takip edilenlerin duyuruları</h1>
+@if (Model.FollowerAnnouncements.Any())
+{
+    <ul>
+        @foreach (var announcement in Model.FollowerAnnouncements)
+        {
+            <li>
+                <strong>@announcement.AnnouncementTitle</strong>
+                <p>@announcement.AnnouncementContent</p>
+                <p>Posted on: @announcement.AnnouncementSentDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+
+            </li>
+        }
+    </ul>
+
+}
+@*
+<h1>New Comments</h1>
+@if(Model.NewComments.Any())
+{
+    <ul>
+        @foreach (var Comment in Model.NewComments)
+        {
+            <h3>@Comment.Announcement.AnnouncementTitle</h3>
+            <li>
+
+                <strong>@Comment.User.FirstName @Comment.User.LastName</strong><p>@Comment.Text</p>
+                
+                <p>Posted on: @Comment.DatePosted.ToString("yyyy-MM-dd HH:mm:ss")</p>
+
+            </li>
+        }
+    </ul>
+}
+*@

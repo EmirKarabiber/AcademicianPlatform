@@ -36,7 +36,7 @@ namespace AcademicianPlatform.Controllers
         {
 			var announcements = GetRecentAnnouncements();
 			var twoMonthsAgo = DateTime.Now.AddMonths(-1);
-
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
             /* Hatayı çözmek için kaldırıldı. Umarım önemli bir parça değildir 
              
 			var model = new IndexModel
@@ -45,8 +45,8 @@ namespace AcademicianPlatform.Controllers
 				
 			};
             */
-			// İki ay öncesinden sonraki tüm duyuruları çekin ve tersten sıralayın
-			var allAnnouncements = await _context.Announcements
+            // İki ay öncesinden sonraki tüm duyuruları çekin ve tersten sıralayın
+            var allAnnouncements = await _context.Announcements
                 .Where(a => a.AnnouncementSentDate >= twoMonthsAgo)
                 .OrderByDescending(a => a.ID)
                 .ToListAsync();
@@ -57,18 +57,84 @@ namespace AcademicianPlatform.Controllers
 				.Where(a => a.AnnouncementSentDate >= twoMonthsAgo && a.AnnouncementSpecial == true)
 				.OrderByDescending(a => a.ID)
 				.ToListAsync();
-			//------------------
+            //------------------
 
-			var Model = new IndexModel
+            //-------- news için -----
+
+            var lastLogin = user.LastLogin;
+
+            var newAnnouncements = await _context.Announcements
+                .Where(a => a.AnnouncementSentDate > lastLogin)
+                .OrderByDescending(a => a.AnnouncementSentDate)
+                .ToListAsync();
+
+            // Son giriş tarihinden sonra oluşturulan tüm yorumları çekin
+            var newComments = await _context.Comments
+                .Where(c => c.DatePosted > lastLogin && c.User == user)
+				.OrderByDescending(c => c.DatePosted)
+				.ToListAsync();
+
+            var followers = await _context.Follows
+             .Where(f => f.FollowedUserId == user.Id && f.FollowDate>lastLogin)
+             .OrderByDescending(f => f.FollowDate)
+             .ToListAsync();
+
+            var followerUsersOrderedByDate = new List<IndexModelForNews>();
+            foreach (var follow in followers)
+            {
+                var followerUser = await _context.Users
+                    .Where(u => u.Id == follow.FollowerId)
+                    .FirstOrDefaultAsync();
+
+                if (followerUser != null)
+                {
+                    followerUsersOrderedByDate.Add(new IndexModelForNews
+                    {
+                        NewFollowerUsers = followerUser,
+                        NewFollowersFollow = follow
+                    });
+                }
+            }
+
+
+
+            var combinedList = new List<object>();
+            combinedList.AddRange(newComments);
+            combinedList.AddRange(followerUsersOrderedByDate);
+            combinedList = combinedList.OrderByDescending(item =>
+            {
+                if (item is Comment comment)
+                {
+                    return comment.DatePosted;
+                }
+                else if (item is IndexModelForNews followerUser)
+                {
+                    return followerUser.NewFollowersFollow.FollowDate;
+                }
+                return DateTime.MinValue; // Diğer türler için varsayılan
+            }).ToList();
+
+
+            int AllNews = newAnnouncements.Count + newComments.Count;
+            //---------------
+
+            var Model = new IndexModel
             {
                 AllAnnouncement=allAnnouncements,
-                SpecialAnnouncement=specialAnnouncements
+                SpecialAnnouncement=specialAnnouncements,
+                IndexNews = AllNews,
+                NewComments = newComments,
+                NewFollowers= followerUsersOrderedByDate,
+                CombinedList = combinedList
+             
             };
             // Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var testMonth = DateTime.Now.AddMonths(-1);
+
             if (user != null)
             {
-                user.LastLogin = DateTime.Now; // Kullanıcının son giriş tarihini güncelle
+                //user.LastLogin = DateTime.Now; // Kullanıcının son giriş tarihini güncelle
+                user.LastLogin = testMonth;
                 await _userManager.UpdateAsync(user); // Kullanıcıyı güncelle
             }
 
@@ -607,6 +673,40 @@ namespace AcademicianPlatform.Controllers
 			await _context.SaveChangesAsync();
 
 			return RedirectToAction("AnnouncementDetails", new { ID = commentToDelete.AnnouncementId });
+		}
+
+		[Authorize]
+		public async Task<IActionResult> News()
+		{
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+			// Kullanıcının takip ettiği kişilerin Id'lerini alın
+			var followedUserIds = await _context.Follows
+				.Where(f => f.FollowerId == user.Id)
+				.Select(f => f.FollowedUserId)
+				.ToListAsync();
+
+			// Kullanıcının son giriş tarihini alın
+			var lastLogin = user.LastLogin;
+
+			// Kullanıcının takip ettiği kişilerin duyurularını çekin ve sıralayın
+			var followedUsersAnnouncements = await _context.Announcements
+				.Where(a => followedUserIds.Contains(a.AnnouncementSenderID) && a.AnnouncementSentDate > lastLogin)
+				.OrderByDescending(a => a.AnnouncementSentDate)
+				.ToListAsync();
+
+
+			// Duyuruları bir model içinde taşıyın ve view'e gönderin
+			var model = new NewAnnouncementsViewModel
+			{
+				FollowerAnnouncements = followedUsersAnnouncements,
+			};
+
+			// Kullanıcının son giriş tarihini güncelleyin
+			user.LastLogin = DateTime.Now;
+			await _userManager.UpdateAsync(user);
+
+			return View(model);
 		}
 
 

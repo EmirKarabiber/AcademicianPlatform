@@ -7,6 +7,7 @@
 
 @{
 	ViewData["Title"] = "Home Page";
+	var newscount = Model.CombinedList.Count;
 }
 
 <style>
@@ -28,7 +29,32 @@
 				<option value="IndexFaculty" data-faculty="İktisadi, İdari ve Sosyal Bilimler">Filtrele: İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
 			</select>
 		</div>
-		<div class="col-4"></div>
+		<div class="col-4">
+			<div class="dropdown-es">
+				<button class="dropbtn-es">
+					Alerts(@newscount)
+					<i class="fa fa-caret-down"></i>
+				</button>
+				<div class="dropdown-content-es">
+					<div class="row-es">
+						<div class="column-es">
+								@foreach (var item in Model.CombinedList)
+								{
+									if (item is Comment comment)
+									{
+										<a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID"><p><strong>@comment.User.FirstName @comment.User.LastName</strong>, @comment.Announcement.AnnouncementTitle duyuruna şu yorumu yazdı: @comment.Text</p></a>
+									}
+									else if (item is IndexModelForNews follow)
+									{
+										<a asp-controller ="Home" asp-action="AcademianDetails" asp-route-id="@follow.NewFollowerUsers.Id"><p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p></a>
+										<!-- Burada bir takipçi görüntüleme kodu -->
+									}
+								}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="col-4 text-end">
 			<a asp-controller="Home" asp-action="NewAnnouncement" class="btn btn-outline-dark faculty-btn">Yeni Duyuru</a>
 		</div>
@@ -47,7 +73,13 @@
 </div>*@
 
 <!--   bu kısım deneysel , SpecialAnnouncement için -->
-@if (Model.SpecialAnnouncement != null)
+@*
+@if(Model.IndexNews > 0)
+{
+	<h3 class="text-center" style="background-color:red;color:white;padding:5px;">@Model.IndexNews tane okunmamış yeni duyuru ve yorumunuz var</h3>
+}
+*@
+@if (Model.SpecialAnnouncement.Count > 0)
 {
 	<hr />
 	@foreach (var item in Model.SpecialAnnouncement)
