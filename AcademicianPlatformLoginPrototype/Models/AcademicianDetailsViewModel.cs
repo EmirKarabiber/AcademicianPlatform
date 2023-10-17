@@ -18,6 +18,6 @@
         public string LastName { get; set; }
         public bool? IsCurrentUser { get; set; }
         public bool? IsFollowing { get; set; }
-        public List<Announcement> UserAnnouncements { get; set; } //
+        public List<Announcement> UserAnnouncements { get; set; }
     }
 }
