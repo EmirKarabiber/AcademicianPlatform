@@ -44,7 +44,7 @@
 									{
 										<a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID"><p><strong>@comment.User.FirstName @comment.User.LastName</strong>, @comment.Announcement.AnnouncementTitle duyuruna şu yorumu yazdı: @comment.Text</p></a>
 									}
-									else if (item is IndexModelForNews follow)
+								else if (item is FollowModelForIndexModel follow)
 									{
 										<a asp-controller ="Home" asp-action="AcademianDetails" asp-route-id="@follow.NewFollowerUsers.Id"><p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p></a>
 										<!-- Burada bir takipçi görüntüleme kodu -->

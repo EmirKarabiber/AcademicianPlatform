@@ -2,7 +2,7 @@
 
 namespace AcademicianPlatform.Models
 {
-	public class IndexModelForNews
+	public class FollowModelForIndexModel
 	{
         public ApplicationUser NewFollowerUsers { get; set; }
         public Follow NewFollowersFollow { get; set; }
@@ -15,7 +15,7 @@ namespace AcademicianPlatform.Models
 		public List<Announcement> announcements { get; set; }
         public int? IndexNews { get; set; }
 		public List<Comment>? NewComments { get; set; }
-		public List<IndexModelForNews>? NewFollowers { get; set; }
+		public List<FollowModelForIndexModel>? NewFollowers { get; set; }
 		public List<object> CombinedList { get; set; }
 
 	}

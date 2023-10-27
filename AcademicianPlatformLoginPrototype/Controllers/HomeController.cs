@@ -17,132 +17,122 @@ using System.IO;
 
 namespace AcademicianPlatform.Controllers
 {
-    public class HomeController : Controller
-    {
-        private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _context;
-        private readonly IUserStore<ApplicationUser> _userStore;
-        private readonly UserManager<ApplicationUser> _userManager;
+	public class HomeController : Controller
+	{
+		private readonly ILogger<HomeController> _logger;
+		private readonly ApplicationDbContext _context;
+		private readonly IUserStore<ApplicationUser> _userStore;
+		private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IUserStore<ApplicationUser> userStore, UserManager<ApplicationUser> userManager)
-        {
-            _logger = logger;
-            _context = context;
-            _userStore = userStore;
-            _userManager = userManager;
-        }
-        [Authorize]
-        public async Task<IActionResult> Index()
-        {
-			var announcements = GetRecentAnnouncements();
-			var twoMonthsAgo = DateTime.Now.AddMonths(-1);
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            /* Hatayı çözmek için kaldırıldı. Umarım önemli bir parça değildir 
-             
-			var model = new IndexModel
-			{
-				AllAnnouncement = announcements
-				
-			};
-            */
-            // İki ay öncesinden sonraki tüm duyuruları çekin ve tersten sıralayın
-            var allAnnouncements = await _context.Announcements
-                .Where(a => a.AnnouncementSentDate >= twoMonthsAgo)
-                .OrderByDescending(a => a.ID)
-                .ToListAsync();
+		public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IUserStore<ApplicationUser> userStore, UserManager<ApplicationUser> userManager)
+		{
+			_logger = logger;
+			_context = context;
+			_userStore = userStore;
+			_userManager = userManager;
+		}
 
-            //------- bu kısım ayarlanacak -----
-            // Sadece özel duyuruları çekin
-			var specialAnnouncements = await _context.Announcements
-				.Where(a => a.AnnouncementSentDate >= twoMonthsAgo && a.AnnouncementSpecial == true)
+		DateTime oneMonthAgo = DateTime.Now.AddMonths(-1);      //son 1 ayki duyuruları göstermek için genel olarak tanımlandı
+		[Authorize]
+		public async Task<IActionResult> Index()
+		{
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+			//özel duyuruların yanında hepsini içeren genel duyurular
+			var allAnnouncements = await _context.Announcements
+				.Where(a => a.AnnouncementSentDate >= oneMonthAgo)
 				.OrderByDescending(a => a.ID)
 				.ToListAsync();
-            //------------------
 
-            //-------- news için -----
+			// Sadece özel duyuruları çekin
+			var specialAnnouncements = await _context.Announcements
+				.Where(a => a.AnnouncementSentDate >= oneMonthAgo && a.AnnouncementSpecial == true)
+				.OrderByDescending(a => a.ID)
+				.ToListAsync();
 
-            var lastLogin = user.LastLogin;
+			//-------- news için -----
 
-            var newAnnouncements = await _context.Announcements
-                .Where(a => a.AnnouncementSentDate > lastLogin)
-                .OrderByDescending(a => a.AnnouncementSentDate)
-                .ToListAsync();
+			var lastLogin = user.LastLogin;     //fonksiyonu sadece 1 defa çalıştırmak için
 
-            // Son giriş tarihinden sonra oluşturulan tüm yorumları çekin
-            var newComments = await _context.Comments
-                .Where(c => c.DatePosted > lastLogin && c.User == user)
+			/*var newAnnouncements = await _context.Announcements
+				.Where(a => a.AnnouncementSentDate > lastLogin)
+				.OrderByDescending(a => a.AnnouncementSentDate)
+				.ToListAsync();*/
+
+			// Son giriş tarihinden sonra oluşturulan tüm yorumlar için
+			var newComments = await _context.Comments
+				.Where(c => c.DatePosted > lastLogin && c.User == user)
 				.OrderByDescending(c => c.DatePosted)
 				.ToListAsync();
 
-            var followers = await _context.Follows
-             .Where(f => f.FollowedUserId == user.Id && f.FollowDate>lastLogin)
-             .OrderByDescending(f => f.FollowDate)
-             .ToListAsync();
-
-            var followerUsersOrderedByDate = new List<IndexModelForNews>();
-            foreach (var follow in followers)
-            {
-                var followerUser = await _context.Users
-                    .Where(u => u.Id == follow.FollowerId)
-                    .FirstOrDefaultAsync();
-
-                if (followerUser != null)
-                {
-                    followerUsersOrderedByDate.Add(new IndexModelForNews
-                    {
-                        NewFollowerUsers = followerUser,
-                        NewFollowersFollow = follow
-                    });
-                }
-            }
+			//lastlogin den itibaren takipler
+			var followers = await _context.Follows
+			 .Where(f => f.FollowedUserId == user.Id && f.FollowDate > lastLogin)
+			 .OrderByDescending(f => f.FollowDate)
+			 .ToListAsync();
 
 
+			var followerUsersOrderedByDate = new List<FollowModelForIndexModel>();
+			foreach (var follow in followers)
+			{
+				var followerUser = await _context.Users
+					.Where(u => u.Id == follow.FollowerId)
+					.FirstOrDefaultAsync();
 
-            var combinedList = new List<object>();
-            combinedList.AddRange(newComments);
-            combinedList.AddRange(followerUsersOrderedByDate);
-            combinedList = combinedList.OrderByDescending(item =>
-            {
-                if (item is Comment comment)
-                {
-                    return comment.DatePosted;
-                }
-                else if (item is IndexModelForNews followerUser)
-                {
-                    return followerUser.NewFollowersFollow.FollowDate;
-                }
-                return DateTime.MinValue; // Diğer türler için varsayılan
-            }).ToList();
+				if (followerUser != null)
+				{
+					followerUsersOrderedByDate.Add(new FollowModelForIndexModel
+					{
+						NewFollowerUsers = followerUser,
+						NewFollowersFollow = follow
+					});
+				}
+			}
 
-
-            int AllNews = newAnnouncements.Count + newComments.Count;
-            //---------------
-
-            var Model = new IndexModel
-            {
-                AllAnnouncement=allAnnouncements,
-                SpecialAnnouncement=specialAnnouncements,
-                IndexNews = AllNews,
-                NewComments = newComments,
-                NewFollowers= followerUsersOrderedByDate,
-                CombinedList = combinedList
-             
-            };
-            // Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
-            var testMonth = DateTime.Now.AddMonths(-1);
-
-            if (user != null)
-            {
-                //user.LastLogin = DateTime.Now; // Kullanıcının son giriş tarihini güncelle
-                user.LastLogin = testMonth;
-                await _userManager.UpdateAsync(user); // Kullanıcıyı güncelle
-            }
-
-            return View(Model);
-        }
+			var combinedList = new List<object>();
+			combinedList.AddRange(newComments);
+			combinedList.AddRange(followerUsersOrderedByDate);
+			combinedList = combinedList.OrderByDescending(item =>
+			{
+				if (item is Comment comment)
+				{
+					return comment.DatePosted;
+				}
+				else if (item is FollowModelForIndexModel followerUser)
+				{
+					return followerUser.NewFollowersFollow.FollowDate;
+				}
+				return DateTime.MinValue; // Diğer türler için varsayılan
+			}).ToList();
 
 
-        [Authorize]
+			//int AllNews = newAnnouncements.Count + newComments.Count;
+			//---------------
+
+			var Model = new IndexModel
+			{
+				AllAnnouncement = allAnnouncements,
+				SpecialAnnouncement = specialAnnouncements,
+				//IndexNews = AllNews,
+				NewComments = newComments,
+				NewFollowers = followerUsersOrderedByDate,
+				CombinedList = combinedList
+
+			};
+			// Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
+			var testMonth = DateTime.Now.AddMonths(-1);
+
+			if (user != null)
+			{
+				//user.LastLogin = DateTime.Now; // Kullanıcının son giriş tarihini güncelle
+				user.LastLogin = testMonth;
+				await _userManager.UpdateAsync(user); // Kullanıcıyı güncelle
+			}
+
+			return View(Model);
+		}
+		
+		[Authorize]
 		public IActionResult Privacy()
 		{
 			return View();
@@ -151,7 +141,7 @@ namespace AcademicianPlatform.Controllers
 		{
 			return View();
 		}
-		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName , string announcementFaculty, bool sendToAll,bool isSpeacialAnnouncement)
+		public async Task<IActionResult> PostNewAnnouncement(string announcementTitle, string announcementContent, string senderName, string announcementFaculty, bool sendToAll, bool isSpeacialAnnouncement)
 		{
 			var user = await _userManager.FindByNameAsync(senderName);
 			Announcement announcement = new Announcement()
@@ -160,76 +150,87 @@ namespace AcademicianPlatform.Controllers
 				AnnouncementContent = announcementContent,
 				AnnouncementSentDate = DateTime.Now,
 				AnnouncementSenderID = user.Id,
-                AnnouncementFaculty = announcementFaculty,
-                AnnouncementSpecial = isSpeacialAnnouncement
-            };
+				AnnouncementFaculty = announcementFaculty,
+				AnnouncementSpecial = isSpeacialAnnouncement
+			};
 			await _context.Announcements.AddAsync(announcement);
 			await _context.SaveChangesAsync();
-            if (sendToAll)
-            {
-                return RedirectToAction("SendEmailAll", announcement);
-            }
-            else
-            {
-                return RedirectToAction("Index");
-            }
-        }
+			if (sendToAll)
+			{
+				return RedirectToAction("SendEmailAll", announcement);
+			}
+			else
+			{
+				return RedirectToAction("Index");
+			}
+		}
 
 
-        //-------- bu kısım deneysel, mail eklerken herkese de gönderilsin mi gibi bir seçenek çıkmalı ve
-        //-------- ona göre whitelistdeki herkese mail gönderecek
-        public async Task <IActionResult> SendEmailAll(Announcement announcement)
-        {
-            // Retrieve the list of email addresses from your database
-            var usersWithEmails = await _userManager.Users
-                .Where(u => !string.IsNullOrEmpty(u.Email)) // email adresi girili hesaplara gönder
-                .ToListAsync();
+		//-------- bu kısım deneysel, mail eklerken herkese de gönderilsin mi gibi bir seçenek çıkmalı ve
+		//-------- ona göre whitelistdeki herkese mail gönderecek
+		public async Task<IActionResult> SendEmailAll(Announcement announcement)
+		{
+			// Retrieve the list of email addresses from your database
+			var usersWithEmails = await _userManager.Users  // email adresi girili hesapları listeliyor
+				.Where(u => !string.IsNullOrEmpty(u.Email)) 
+				.ToListAsync();
 
-            var sentEmails = new List<string>();
-            
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			var sentEmails = new List<string>();	//mail giden hesapları daha sonra göstermek için
 
-            foreach (var userWithEmail in usersWithEmails)
-            {
-                var recipientEmail = userWithEmail.Email;
-                var message = new MimeMessage();
-                var bodyBuilder = new BodyBuilder();
-                message.From.Add(new MailboxAddress("Gönderen : " + user.Email, user.Email));
-                message.To.Add(new MailboxAddress("Alıcı : " + recipientEmail, recipientEmail));
-                message.Subject = announcement.AnnouncementTitle + " Hakkında";
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            
-                bodyBuilder.HtmlBody = "(Bu mail yeni bir duyuru eklendiğine dair bilgilendirmedir) " + announcement.AnnouncementContent;
-                message.Body = bodyBuilder.ToMessageBody();
+			foreach (var userWithEmail in usersWithEmails)
+			{
+				var recipientEmail = userWithEmail.Email;
+				var message = new MimeMessage();
+				var bodyBuilder = new BodyBuilder();
 
-                // E-posta gönderme işlemi için SMTP istemcisini kullanma
-                using (var client = new MailKit.Net.Smtp.SmtpClient())
-                {
-                    // SMTP sunucusuna bağlanma
-                    await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-                    // Kimlik doğrulama
-                    await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
-                    // E-postayı gönderme
-                    await client.SendAsync(message);
-                    // SMTP sunucusundan çıkma
-                    await client.DisconnectAsync(true);
-                }
-                sentEmails.Add(recipientEmail);
-            }
+				//burada gönderen, alıcı gibi ifadeler olmasa da olur, mesela gönderen yerine direkt {title first last} gibi fullname yapısı kullanılabilir.
+				message.From.Add(new MailboxAddress("Gönderen : " + user.Email, user.Email));
+				message.To.Add(new MailboxAddress("Alıcı : " + recipientEmail, recipientEmail));
+				string userFullName = user.Title + " " + user.FirstName + " " + user.LastName;
+				message.Subject = "AkademISTUN'de Yeni Duyuru Paylaşıldı :" + announcement.AnnouncementTitle + " Hakkında";
 
-            var emailAddresses = sentEmails.ToArray(); // Convert the list to an array
-            var recipientEmailsString = string.Join(", ", emailAddresses); // Join the email addresses with a comma and space
+				//Not: bu yazıya style etiketi ile css tasarımı da yapılabilir lakin her mail sistemi kabul etmeyebileceğinden biraz sonraya bırakılabilir.
+				bodyBuilder.HtmlBody = "<html><body>" +
+					"<p>Merhaba,</p>" +
+					"<p> <strong>" + user.Department + "</strong> departmanındaki <strong> " + userFullName + "</strong> , <strong>" + announcement.AnnouncementTitle + " </strong> başlıklı bir yeni duyuru yayınladı. Duyurunun içeriği aşağıdaki gibidir:</p>" +
+					"<p> Duyuru içeriği : " + announcement.AnnouncementContent + "</p>" +
+					"<p>Daha fazla ayrıntıya ulaşmak için <a href='https://localhost:7111/Home/AnnouncementDetails/" + announcement.ID + "'>bu bağlantıya</a> tıklayabilir ve duyuruyu inceleyebilirsiniz.</p>" +
+					"<p>AkademISTUN</p>" +
+					"</body></html>";
 
-            var emailModel = new EmailViewModel
-            {
-                SenderEmail = user.Email,
-                RecipientEmail = recipientEmailsString, // Set the list of recipient email addresses in the model
-                Subject = "Yeni Duyuru: " + announcement.AnnouncementTitle,
-                Body = announcement.AnnouncementContent
-            };
-            TempData["Message"] = "E-posta başarıyla gönderildi!";
-            return RedirectToAction("EmailSenderResult", emailModel); 
-        }
+				message.Body = bodyBuilder.ToMessageBody();
+
+				// E-posta gönderme işlemi için SMTP istemcisini kullanma
+				using (var client = new MailKit.Net.Smtp.SmtpClient())
+				{
+					// SMTP sunucusuna bağlanma
+					await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+					// Kimlik doğrulama
+					await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
+					// E-postayı gönderme
+					await client.SendAsync(message);
+					// SMTP sunucusundan çıkma
+					await client.DisconnectAsync(true);
+				}
+				sentEmails.Add(recipientEmail);
+			}
+
+			var emailAddresses = sentEmails.ToArray();
+			var recipientEmailsString = string.Join(", ", emailAddresses);
+			//hangi maillere gittiğini gösterme amaçlı sayfa tasarımı
+
+			var emailModel = new EmailViewModel
+			{
+				SenderEmail = user.Email,
+				RecipientEmail = recipientEmailsString, // Set the list of recipient email addresses in the model
+				Subject = "Yeni Duyuru: " + announcement.AnnouncementTitle,
+				Body = announcement.AnnouncementContent
+			};
+			TempData["Message"] = "E-posta başarıyla gönderildi!";
+			return RedirectToAction("EmailSenderResult", emailModel);
+		}
 
 
 		public IActionResult DeleteAnnouncement(int announcementID)
@@ -244,19 +245,18 @@ namespace AcademicianPlatform.Controllers
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+		public IActionResult Error()
+		{
+			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+		}
 
-        [Authorize]
+		[Authorize]
 		public IActionResult AnnouncementDetails([FromRoute(Name = "ID")] int announcementID)
 		{
 
 			var announcement = _context.Announcements
-		.Include(a => a.Comments) // Yorumları dahil et
-		.FirstOrDefault(a => a.ID == announcementID);
-
+				.Include(a => a.Comments) // Yorumları dahil et
+				.FirstOrDefault(a => a.ID == announcementID);
 
 			if (announcement == null)
 			{
@@ -266,129 +266,129 @@ namespace AcademicianPlatform.Controllers
 			var announcementViewModel = new AnnouncementViewModel
 			{
 				Announcement = announcement,
-                
-				
+
+
 				// Diğer özellikleri burada doldurun
 			};
 
-
+			/*
 			// Mail bilgilerini hazırla
 			string recipientEmail = "destek@example.com";
-			string subject = "Konu";	//şu kısımlar bir şekilde sayfadan çekilecek
+			string subject = "Konu";    //şu kısımlar bir şekilde sayfadan çekilecek
 			string body = "İçerik";
-            // Mailto linki oluştur
-            string mailtoLink = $"mailto:{recipientEmail}?subject={subject}&body={body}";
-            // Mailto linkini View'e taşı
-            ViewBag.MailtoLink = mailtoLink;
+			// Mailto linki oluştur
+			string mailtoLink = $"mailto:{recipientEmail}?subject={subject}&body={body}";
+			// Mailto linkini View'e taşı
+			ViewBag.MailtoLink = mailtoLink;
+			*/
+
+			return View(announcementViewModel);
+		}
 
 
-            return View(announcementViewModel);
-        }
+		[Authorize]
+		public async Task<IActionResult> MyAnnouncoments()
+		{
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			if (user == null)
+			{
+				return NotFound();
+			}
 
+			var userAnnouncements = _context.Announcements
+				.Where(a => a.AnnouncementSenderID == user.Id)
+				.OrderByDescending(a => a.ID)
+				.ToList();
 
-        [Authorize]
-        public async Task<IActionResult> MyAnnouncoments()
-        {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var userAnnouncements = _context.Announcements
-                .Where(a => a.AnnouncementSenderID == user.Id)
-                .OrderByDescending(a => a.ID)
-                .ToList();
-
-            return View(userAnnouncements);
-        }
-        //----
-
-
-
-        [Authorize]
-        public async Task<IActionResult> EmailSender([FromRoute(Name = "ID")] int announcementID)
-        {
-            // Mevcut kullanıcıyı bul
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-
-            // Gönderici olarak kullanıcının e-posta adresini al
-            string senderEmail = user.Email;
-
-            // Belirtilen duyuruyu veritabanından bul
-            Announcement announcement = _context.Announcements.FirstOrDefault(a => a.ID == announcementID);
-            if (announcement == null)
-            {
-                return NotFound(); // Duyuru bulunamazsa 404 (Not Found) döndür
-            }
-
-            // Duyurunun sahibini veritabanından bul
-            var announcementOwner = await _userManager.FindByIdAsync(announcement.AnnouncementSenderID);
-
-            // E-posta gönderimi için kullanılacak modeli oluştur
-            EmailViewModel model = new EmailViewModel
-            {
-                SenderEmail = senderEmail, // Gönderici e-posta adresi
-                Subject = announcement.AnnouncementTitle.ToString() + " Hk.", // E-posta konusu
-                RecipientEmail = announcementOwner.Email, // Alıcı e-posta adresi (duyuru sahibi)
-                Body = null, // E-posta içeriği (varsayılan olarak boş bırakıldı)
-                AnnouncementIDForEmail = announcementID
-            };
-
-            // Oluşturulan modeli view'e taşı ve e-posta gönderim sayfasını görüntüle
-            return View(model);
-        }
+			return View(userAnnouncements);
+		}
+		//----
 
 
 
+		[Authorize]
+		public async Task<IActionResult> EmailSender([FromRoute(Name = "ID")] int announcementID)
+		{
+			// Mevcut kullanıcıyı bul
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-        [HttpPost]
-        public async Task<IActionResult> SendEmail([FromForm] EmailViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
+			// Gönderici olarak kullanıcının e-posta adresini al
+			string senderEmail = user.Email;
 
-                // Oluşturulan email mesajı
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("Gönderen : " + model.SenderEmail, model.SenderEmail));
-                message.To.Add(new MailboxAddress("Alıcı : " + model.RecipientEmail, model.RecipientEmail));
-                message.Subject = model.Subject;
+			// Belirtilen duyuruyu veritabanından bul
+			Announcement announcement = _context.Announcements.FirstOrDefault(a => a.ID == announcementID);
+			if (announcement == null)
+			{
+				return NotFound(); // Duyuru bulunamazsa 404 (Not Found) döndür
+			}
 
-                var bodyBuilder = new BodyBuilder();
-                bodyBuilder.HtmlBody = model.Body;
-                message.Body = bodyBuilder.ToMessageBody();
+			// Duyurunun sahibini veritabanından bul
+			var announcementOwner = await _userManager.FindByIdAsync(announcement.AnnouncementSenderID);
 
-                message.ReplyTo.Add(new MailboxAddress("Yanıt Adresi : " + model.SenderEmail, model.SenderEmail));
+			// E-posta gönderimi için kullanılacak modeli oluştur
+			EmailViewModel model = new EmailViewModel
+			{
+				SenderEmail = senderEmail, // Gönderici e-posta adresi
+				Subject = announcement.AnnouncementTitle.ToString() + " Hk.", // E-posta konusu
+				RecipientEmail = announcementOwner.Email, // Alıcı e-posta adresi (duyuru sahibi)
+				Body = null, // E-posta içeriği (varsayılan olarak boş bırakıldı)
+				AnnouncementIDForEmail = announcementID
+			};
 
-                // E-posta gönderme işlemi için SMTP istemcisini kullanma
-                using (var client = new MailKit.Net.Smtp.SmtpClient())
-                {
-                    // SMTP sunucusuna bağlanma
-                    await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            
-                    // Kimlik doğrulama
-                    await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
-                    //yeni bir mail hesabı açtım , oradan gerekli şifreyi aldım lakin anlık olarak gereksiz mailler penceresine yolluyor maili
-            
-                    // E-postayı gönderme
-                    await client.SendAsync(message);
-            
-                    // SMTP sunucusundan çıkma
-                    await client.DisconnectAsync(true);
-                }
+			// Oluşturulan modeli view'e taşı ve e-posta gönderim sayfasını görüntüle
+			return View(model);
+		}
 
-                TempData["Message"] = "E-posta başarıyla gönderildi!";
-                return RedirectToAction("EmailSenderResult",model);
-            }
 
-            // Model geçerli değilse formu tekrar göster
-            return View("EmailSender", model);
-        }
 
-        public IActionResult EmailSenderResult(EmailViewModel model)
-        {
-            return View(model);
-        }
+
+		[HttpPost]
+		public async Task<IActionResult> SendEmail([FromForm] EmailViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+
+				// Oluşturulan email mesajı
+				var message = new MimeMessage();
+				message.From.Add(new MailboxAddress("Gönderen : " + model.SenderEmail, model.SenderEmail));
+				message.To.Add(new MailboxAddress("Alıcı : " + model.RecipientEmail, model.RecipientEmail));
+				message.Subject = model.Subject;
+
+				var bodyBuilder = new BodyBuilder();
+				bodyBuilder.HtmlBody = model.Body;
+				message.Body = bodyBuilder.ToMessageBody();
+
+				message.ReplyTo.Add(new MailboxAddress("Yanıt Adresi : " + model.SenderEmail, model.SenderEmail));
+
+				// E-posta gönderme işlemi için SMTP istemcisini kullanma
+				using (var client = new MailKit.Net.Smtp.SmtpClient())
+				{
+					// SMTP sunucusuna bağlanma
+					await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+
+					// Kimlik doğrulama
+					await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
+					//yeni bir mail hesabı açtım , oradan gerekli şifreyi aldım lakin anlık olarak gereksiz mailler penceresine yolluyor maili
+
+					// E-postayı gönderme
+					await client.SendAsync(message);
+
+					// SMTP sunucusundan çıkma
+					await client.DisconnectAsync(true);
+				}
+
+				TempData["Message"] = "E-posta başarıyla gönderildi!";
+				return RedirectToAction("EmailSenderResult", model);
+			}
+
+			// Model geçerli değilse formu tekrar göster
+			return View("EmailSender", model);
+		}
+
+		public IActionResult EmailSenderResult(EmailViewModel model)
+		{
+			return View(model);
+		}
 
 		// Bu metot, belirli bir fakülte için duyuruları listeleyen bir sayfanın işlemesini sağlar.
 		// İstenilen fakülte adı "announcementFaculty" parametresi ile alınır.
@@ -397,38 +397,25 @@ namespace AcademicianPlatform.Controllers
 			// Eğer fakülte adı geçerli bir değere sahipse işlem yapılır.
 			if (!string.IsNullOrEmpty(announcementFaculty))
 			{
-                //------------------------------------------------------
-                var announcements = GetRecentAnnouncements();
-                var twoMonthsAgo = DateTime.Now.AddMonths(-1);
+				var allAnnouncements = await _context.Announcements
+					.Where(a => a.AnnouncementSentDate >= oneMonthAgo &&
+						(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
+						.OrderByDescending(a => a.ID)
+						.ToListAsync();
 
-                var allAnnouncements = await _context.Announcements
-                    .Where(a => a.AnnouncementSentDate >= twoMonthsAgo &&
-                        (a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
-                        .OrderByDescending(a => a.ID)
-                        .ToListAsync();
+				var specialAnnouncements = await _context.Announcements
+					.Where(a => a.AnnouncementSentDate >= oneMonthAgo && a.AnnouncementSpecial == true &&
+						(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
+						.OrderByDescending(a => a.ID)
+						.ToListAsync();
 
-                // Sadece özel duyuruları çekin
-                var specialAnnouncements = await _context.Announcements
-                    .Where(a => a.AnnouncementSentDate >= twoMonthsAgo && a.AnnouncementSpecial == true &&
-                        (a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
-                        .OrderByDescending(a => a.ID)
-                        .ToListAsync();
-                
+				var Model = new IndexModel
+				{
+					AllAnnouncement = allAnnouncements,
+					SpecialAnnouncement = specialAnnouncements
+				};
 
-                var Model = new IndexModel
-                {
-                    AllAnnouncement = allAnnouncements,
-                    SpecialAnnouncement = specialAnnouncements
-                };
-            
-              /*  
-                 var announcements = _context.Announcements
-					.Where(a => a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler")
-					.OrderByDescending(a => a.ID)
-					.ToList();
-              */
-				
-				// Duyuruları içeren bir görünümü döndürür.
+		//------ !!! Index Modelin diğer parametreleri açısından burada hata çıkabilir !!! -------
 				return View("Index", Model);
 			}
 
@@ -437,203 +424,193 @@ namespace AcademicianPlatform.Controllers
 		}
 
 
-        public IActionResult Academians(string academianDepartment)
-        {
-            var DepartmentUsers = new AcademicianWithDepartment
-            {
-                Department = academianDepartment
-            };
-            if (academianDepartment == "Sağlık Meslek")
-            {
-                var academians = _userManager.Users.Where(u => u.Department == "Anestezi" ||
-                u.Department == "Ağız ve Diş Sağlığı" ||
-                u.Department == "İlk ve Acil Yardım" ||
-                u.Department == "Tıbbi Görüntüleme Teknikleri" ||
-                u.Department == "Tıbbi Laboratuvar Teknikleri").ToList();
-                DepartmentUsers.Users = academians;
-                
-            }
-            else if (academianDepartment == "Yabancı Diller")
-            {
-               var academians = _userManager.Users.Where(u => u.Department == "İngilizce Mütercim-Tercümanlık" ||
-               u.Department == "İngilizce Hazırlık Birimi" ||
-               u.Department == "Ortak Yabancı Dil Dersleri Birimi").ToList();
-               DepartmentUsers.Users = academians;
-
-            }
-            else
-            {
-                var academians = _userManager.Users.Where(u => u.Department == academianDepartment).ToList();
-                DepartmentUsers.Users = academians;
-            }
-               
-            return View(DepartmentUsers);
-
-            
-        }
-
-
-
-
-        public async Task<IActionResult> AcademicianDetails(string id)
-        {
-            var academician = _userManager.Users.FirstOrDefault(u => u.Id == id);
-            var userAnnouncements = _context.Announcements
-                .Where(a => a.AnnouncementSenderID == id)
-                .OrderByDescending(a => a.ID)
-                .ToList();
-
-            string userName = User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(userName);
-
-            string followerId = user.Id;
-            string followingId = id;
-
-            var follow = _context.Follows
-                .FirstOrDefault(f => f.FollowerId == followerId && f.FollowedUserId == followingId);
-
-            var isFollowing = (follow != null);
-
-
-            var FullName = academician.FirstName + " " + academician.LastName.ToUpper();
-            var viewModel = new AcademicianDetailsViewModel
-            {
-                UserId = academician.Id,
-                UserName = academician.UserName,
-                Email = academician.Email,
-                PhoneNumber = academician.PhoneNumber,
-                UserAnnouncements = userAnnouncements,
-                ProfilePhotoPath = academician.ProfilePhotoPath,
-                FullName = FullName,
-                Department = academician.Department,
-                Title = academician.Title,
-                AboutMeText = academician.AboutMeText,
-                CVPath = academician.CVPath,
-				LastLogin = academician.LastLogin.ToString(),
-                IsCurrentUser = (User.Identity.Name == academician.UserName),
-                IsFollowing = isFollowing
-
-                // Diğer kullanıcı bilgilerini burada doldurun.
-            };
-
-            return View(viewModel);
-        }
-        [HttpPost]
-        public async Task<IActionResult> FollowUser(string userIdToFollow)
-        {
-            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-
-            if (currentUser != null)
-            {
-                // Kullanıcıyı takip etme işlemi
-                var follow = new Follow
-                {
-                    FollowerId = currentUser.Id,
-                    FollowedUserId = userIdToFollow
-                };
-
-                _context.Follows.Add(follow);
-                await _context.SaveChangesAsync();
-            }
-
-            // İşlem tamamlandığında kullanıcıyı doğru sayfaya yönlendirin
-            return RedirectToAction("AcademicianDetails",new { id = userIdToFollow });
-        }
-        [HttpPost]
-        public async Task<IActionResult> UnfollowUser(string userIdToUnfollow)
-        {
-            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-
-            if (currentUser != null)
-            {
-                // Kullanıcıyı takip etmeyi bırakma işlemi
-                var follow = await _context.Follows
-                    .Where(f => f.FollowerId == currentUser.Id && f.FollowedUserId == userIdToUnfollow)
-                    .FirstOrDefaultAsync();
-
-                if (follow != null)
-                {
-                    _context.Follows.Remove(follow);
-                    await _context.SaveChangesAsync();
-                }
-            }
-
-            // İşlem tamamlandığında kullanıcıya geri dön
-            return RedirectToAction("AcademicianDetails", new { id = userIdToUnfollow });
-        }
-
-        public async Task<IActionResult> FollowerFollowing(string id)
-        {
-                var user = await _userManager.FindByIdAsync(id);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-                var _currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-
-                var followersList = await _context.Follows
-                   .Where(f => f.FollowedUserId == id)
-                   .Select(f => f.FollowerId)
-                   .ToListAsync();
-                
-                var followingsList = await _context.Follows
-                    .Where(f => f.FollowerId == id)
-                    .Select(f => f.FollowedUserId)
-                    .ToListAsync();
-
-            var CurrentUserFollowList = await _context.Follows
-                    .Where(f => f.FollowerId == _currentUser.Id)
-                    .Join(_userManager.Users,
-                        follow => follow.FollowedUserId,
-                        user => user.Id,
-                        (follow, user) => user)
-                    .ToListAsync();
-
-
-
-            var followers = await _userManager.Users
-                    .Where(u => followersList.Contains(u.Id))
-                    .ToListAsync();
-
-                var following = await _userManager.Users
-                    .Where(u => followingsList.Contains(u.Id))
-                    .ToListAsync();
-
-        
-
-            var FollowModel = new FollowersFollowingModel
-                {
-                    UserId = user,
-                    CurrentUser = _currentUser,
-                    Followers = followers,
-                    Following = following,
-                    UserFullName = user.FirstName + " " + user.LastName.ToUpper(),
-                    CurrentUserFollowList = CurrentUserFollowList
-            };
-        
-            return View(FollowModel);
-        }
-
-		private List<Announcement> GetRecentAnnouncements()
+		public IActionResult Academians(string academianDepartment)
 		{
-			var twoMonthsAgo = DateTime.Now.AddMonths(-2);
-			var announcements = _context.Announcements
-				.Where(a => a.AnnouncementSentDate >= twoMonthsAgo)
-				.OrderByDescending(a => a.AnnouncementSentDate)
-				.Include(a => a.Comments) // Yorumları dahil et
+			var DepartmentUsers = new AcademicianWithDepartment
+			{
+				Department = academianDepartment
+			};
+			if (academianDepartment == "Sağlık Meslek")
+			{
+				var academians = _userManager.Users.Where(u => u.Department == "Anestezi" ||
+				u.Department == "Ağız ve Diş Sağlığı" ||
+				u.Department == "İlk ve Acil Yardım" ||
+				u.Department == "Tıbbi Görüntüleme Teknikleri" ||
+				u.Department == "Tıbbi Laboratuvar Teknikleri").ToList();
+				DepartmentUsers.Users = academians;
+
+			}
+			else if (academianDepartment == "Yabancı Diller")
+			{
+				var academians = _userManager.Users.Where(u => u.Department == "İngilizce Mütercim-Tercümanlık" ||
+				u.Department == "İngilizce Hazırlık Birimi" ||
+				u.Department == "Ortak Yabancı Dil Dersleri Birimi").ToList();
+				DepartmentUsers.Users = academians;
+
+			}
+			else
+			{
+				var academians = _userManager.Users.Where(u => u.Department == academianDepartment).ToList();
+				DepartmentUsers.Users = academians;
+			}
+
+			return View(DepartmentUsers);
+
+
+		}
+
+
+
+
+		public async Task<IActionResult> AcademicianDetails(string id)
+		{
+			var academician = _userManager.Users.FirstOrDefault(u => u.Id == id);
+			var userAnnouncements = _context.Announcements
+				.Where(a => a.AnnouncementSenderID == id)
+				.OrderByDescending(a => a.ID)
 				.ToList();
 
-			return announcements;
+			string userName = User.Identity.Name;
+			var user = await _userManager.FindByNameAsync(userName);
+
+			string followerId = user.Id;
+			string followingId = id;
+
+			var follow = _context.Follows
+				.FirstOrDefault(f => f.FollowerId == followerId && f.FollowedUserId == followingId);
+
+			var isFollowing = (follow != null);
+
+
+			var FullName = academician.FirstName + " " + academician.LastName.ToUpper();
+			var viewModel = new AcademicianDetailsViewModel
+			{
+				UserId = academician.Id,
+				UserName = academician.UserName,
+				Email = academician.Email,
+				PhoneNumber = academician.PhoneNumber,
+				UserAnnouncements = userAnnouncements,
+				ProfilePhotoPath = academician.ProfilePhotoPath,
+				FullName = FullName,
+				Department = academician.Department,
+				Title = academician.Title,
+				AboutMeText = academician.AboutMeText,
+				CVPath = academician.CVPath,
+				LastLogin = academician.LastLogin.ToString(),
+				IsCurrentUser = (User.Identity.Name == academician.UserName),
+				IsFollowing = isFollowing
+
+				// Diğer kullanıcı bilgilerini burada doldurun.
+			};
+
+			return View(viewModel);
 		}
+		[HttpPost]
+		public async Task<IActionResult> FollowUser(string userIdToFollow)
+		{
+			var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+
+			if (currentUser != null)
+			{
+				// Kullanıcıyı takip etme işlemi
+				var follow = new Follow
+				{
+					FollowerId = currentUser.Id,
+					FollowedUserId = userIdToFollow
+				};
+
+				_context.Follows.Add(follow);
+				await _context.SaveChangesAsync();
+			}
+
+			// İşlem tamamlandığında kullanıcıyı doğru sayfaya yönlendirin
+			return RedirectToAction("AcademicianDetails", new { id = userIdToFollow });
+		}
+		[HttpPost]
+		public async Task<IActionResult> UnfollowUser(string userIdToUnfollow)
+		{
+			var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+
+			if (currentUser != null)
+			{
+				// Kullanıcıyı takip etmeyi bırakma işlemi
+				var follow = await _context.Follows
+					.Where(f => f.FollowerId == currentUser.Id && f.FollowedUserId == userIdToUnfollow)
+					.FirstOrDefaultAsync();
+
+				if (follow != null)
+				{
+					_context.Follows.Remove(follow);
+					await _context.SaveChangesAsync();
+				}
+			}
+
+			// İşlem tamamlandığında kullanıcıya geri dön
+			return RedirectToAction("AcademicianDetails", new { id = userIdToUnfollow });
+		}
+
+		public async Task<IActionResult> FollowerFollowing(string id)
+		{
+			var user = await _userManager.FindByIdAsync(id);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			var _currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+
+			var followersList = await _context.Follows
+			   .Where(f => f.FollowedUserId == id)
+			   .Select(f => f.FollowerId)
+			   .ToListAsync();
+
+			var followingsList = await _context.Follows
+				.Where(f => f.FollowerId == id)
+				.Select(f => f.FollowedUserId)
+				.ToListAsync();
+
+			var CurrentUserFollowList = await _context.Follows
+					.Where(f => f.FollowerId == _currentUser.Id)
+					.Join(_userManager.Users,
+						follow => follow.FollowedUserId,
+						user => user.Id,
+						(follow, user) => user)
+					.ToListAsync();
+
+
+
+			var followers = await _userManager.Users
+					.Where(u => followersList.Contains(u.Id))
+					.ToListAsync();
+
+			var following = await _userManager.Users
+				.Where(u => followingsList.Contains(u.Id))
+				.ToListAsync();
+
+
+
+			var FollowModel = new FollowersFollowingModel
+			{
+				UserId = user,
+				CurrentUser = _currentUser,
+				Followers = followers,
+				Following = following,
+				UserFullName = user.FirstName + " " + user.LastName.ToUpper(),
+				CurrentUserFollowList = CurrentUserFollowList
+			};
+
+			return View(FollowModel);
+		}
+
+
 
 		[HttpPost]
 
 		public async Task<IActionResult> AddComment(int announcementID, string commentContent)
 		{
-			
+
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-			
+
 			var comment = new Comment
 			{
 				AnnouncementId = announcementID,
@@ -641,7 +618,7 @@ namespace AcademicianPlatform.Controllers
 				UserId = user.Id,
 				User = user,
 				DatePosted = DateTime.Now
-                
+
 			};
 
 			_context.Comments.Add(comment);
@@ -659,14 +636,14 @@ namespace AcademicianPlatform.Controllers
 
 			if (commentToDelete == null)
 			{
-				return NotFound(); 
+				return NotFound();
 			}
 
 			var user = await _userManager.GetUserAsync(User);
 
 			if (commentToDelete.UserId != user.Id)
 			{
-				return Unauthorized(); 
+				return Unauthorized();
 			}
 
 			_context.Comments.Remove(commentToDelete);
