@@ -142,11 +142,15 @@ body {
 
 .nav-pills {
     background-color: #fff;
+    width: 800px;
 }
     /* Dikdörtgenlerin yüksekliðini artýrma */
     .nav-pills .nav-link {
-        padding: 15px 20px;
+        padding: 15px 50px;
+        text-align: left;
+        display: block;
     }
+
     /* Menü seçeneklerinin alt baþlýklarý (yazý) */
     .nav-pills .nav-item .nav-link {
         color: #02a358;
@@ -1393,3 +1397,67 @@ li a i {
     }
 }
 /* ----- */
+#video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#video-background {
+    object-fit: cover;
+    filter: brightness(0.3); /* Deðer 0 ile 1 arasýnda bir sayý olabilir, 1 orijinal parlaklýk, 0 çok karanlýk */
+    object-fit: cover;
+    width: 100%;
+}
+
+#content-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.form-container {
+    width: 100%;
+    max-width: 400px; /* Formun maksimum geniþliðini ayarlayabilirsiniz */
+    padding: 20px;
+}
+#akademistunLogin {
+    color: #f8f8ff;
+    font-size: 40px;
+    text-align: center;
+    position: absolute; /* Yazýnýn pozisyonunu mutlak olarak ayarlar */
+    top: 130px; /* Yukarýdan 10 piksel boþluk býrakýr */
+    left: 0; /* Sol kenara hizalar, isteðinize göre ayarlayabilirsiniz */
+    right: 0; /* Sað kenara hizalar, isteðinize göre ayarlayabilirsiniz */
+}
+
+
+#forgot-password {
+    color: #f8f8ff;
+    font-size: 16px;
+}
+.checkbox-login {
+    color: #f8f8ff; 
+    margin-top: 10px; 
+}
+#login-submit {
+    background-color: #A82F3A;
+    color: #FFFFFF;
+    border: none;
+}
+.first-line {
+    font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 40px; /* Ýlk satýrý yukarý çekmek için negatif margin kullanýlýr. Ayarladýðýnýz deðeri deðiþtirebilirsiniz. */
+}
+
+.second-line {
+    font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 40px; /* Ýkinci satýrý yukarý çekmek için negatif margin kullanýlýr. Ayarladýðýnýz deðeri deðiþtirebilirsiniz. */
+}
