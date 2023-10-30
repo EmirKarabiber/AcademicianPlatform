@@ -23,6 +23,11 @@
         border-radius: 120px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+    #isUsersNull
+    {
+        font-size:2rem;
+
+    }
 
 </style>
 <h1 class="display-4 text-center custom-heading">@AcademianDepartmentValue Akademisyenleri </h1>
@@ -43,7 +48,10 @@
                 }
             </div>
         </div>
-   
+        @if(Model.Users.Count == 0)
+        {
+    <p class="text-center  " id="isUsersNull">Sistemde henüz herhangi bir "@AcademianDepartmentValue" akademisyeni kayıtlı değil</p>
+        }
 
 
 @*@model List<ApplicationUser>

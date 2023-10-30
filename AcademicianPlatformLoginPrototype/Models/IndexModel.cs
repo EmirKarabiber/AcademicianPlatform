@@ -4,19 +4,15 @@ namespace AcademicianPlatform.Models
 {
 	public class FollowModelForIndexModel
 	{
-        public ApplicationUser NewFollowerUsers { get; set; }
-        public Follow NewFollowersFollow { get; set; }
+        public ApplicationUser NewFollowerUsers { get; set; }	//Notification sisteminden User a gidebilmek için
+        public Follow NewFollowersFollow { get; set; }		//followu belirtmek için
     }
 	public class IndexModel
 	{
-        public List<Announcement> AllAnnouncement { get; set; }
-        public List<Announcement> SpecialAnnouncement { get; set; }
-		public List<AnnouncementViewModel> AnnouncementViewModels { get; set; }
-		public List<Announcement> announcements { get; set; }
-        public int? IndexNews { get; set; }
-		public List<Comment>? NewComments { get; set; }
-		public List<FollowModelForIndexModel>? NewFollowers { get; set; }
-		public List<object> CombinedList { get; set; }
+        public List<Announcement> AllAnnouncement { get; set; }		//tüm duyurular
+        public List<Announcement> SpecialAnnouncement { get; set; }		//özel duyurular
+        public int? IndexNews { get; set; }		//New Announcement sayısını tutacak.
+		public List<object> NotificationList { get; set; }
 
 	}
 	

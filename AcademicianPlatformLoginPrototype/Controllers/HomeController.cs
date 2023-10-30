@@ -19,6 +19,8 @@ namespace AcademicianPlatform.Controllers
 {
 	public class HomeController : Controller
 	{
+
+
 		private readonly ILogger<HomeController> _logger;
 		private readonly ApplicationDbContext _context;
 		private readonly IUserStore<ApplicationUser> _userStore;
@@ -30,108 +32,110 @@ namespace AcademicianPlatform.Controllers
 			_context = context;
 			_userStore = userStore;
 			_userManager = userManager;
+
+			//notificationList = new List<object>();
 		}
 
 		DateTime oneMonthAgo = DateTime.Now.AddMonths(-1);      //son 1 ayki duyuruları göstermek için genel olarak tanımlandı
+																//List<object>? notificationList = new List<object>();	//bildiri sistemi için
+		private static List<object>? notificationList = new List<object>();
+
 		[Authorize]
 		public async Task<IActionResult> Index()
 		{
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			var lastlogin = user.LastLogin;
 
-			//özel duyuruların yanında hepsini içeren genel duyurular
+			var model = await GetIndexModel("Tüm Fakülteler", user, lastlogin);
+
+			// Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
+			user.LastLogin = DateTime.Now;
+
+			//test amaçlı , silinecek sonra
+			//user.LastLogin = DateTime.Now.AddMonths(-1);
+
+
+			await _userManager.UpdateAsync(user);
+
+			return View(model);
+		}
+
+		
+		public async Task<IndexModel> GetIndexModel(string announcementFaculty, ApplicationUser user, DateTime? lastLogin)
+		{
 			var allAnnouncements = await _context.Announcements
-				.Where(a => a.AnnouncementSentDate >= oneMonthAgo)
+				.Where(a => a.AnnouncementSentDate >= oneMonthAgo &&
+					(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
 				.OrderByDescending(a => a.ID)
 				.ToListAsync();
 
-			// Sadece özel duyuruları çekin
 			var specialAnnouncements = await _context.Announcements
-				.Where(a => a.AnnouncementSentDate >= oneMonthAgo && a.AnnouncementSpecial == true)
+				.Where(a => a.AnnouncementSentDate >= oneMonthAgo && a.AnnouncementSpecial == true &&
+					(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
 				.OrderByDescending(a => a.ID)
 				.ToListAsync();
 
-			//-------- news için -----
-
-			var lastLogin = user.LastLogin;     //fonksiyonu sadece 1 defa çalıştırmak için
-
-			/*var newAnnouncements = await _context.Announcements
-				.Where(a => a.AnnouncementSentDate > lastLogin)
-				.OrderByDescending(a => a.AnnouncementSentDate)
-				.ToListAsync();*/
-
-			// Son giriş tarihinden sonra oluşturulan tüm yorumlar için
 			var newComments = await _context.Comments
 				.Where(c => c.DatePosted > lastLogin && c.User == user)
 				.OrderByDescending(c => c.DatePosted)
 				.ToListAsync();
 
-			//lastlogin den itibaren takipler
 			var followers = await _context.Follows
-			 .Where(f => f.FollowedUserId == user.Id && f.FollowDate > lastLogin)
-			 .OrderByDescending(f => f.FollowDate)
-			 .ToListAsync();
+				.Where(f => f.FollowedUserId == user.Id && f.FollowDate > lastLogin)
+				.OrderByDescending(f => f.FollowDate)
+				.ToListAsync();
 
-
-			var followerUsersOrderedByDate = new List<FollowModelForIndexModel>();
-			foreach (var follow in followers)
+			if (notificationList.Count ==0 || (notificationList.Count > 0 && (newComments.Count > 0 || followers.Count > 0)))	//combined list içerisinde eleman yoksa böyle dolduracak. içinde eleman olunca doldurmaz zaten
 			{
-				var followerUser = await _context.Users
-					.Where(u => u.Id == follow.FollowerId)
-					.FirstOrDefaultAsync();
+				
 
-				if (followerUser != null)
+				var followerUsersOrderedByDate = new List<FollowModelForIndexModel>();
+				foreach (var follow in followers)
 				{
-					followerUsersOrderedByDate.Add(new FollowModelForIndexModel
+					var followerUser = await _context.Users
+						.Where(u => u.Id == follow.FollowerId)
+						.FirstOrDefaultAsync();
+
+					if (followerUser != null)
 					{
-						NewFollowerUsers = followerUser,
-						NewFollowersFollow = follow
-					});
+						followerUsersOrderedByDate.Add(new FollowModelForIndexModel
+						{
+							NewFollowerUsers = followerUser,
+							NewFollowersFollow = follow
+						});
+					}
+
 				}
+				
+					notificationList.AddRange(newComments);
+					notificationList.AddRange(followerUsersOrderedByDate);
+					notificationList = notificationList.OrderByDescending(item =>
+					{
+						if (item is Comment comment)
+						{
+							return comment.DatePosted;
+						}
+						else if (item is FollowModelForIndexModel followerUser)
+						{
+							return followerUser.NewFollowersFollow.FollowDate;
+						}
+						return DateTime.MinValue;
+					}).ToList();
+				
 			}
 
-			var combinedList = new List<object>();
-			combinedList.AddRange(newComments);
-			combinedList.AddRange(followerUsersOrderedByDate);
-			combinedList = combinedList.OrderByDescending(item =>
-			{
-				if (item is Comment comment)
-				{
-					return comment.DatePosted;
-				}
-				else if (item is FollowModelForIndexModel followerUser)
-				{
-					return followerUser.NewFollowersFollow.FollowDate;
-				}
-				return DateTime.MinValue; // Diğer türler için varsayılan
-			}).ToList();
-
-
-			//int AllNews = newAnnouncements.Count + newComments.Count;
-			//---------------
-
-			var Model = new IndexModel
+			var model = new IndexModel
 			{
 				AllAnnouncement = allAnnouncements,
 				SpecialAnnouncement = specialAnnouncements,
-				//IndexNews = AllNews,
-				NewComments = newComments,
-				NewFollowers = followerUsersOrderedByDate,
-				CombinedList = combinedList
-
+				//NewComments = newComments,
+				//NewFollowers = followerUsersOrderedByDate,
+				NotificationList = notificationList
 			};
-			// Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
-			var testMonth = DateTime.Now.AddMonths(-1);
 
-			if (user != null)
-			{
-				//user.LastLogin = DateTime.Now; // Kullanıcının son giriş tarihini güncelle
-				user.LastLogin = testMonth;
-				await _userManager.UpdateAsync(user); // Kullanıcıyı güncelle
-			}
-
-			return View(Model);
+			return model;
 		}
-		
+
 		[Authorize]
 		public IActionResult Privacy()
 		{
@@ -392,34 +396,18 @@ namespace AcademicianPlatform.Controllers
 
 		// Bu metot, belirli bir fakülte için duyuruları listeleyen bir sayfanın işlemesini sağlar.
 		// İstenilen fakülte adı "announcementFaculty" parametresi ile alınır.
+		[Authorize]
 		public async Task<IActionResult> IndexFaculty([FromQuery] string announcementFaculty)
 		{
-			// Eğer fakülte adı geçerli bir değere sahipse işlem yapılır.
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
 			if (!string.IsNullOrEmpty(announcementFaculty))
 			{
-				var allAnnouncements = await _context.Announcements
-					.Where(a => a.AnnouncementSentDate >= oneMonthAgo &&
-						(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
-						.OrderByDescending(a => a.ID)
-						.ToListAsync();
+				var model = await GetIndexModel(announcementFaculty, user, user.LastLogin);
 
-				var specialAnnouncements = await _context.Announcements
-					.Where(a => a.AnnouncementSentDate >= oneMonthAgo && a.AnnouncementSpecial == true &&
-						(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
-						.OrderByDescending(a => a.ID)
-						.ToListAsync();
-
-				var Model = new IndexModel
-				{
-					AllAnnouncement = allAnnouncements,
-					SpecialAnnouncement = specialAnnouncements
-				};
-
-		//------ !!! Index Modelin diğer parametreleri açısından burada hata çıkabilir !!! -------
-				return View("Index", Model);
+				return View("Index", model);
 			}
 
-			// Eğer fakülte adı geçerli değilse, genel "Index" sayfasına yönlendirme yapılır.
 			return RedirectToAction("Index");
 		}
 

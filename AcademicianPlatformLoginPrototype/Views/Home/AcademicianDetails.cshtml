@@ -26,8 +26,8 @@
                             </p>
                             <p><strong>Son Giriş Tarihi:</strong> @Model.LastLogin</p>
                             
-                             <a class="btn btn-success" asp-controller="Home" asp-action="FollowerFollowing" asp-route-id="@Model.UserId">Takipçi - Takip Listesi</a>
-
+                             <a class="btn btn-success mb-2" asp-controller="Home" asp-action="FollowerFollowing" asp-route-id="@Model.UserId">Takipçi - Takip Listesi</a>
+                             
                
                             
                             @if (Model.IsCurrentUser == false)

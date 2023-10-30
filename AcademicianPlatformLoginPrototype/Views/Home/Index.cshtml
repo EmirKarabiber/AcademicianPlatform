@@ -7,7 +7,7 @@
 
 @{
 	ViewData["Title"] = "Home Page";
-	var newscount = Model.CombinedList.Count;
+	var newscount = Model.NotificationList.Count;
 }
 
 <style>
@@ -29,7 +29,7 @@
 				<option value="IndexFaculty" data-faculty="İktisadi, İdari ve Sosyal Bilimler">Filtrele: İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
 			</select>
 		</div>
-		<div class="col-4">
+		<div class="col-4 text-end">
 			<div class="dropdown-es">
 				<button class="dropbtn-es">
 					Alerts(@newscount)
@@ -38,18 +38,29 @@
 				<div class="dropdown-content-es">
 					<div class="row-es">
 						<div class="column-es">
-								@foreach (var item in Model.CombinedList)
+							@foreach (var item in Model.NotificationList)
 								{
 									if (item is Comment comment)
 									{
-										<a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID"><p><strong>@comment.User.FirstName @comment.User.LastName</strong>, @comment.Announcement.AnnouncementTitle duyuruna şu yorumu yazdı: @comment.Text</p></a>
+										<div class="notifi-div">
+                                        <a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID"><p>
+											<a asp-controller="Home" asp-action="AcademicianDetails" asp-route-id="@comment.User.Id"><strong>@comment.User.FirstName @comment.User.LastName</strong></a>, "@comment.Announcement.AnnouncementTitle" duyuruna şu yorumu yazdı: @comment.Text
+											</p></a>
+										</div>
+										
 									}
-								else if (item is FollowModelForIndexModel follow)
+									else if (item is FollowModelForIndexModel follow)
 									{
-										<a asp-controller ="Home" asp-action="AcademianDetails" asp-route-id="@follow.NewFollowerUsers.Id"><p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p></a>
+									<div class="notifi-div">
+										<a asp-controller ="Home" asp-action="AcademicianDetails" asp-route-id="@follow.NewFollowerUsers.Id"><p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p></a>
 										<!-- Burada bir takipçi görüntüleme kodu -->
+									</div>
 									}
 								}
+							@if(Model.NotificationList.Count==0)
+							{
+								<p>Şuanda herhangi bir bildiriniz bulunmamaktadır.</p>
+							}
 						</div>
 					</div>
 				</div>
@@ -91,13 +102,14 @@
 			var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
 			if (user != null)
 			{
+				bool isNew = item.AnnouncementSentDate > user.LastLogin;
 
 				<div class="container" style=" height:50%">
 					<div class="card border mb-3 shadow" id="card" style="border-radius: 15px;">
 
 						<div id="annHeader" class="card-header d-inline align-content-end card-header-with-shadow ann-header" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
 							<h5 id="annHeaderContent">
-								Acil Duyuru (@item.AnnouncementFaculty)<span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate.ToString("dd/MM/yyyy HH:mm")</span>
+								Acil Duyuru (@item.AnnouncementFaculty)@if (isNew == true) { <span>Yeni Duyuru </span> }<span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate.ToString("dd/MM/yyyy HH:mm")</span>
 							</h5>
 						</div>
 						<div class="card-body" style="height: 175px;">

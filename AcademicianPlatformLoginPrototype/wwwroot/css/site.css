@@ -1357,19 +1357,26 @@ li a i {
     background-color: #ccc;
     height: 100%;
 }
-
+    .column-es .notifi-div {
+        padding: 10px;
+        display: block;
+    }
     .column-es a {
         float: none;
         color: black;
-        padding: 16px;
         text-decoration: none;
-        display: block;
         text-align: left;
     }
+    .column-es a:hover
+    {
+        color:#535353;
+    }
 
-        .column-es a:hover {
-            background-color: #ddd;
-        }
+
+    .column-es .notifi-div:hover {
+        background-color: #ddd;
+    }
+
 
 /* Clear floats after the columns */
 .row-es:after {

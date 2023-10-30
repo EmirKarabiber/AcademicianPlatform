@@ -14,12 +14,12 @@
 }
 
 @{
-	var senderID = Model.AnnouncementSenderID;
+	var senderID = Model.Announcement.AnnouncementSenderID;
 	Console.WriteLine("AAAAAAAAAAsenderID: " + senderID);
 	@*var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);*@
 	var user = await UserManager.FindByIdAsync(Model.Announcement.AnnouncementSenderID);
 
-	var AnnouncomentSenderID = Model.AnnouncementSenderID;
+	//var AnnouncomentSenderID = Model.AnnouncementSenderID;
 	var currentUser = await UserManager.GetUserAsync(User);
 	var isCurrentUserAnnouncementCreator = currentUser.Id == senderID;
 }
@@ -133,26 +133,3 @@
 	</ul>
 	
 }
-
-
-@*  Eski sistem kodları (yedek olarak tutuluyor)
-
-<!--<a class="btn btn-primary" onclick="sendEmail()">Mail Gönder</a>-->
-        <!--  eski sistemin kodları  -->
-<script>
-    function sendEmail() {
-        var recipientEmail = "@user.Email"; // Kullanıcının mail adresini alın
-        var subject = "@Model.AnnouncementTitle Hk."; // Konu değerini istediğiniz şekilde belirleyin
-        var body = "İçerik"; // İçerik değerini istediğiniz şekilde belirleyin
-
-        var mailtoLink = "mailto:" + recipientEmail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-
-        window.location.href = mailtoLink;
-    }
-</script>
-
-<a asp-controller="Home" asp-action="EmailSender" asp-route-id="@Model.ID">Send Email</a>
-
-        <a class="btn btn-danger" asp-controller="Home" asp-action="DeleteAnnouncement"
-            asp-route-announcementID="@Model.ID">Delete</a>
-*@
