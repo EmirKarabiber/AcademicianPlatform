@@ -32,32 +32,44 @@
 		<div class="col-4 text-end">
 			<div class="dropdown-es">
 				<button class="dropbtn-es">
-					Alerts(@newscount)
+					<i class="fa-solid fa-bell" style="color: #85150d;"></i> Bildirimler(@newscount)
 					<i class="fa fa-caret-down"></i>
 				</button>
 				<div class="dropdown-content-es">
 					<div class="row-es">
-						<div class="column-es">
+						<div class="column-es" style="background-color: #ffffff;">
 							@foreach (var item in Model.NotificationList)
+							{
+								if (item is Comment comment)
 								{
-									if (item is Comment comment)
-									{
-										<div class="notifi-div">
-                                        <a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID"><p>
-											<a asp-controller="Home" asp-action="AcademicianDetails" asp-route-id="@comment.User.Id"><strong>@comment.User.FirstName @comment.User.LastName</strong></a>, "@comment.Announcement.AnnouncementTitle" duyuruna şu yorumu yazdı: @comment.Text
-											</p></a>
-										</div>
-										
-									}
-									else if (item is FollowModelForIndexModel follow)
-									{
 									<div class="notifi-div">
-										<a asp-controller ="Home" asp-action="AcademicianDetails" asp-route-id="@follow.NewFollowerUsers.Id"><p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p></a>
+										<a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID">
+											<p>
+												<a asp-controller="Home" asp-action="AcademicianDetails"
+												   asp-route-id="@comment.User.Id">
+													<strong style="color: #85150d; font-size: 17px;">@comment.User.FirstName @comment.User.LastName</strong>
+												</a>,
+												<span style="color: black; font-size: 17px; font-weight: bold;">
+													"@comment.Announcement.AnnouncementTitle"
+												</span>
+												<span style="font-size: 17px; font-weight: 500;">duyuruna şu yorumu yazdı: </span>
+												<span style="font-size: 15px;">@comment.Text</span>
+											</p>
+										</a>
+									</div>
+									<hr />
+								}
+								else if (item is FollowModelForIndexModel follow)
+								{
+									<div class="notifi-div">
+										<a asp-controller="Home" asp-action="AcademicianDetails" asp-route-id="@follow.NewFollowerUsers.Id">
+											<p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p>
+										</a>
 										<!-- Burada bir takipçi görüntüleme kodu -->
 									</div>
-									}
 								}
-							@if(Model.NotificationList.Count==0)
+							}
+							@if (Model.NotificationList.Count == 0)
 							{
 								<p>Şuanda herhangi bir bildiriniz bulunmamaktadır.</p>
 							}
@@ -87,7 +99,7 @@
 @*
 @if(Model.IndexNews > 0)
 {
-	<h3 class="text-center" style="background-color:red;color:white;padding:5px;">@Model.IndexNews tane okunmamış yeni duyuru ve yorumunuz var</h3>
+ <h3 class="text-center" style="background-color:red;color:white;padding:5px;">@Model.IndexNews tane okunmamış yeni duyuru ve yorumunuz var</h3>
 }
 *@
 @if (Model.SpecialAnnouncement.Count > 0)
@@ -109,7 +121,10 @@
 
 						<div id="annHeader" class="card-header d-inline align-content-end card-header-with-shadow ann-header" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
 							<h5 id="annHeaderContent">
-								Acil Duyuru (@item.AnnouncementFaculty)@if (isNew == true) { <span>Yeni Duyuru </span> }<span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate.ToString("dd/MM/yyyy HH:mm")</span>
+								Acil Duyuru (@item.AnnouncementFaculty)@if (isNew == true)
+								{
+									<span>Yeni Duyuru </span>
+								}<span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate.ToString("dd/MM/yyyy HH:mm")</span>
 							</h5>
 						</div>
 						<div class="card-body" style="height: 175px;">
@@ -160,7 +175,7 @@
 					<br />
 
 				</div>
-				
+
 			}
 		}
 	}
@@ -173,7 +188,7 @@
 	{
 		@if (item != null)
 		{
-			
+
 			var senderID = item.AnnouncementSenderID;
 			var user = await UserStore.FindByIdAsync(senderID, CancellationToken.None);
 			if (user != null)
@@ -183,14 +198,14 @@
 					<div class="card border mb-3 shadow" id="card" style="border-radius: 15px;">
 
 						<div id="annHeader" class="card-header d-inline align-content-end card-header-with-shadow" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-						
+
 							<h5 id="annHeaderContent">
 								Duyuru (@item.AnnouncementFaculty)<span id="Date" style="float: right; font-size: 12px; margin-top: 6px;">Gönderim tarihi: @item.AnnouncementSentDate</span>
 							</h5>
 						</div>
-						
+
 						<div class="card-body" style="height: 175px;">
-							
+
 							<div>
 								<h5 class="card-title m-0 p-0">
 									<div class="container">
@@ -214,16 +229,16 @@
 								</h5>
 							</div>
 							<span id="cardTitle" style="font-size: 24px; color: #85150d;"><p class="m-0 p-0" id="titleP">@item.AnnouncementTitle</p></span>
-						
+
 							<p class="card-text" id="card-text">
 								@item.AnnouncementContent
-								</p>
+							</p>
 
 							<div>
-							<a class="btn btn-outline-danger m-0" id="mobileDetails" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+								<a class="btn btn-outline-danger m-0" id="mobileDetails" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 							</div>
 
-							<a id ="details" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
+							<a id="details" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@item.ID">Detaylar</a>
 
 							<button onclick="scrollToTop()"
 									id="scroll-top-button"
@@ -233,14 +248,14 @@
 							</button>
 						</div>
 					</div>
-					
+
 					<br />
-					
+
 				</div>
 			}
 		}
 	}
-	
+
 }
 
 <script>

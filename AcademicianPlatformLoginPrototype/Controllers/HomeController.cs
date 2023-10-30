@@ -196,14 +196,18 @@ namespace AcademicianPlatform.Controllers
 				message.Subject = "AkademISTUN'de Yeni Duyuru Paylaşıldı :" + announcement.AnnouncementTitle + " Hakkında";
 
 				//Not: bu yazıya style etiketi ile css tasarımı da yapılabilir lakin her mail sistemi kabul etmeyebileceğinden biraz sonraya bırakılabilir.
-				bodyBuilder.HtmlBody = "<html><body>" +
-					"<p>Merhaba,</p>" +
-					"<p> <strong>" + user.Department + "</strong> departmanındaki <strong> " + userFullName + "</strong> , <strong>" + announcement.AnnouncementTitle + " </strong> başlıklı bir yeni duyuru yayınladı. Duyurunun içeriği aşağıdaki gibidir:</p>" +
-					"<p> Duyuru içeriği : " + announcement.AnnouncementContent + "</p>" +
-					"<p>Daha fazla ayrıntıya ulaşmak için <a href='https://localhost:7111/Home/AnnouncementDetails/" + announcement.ID + "'>bu bağlantıya</a> tıklayabilir ve duyuruyu inceleyebilirsiniz.</p>" +
-					"<p>AkademISTUN</p>" +
-					"</body></html>";
-
+				bodyBuilder.HtmlBody ="<html><head><style>"+
+				  "body {font-family: Arial, sans-serif;background-color: #f4f4f4;margin: 0;padding: 0;display: flex;justify-content: center;align-items: center;height: 100vh; }" +
+				  ".container {background-color: #fff; border-radius: 8px;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); margin:40px;padding: 20px;border:2px solid #d3d3d3}" +
+				  ".ust {color: #85150d;text-align: center;}"+
+				  "p {margin: 10px 0;}"+
+				  "a {text-decoration: none;color: #85150d;}" +
+				  "</style></head><body>" +
+				  "<div class='container'><h2 class='ust'>"+userFullName+"</h2>"+"<h3 class='ust'>Yeni Duyuru Yayınladı</h3>"+
+				  "<p><strong>"+user.Department+"</strong> departmanındaki <strong>"+userFullName+"</strong>, <strong>"+announcement.AnnouncementTitle+"</strong> başlıklı bir yeni duyuru yayınladı. Duyurunun içeriği aşağıdaki gibidir:</p><h4>"+announcement.AnnouncementTitle+"</h4>"+
+				  "<p>"+announcement.AnnouncementContent+"</p><br>" +
+				  "<p>Daha fazla ayrıntıya ulaşmak için <a href='https://localhost:7111/Home/AnnouncementDetails/" + announcement.ID + "'>bu bağlantıya</a> tıklayabilir ve duyuruyu inceleyebilirsiniz.</p><br><hr>" +
+				  "<a href='https://localhost:7111/'>AkademISTUN</a></div></body></html>";
 				message.Body = bodyBuilder.ToMessageBody();
 
 				// E-posta gönderme işlemi için SMTP istemcisini kullanma
