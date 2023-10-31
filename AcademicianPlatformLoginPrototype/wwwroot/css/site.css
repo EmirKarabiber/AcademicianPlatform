@@ -1472,9 +1472,10 @@ li a i {
     background-color: #A82F3A;
     border: none;
     font-size: 18px;
+    width: 200px;
 }
 .kayitol-Title {
-    font-size: 30px;
+    font-size: 35px;
     color: #A82F3A;
     font-weight: bold;
     margin-top: 30px;
@@ -1483,8 +1484,17 @@ li a i {
 .kayitol-text {
     color: #1e3799;
     font-size: 18px;
+    margin-top: -30px;
 }
 .hesab-kayit-text {
-    font-size: 18px; 
+    font-size: 18px;
     color: #000;
+    margin-top: -30px;
+}
+.bold-text-giris {
+    display: inline;
+}
+.bottom-text {
+    font-weight: bold;
+    color: #dcdcdc;
 }

@@ -46,11 +46,15 @@
                                     <p>
                                         @foreach (var provider in Model.ExternalLogins!)
                                         {
-                                            <button type="submit" class="btn btn-primary login-button" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">AkademİSTÜN'e Giriş Yapın</button>
+                                            <button type="submit" class="btn btn-primary login-button" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                                <span class="bold-text-giris">AkademİSTÜN'e</span> <br> <span class="bottom-text">Giriş Yapın</span>
+                                            </button>
                                         }
                                     </p>
                                 </div>
                             </form>
+
+
                         }
                     }
                 </section>
