@@ -152,18 +152,29 @@ body {
     }
 
     /* Menü seçeneklerinin alt baþlýklarý (yazý) */
-    .nav-pills .nav-item .nav-link {
-        color: #02a358;
-    }
+
 
     /* Menü seçeneklerinin normal durum rengi */
     .nav-pills .nav-item .nav-link {
         background-color: transparent;
         color: #4f4f4f;
         transition: background-color 0.3s, color 0.3s;
-        font-size: large;
+        font-size: larger;
         font-weight: 600;
+        padding: 15px 20px;
+        width: 290px;
     }
+        .nav-pills .nav-item .nav-link i {
+            margin-right: 10px;
+            
+        }
+.nav-link:hover {
+    /* Hover durumunda görüntülemek istediðiniz stil ayarlarýný burada tanýmlayýn. Örneðin: */
+    background-color: #ccc;
+    color: #000;
+}
+
+
 
         /* Menü seçeneklerinin týklanmýþ durum rengi */
         .nav-pills .nav-item .nav-link.active {
@@ -171,10 +182,16 @@ body {
             color: black;
         }
 
+        /* iletiþim bilgilerini güncelle yazýsýndaki güncelle için */
+        .guncelle {
+            margin-left:60px;
+        }
+
 
         .nav-pills .nav-item .nav-link:hover {
             background-color: rgba(200, 200, 200, 0.5);
             color: black;
+            width: 290px;
         }
         /* Seçilen menü seçeneðinin sol baþýný siyaha boyama */
         .nav-pills .nav-item .nav-link.active {
@@ -630,10 +647,12 @@ body {
 
 .faculty-label {
     color: #191970;
+    display: block;
 }
 
 .date-label {
     color: #191970;
+    display: block;
 }
 
 .announcementTitle {
@@ -661,6 +680,7 @@ body {
 .custom-faculty {
     font-weight: bold;
     color: #000;
+
 }
 
 .custom-content {
@@ -681,6 +701,11 @@ body {
     text-align: center;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.08);
 }
+
+    .announcement-item p {
+        width: auto; /* Geniþliði otomatik olarak ayarla */
+        display: inline; /* Satýr içi görünüm */
+    }
 
 /* Baþlýk, Ýçerik, Fakülte, Tarih ve Butonlar */
 .announcementTitle,

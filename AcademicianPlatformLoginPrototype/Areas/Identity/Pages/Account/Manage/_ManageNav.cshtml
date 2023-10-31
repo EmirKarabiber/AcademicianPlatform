@@ -1,12 +1,12 @@
 ﻿@inject SignInManager<ApplicationUser> SignInManager
 
 <ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.MyAnnouncementsNavClass(ViewContext)" id="myAnnouncements" asp-page="./MyAnnouncements"><i class="fas fa-bullhorn fa-sm" style="color: #4f4f4f;"></i>&nbsp;&nbsp; Geçmiş Duyurularım</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ProfilePictureNavClass(ViewContext)" id="profile-picture" asp-page="./ProfilePicture"><i class="fas fa-image fa-sm" style="color: #4f4f4f;"></i>&nbsp;&nbsp; Profil Resmini Güncelle</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.EditCVNavClass(ViewContext)" id="edit-cv" asp-page="./EditCV"><i class="fas fa-file-contract fa-sm" style="color: #4f4f4f;"></i>&nbsp;&nbsp; CV Güncelle</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.AboutMeNavClass(ViewContext)" id="about-me" asp-page="./AboutMe"><i class="fas fa-id-card fa-sm" style="color: #4f4f4f;"></i>&nbsp;&nbsp; Hakkımda Güncelle</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><i class="fas fa-phone fa-sm" style="color: #4f4f4f;"></i>&nbsp;&nbsp; İletişim Bilgilerini Güncelle</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.SupportNavClass(ViewContext)" id="support" asp-page="./Support"><i class="fas fa-headset fa-sm" style="color: #4f4f4f;"></i>&nbsp;&nbsp; Destek</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.MyAnnouncementsNavClass(ViewContext)" id="myAnnouncements" asp-page="./MyAnnouncements"><i class="fas fa-bullhorn fa-sm" style="color: #4f4f4f;"></i>&nbsp; Geçmiş Duyurularım</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ProfilePictureNavClass(ViewContext)" id="profile-picture" asp-page="./ProfilePicture"><i class="fas fa-image fa-sm" style="color: #4f4f4f;"></i>&nbsp; Profil Resmini  Güncelle</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.EditCVNavClass(ViewContext)" id="edit-cv" asp-page="./EditCV"><i class="fas fa-file-contract fa-sm" style="color: #4f4f4f;"></i>&nbsp; CV Güncelle</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.AboutMeNavClass(ViewContext)" id="about-me" asp-page="./AboutMe"><i class="fas fa-id-card fa-sm" style="color: #4f4f4f;"></i>&nbsp; Hakkımda Güncelle</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><i class="fas fa-phone fa-sm" style="color: #4f4f4f;"></i>&nbsp İletişim Bilgilerini <span class="guncelle">Güncelle</span></a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.SupportNavClass(ViewContext)" id="support" asp-page="./Support"><i class="fas fa-headset fa-sm" style="color: #4f4f4f;"></i>&nbsp; Destek</a></li>
     <li class="nav-item">
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button type="submit" class="nav-link btn btn-link text-dark"><i class="fas fa-door-open fa-sm" style="color: #4f4f4f;"></i>&nbsp;&nbsp; Çıkış Yap</button>
