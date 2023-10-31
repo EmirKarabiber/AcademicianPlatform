@@ -68,10 +68,9 @@
             <div class="card-header">Duyuru (@announcement.AnnouncementFaculty)</div>
             <div class="card-body text-dark">
                 <h5 class="card-title">@announcement.AnnouncementTitle</h5>
-                <p class="card-text">@announcement.AnnouncementContent</p>
+                <span class="card-text">@announcement.AnnouncementContent</span>
                 <a class="btn btn-outline-danger m-0" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@announcement.ID">Detaylar</a>
                 
-
             </div>
             <div class="card-footer text-end custom-announcement-footer"><strong>@announcement.AnnouncementSentDate</strong></div>
         </div>
@@ -82,5 +81,5 @@
         <p class="font-italic text-muted mt-3 custom-announcement-no-content">Henüz duyuru yok.</p>
     }
 </div>
-</div>
+
 

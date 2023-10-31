@@ -4,15 +4,17 @@
     ViewData["Title"] = "News";
 }
 
-<h2 class="display-4 text-center">News</h2>
-<h1>Takip edilenlerin duyuruları</h1>
+
+<h3 class="display-4 text-center">Takip edilenlerin duyuruları</h3>
+<hr />
 @if (Model.FollowerAnnouncements.Any())
 {
     <ul>
         @foreach (var announcement in Model.FollowerAnnouncements)
         {
             <li>
-                <strong>@announcement.AnnouncementTitle</strong>
+                <a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@announcement.ID"><strong>@announcement.AnnouncementTitle</strong></a>
+                <a asp-controller="Home" asp-action="AcademicianDetails" asp-route-id="@announcement.AnnouncementSenderID"></a>
                 <p>@announcement.AnnouncementContent</p>
                 <p>Posted on: @announcement.AnnouncementSentDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
 
@@ -21,22 +23,7 @@
     </ul>
 
 }
-@*
-<h1>New Comments</h1>
-@if(Model.NewComments.Any())
+else
 {
-    <ul>
-        @foreach (var Comment in Model.NewComments)
-        {
-            <h3>@Comment.Announcement.AnnouncementTitle</h3>
-            <li>
-
-                <strong>@Comment.User.FirstName @Comment.User.LastName</strong><p>@Comment.Text</p>
-                
-                <p>Posted on: @Comment.DatePosted.ToString("yyyy-MM-dd HH:mm:ss")</p>
-
-            </li>
-        }
-    </ul>
+    <p class="text-center" style="font-size:2rem;">Şuanda takip ettiğiniz kişilerden yeni bir duyuru yok.</p>
 }
-*@
