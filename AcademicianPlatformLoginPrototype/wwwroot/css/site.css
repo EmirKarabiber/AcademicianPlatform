@@ -1512,3 +1512,11 @@ li a i {
 #container {
     background-color: white;
 }
+
+.form-group {
+    margin-bottom: -7px; 
+}
+
+.button-mailGonder {
+    margin-top: 3px; 
+}
