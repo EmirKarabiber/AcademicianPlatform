@@ -1499,3 +1499,8 @@ li a i {
     font-weight: bold;
     color: #dcdcdc;
 }
+
+.navbar-brand a {
+    color: #A82F3A;
+    text-decoration: none;
+}
