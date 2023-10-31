@@ -1,12 +1,15 @@
 ﻿@page
 @model ExternalLoginModel
 @{
-    ViewData["Title"] = "Kayıt Ol";
+    ViewData["Title"] = "KAYIT Ol";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="kayitol-Title">@ViewData["Title"]</h1>
 <br />
-<h4 id="external-login-title">İstanbul Sağlık ve Teknoloji Üniversitesi @Model.ProviderDisplayName Hesabınız ile Kayıt Olun</h4>
+<h4 id="external-login-title">
+    <span class="kayitol-text">İstanbul Sağlık ve Teknoloji Üniversitesi @Model.ProviderDisplayName</span>
+    <span class="hesab-kayit-text">Hesabınız ile Kayıt Olun</span>
+</h4>
 <hr />
 
 <p id="external-login-description" class="text-info">

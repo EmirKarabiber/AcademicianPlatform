@@ -1398,6 +1398,8 @@ li a i {
     }
 }
 /* ----- */
+
+/* Log-In Start */
 #video-container {
     position: fixed;
     top: 0;
@@ -1409,7 +1411,7 @@ li a i {
 
 #video-background {
     object-fit: cover;
-    filter: brightness(0.3); /* Deðer 0 ile 1 arasýnda bir sayý olabilir, 1 orijinal parlaklýk, 0 çok karanlýk */
+    filter: brightness(0.3); 
     object-fit: cover;
     width: 100%;
 }
@@ -1424,17 +1426,17 @@ li a i {
 }
 .form-container {
     width: 100%;
-    max-width: 400px; /* Formun maksimum geniþliðini ayarlayabilirsiniz */
+    max-width: 400px; 
     padding: 20px;
 }
 #akademistunLogin {
     color: #f8f8ff;
     font-size: 40px;
     text-align: center;
-    position: absolute; /* Yazýnýn pozisyonunu mutlak olarak ayarlar */
-    top: 130px; /* Yukarýdan 10 piksel boþluk býrakýr */
-    left: 0; /* Sol kenara hizalar, isteðinize göre ayarlayabilirsiniz */
-    right: 0; /* Sað kenara hizalar, isteðinize göre ayarlayabilirsiniz */
+    position: absolute; 
+    top: 130px; 
+    left: 0;
+    right: 0; 
 }
 
 
@@ -1454,11 +1456,35 @@ li a i {
 .first-line {
     font-weight: 700;
     font-family: 'Open Sans', sans-serif;
-    font-size: 40px; /* Ýlk satýrý yukarý çekmek için negatif margin kullanýlýr. Ayarladýðýnýz deðeri deðiþtirebilirsiniz. */
+    font-size: 40px;
 }
 
 .second-line {
     font-weight: 700;
     font-family: 'Open Sans', sans-serif;
-    font-size: 40px; /* Ýkinci satýrý yukarý çekmek için negatif margin kullanýlýr. Ayarladýðýnýz deðeri deðiþtirebilirsiniz. */
+    font-size: 40px;
+}
+.login-button {
+    position: absolute;
+    top: 37%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #A82F3A;
+    border: none;
+    font-size: 18px;
+}
+.kayitol-Title {
+    font-size: 30px;
+    color: #A82F3A;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 0; /* Alt boþluðu kaldýrýr */
+}
+.kayitol-text {
+    color: #1e3799;
+    font-size: 18px;
+}
+.hesab-kayit-text {
+    font-size: 18px; 
+    color: #000;
 }
