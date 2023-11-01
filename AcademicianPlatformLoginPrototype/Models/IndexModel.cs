@@ -4,7 +4,8 @@ namespace AcademicianPlatform.Models
 {
 	public class FollowModelForIndexModel
 	{
-        public ApplicationUser NewFollowerUsers { get; set; }	//Notification sisteminden User a gidebilmek için
+        public ApplicationUser NewFollowerUsers { get; set; }   //Notification sisteminden User a gidebilmek için
+        public string followerid { get; set; }
         public Follow NewFollowersFollow { get; set; }		//followu belirtmek için
     }
 	public class IndexModel

@@ -91,7 +91,7 @@ namespace AcademicianPlatform.Controllers
 				.OrderByDescending(f => f.FollowDate)
 				.ToListAsync();
 
-			if (notificationList.Count ==0 || (notificationList.Count > 0 && (newComments.Count > 0 || followers.Count > 0)))	//combined list içerisinde eleman yoksa böyle dolduracak. içinde eleman olunca doldurmaz zaten
+			if (notificationList.Count == 0 || (notificationList.Count > 0 && (newComments.Count > 0 || followers.Count > 0)))	//combined list içerisinde eleman yoksa böyle dolduracak. içinde eleman olunca doldurmaz zaten
 			{
 				
 				var followerUsersOrderedByDate = new List<FollowModelForIndexModel>();
@@ -106,7 +106,8 @@ namespace AcademicianPlatform.Controllers
 						followerUsersOrderedByDate.Add(new FollowModelForIndexModel
 						{
 							NewFollowerUsers = followerUser,
-							NewFollowersFollow = follow
+							NewFollowersFollow = follow,
+							followerid = followerUser.Id
 						});
 					}
 
@@ -606,10 +607,15 @@ namespace AcademicianPlatform.Controllers
 		{
 
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			var announcement = _context.Announcements
+				.Include(a => a.Comments) // Yorumları dahil et
+				.FirstOrDefault(a => a.ID == announcementID);
 
+			var SenderId = announcement.AnnouncementSenderID;
 
 			var comment = new Comment
 			{
+				AnnouncementSenderId = SenderId,
 				AnnouncementId = announcementID,
 				Text = commentContent,
 				UserId = user.Id,

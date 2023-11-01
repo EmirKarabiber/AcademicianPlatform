@@ -9,9 +9,9 @@ namespace AcademicianPlatform.Models
 		public string UserId { get; set; }
 		public ApplicationUser User { get; set; }
 		public bool IsDeleted { get; set; }
+        public string AnnouncementSenderId { get; set; }
 
-
-		public DateTime DatePosted { get; set; }
+        public DateTime DatePosted { get; set; }
 
 		public int AnnouncementId { get; set; } // Yorumun hangi duyuruya ait olduğunu belirtmek için AnnouncementId ekleyin
 		public Announcement Announcement { get; set; } // Duyuruya referans

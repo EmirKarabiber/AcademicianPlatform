@@ -17,7 +17,7 @@
 </style>
 <div class="container mb-3 mt-1">
 	<div class="row">
-		<div class="col-6">
+		<div class="col-4">
 			<select class="form-select" id="facultySelect">
 				<option value="">Duyuruları Filtrele...</option>
 				<option value="Index">Filtrele: Tüm Fakülteler</option>
@@ -29,7 +29,7 @@
 				<option value="IndexFaculty" data-faculty="İktisadi, İdari ve Sosyal Bilimler">Filtrele: İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
 			</select>
 		</div>
-		@*
+		
 		<div class="col-4 text-end">
 			<div class="dropdown-es">
 				<button class="dropbtn-es">
@@ -47,11 +47,16 @@
 									if (item is Comment comment)
 									{
 										<div class="notifi-div">
-											<a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID">
+											<a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.AnnouncementId">
 												<p>
 													<a asp-controller="Home" asp-action="AcademicianDetails"
-													   asp-route-id="@comment.User.Id">
-														<strong style="color: #85150d; font-size: 17px;">@comment.User.FirstName @comment.User.LastName</strong>
+													asp-route-id="@comment.UserId">
+														@{
+															var user = await UserManager.FindByIdAsync(comment.AnnouncementSenderId);
+															var FullName = user.FirstName + " " + user.LastName;
+														}
+													   
+														<strong style="color: #85150d; font-size: 17px;">FullName</strong>
 													</a>,
 													<span style="color: black; font-size: 17px; font-weight: bold;">
 														"@comment.Announcement.AnnouncementTitle"
@@ -66,8 +71,12 @@
 									else if (item is FollowModelForIndexModel follow)
 									{
 										<div class="notifi-div">
-											<a asp-controller="Home" asp-action="AcademicianDetails" asp-route-id="@follow.NewFollowerUsers.Id">
-												<p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p>
+											@{
+												var followUser = await UserManager.FindByIdAsync(follow.followerid);
+												var followFullName = followUser.FirstName + " " + followUser.LastName;
+											}
+											<a asp-controller="Home" asp-action="AcademicianDetails" asp-route-id="@follow.followerid">
+												<p><strong>@followFullName</strong>, seni ediyor.</p>
 											</a>
 											<!-- Burada bir takipçi görüntüleme kodu -->
 										</div>
@@ -83,8 +92,8 @@
 					</div>
 				</div>
 			</div>
-		</div>*@
-		<div class="col-6 text-end">
+		</div>
+		<div class="col-4 text-end">
 			<a asp-controller="Home" asp-action="NewAnnouncement" class="btn btn-outline-dark faculty-btn">Yeni Duyuru</a>
 		</div>
 	</div>
