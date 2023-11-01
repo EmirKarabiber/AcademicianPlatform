@@ -98,7 +98,7 @@ else{
                 </div>
                 <div class="card-body text-dark bg-white">
                     <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
                     <br />
                     @if (@ticket.isResolved)
                     {
@@ -142,7 +142,7 @@ else{
                 </div>
                 <div class="card-body text-dark bg-white">
                     <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
                     <br />
                     @if (@ticket.isResolved)
                     {
@@ -185,7 +185,7 @@ else{
                 </div>
                 <div class="card-body text-dark bg-white">
                     <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
                     <br />
                     @if (@ticket.isResolved)
                     {
@@ -239,7 +239,7 @@ else{
                        </div>
                        <div class="card-body text-dark bg-white">
                            <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                           <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
                            <br />
                            @if(@ticket.isResolved)
                             {
@@ -281,7 +281,7 @@ else{
                        </div>
                        <div class="card-body text-dark bg-white">
                            <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                           <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
                            <br />
                            @if(@ticket.isResolved)
                             {
@@ -322,7 +322,7 @@ else{
                        </div>
                        <div class="card-body text-dark bg-white">
                            <h5 style="color: #A82F3A; font-size: 25px; font-weight: normal;" class="card-title">@ticket.TicketTitle</h5>
-                           <p class="card-text" style="font-size: 16px; font-weight: normal;">@ticket.TicketContent</p>
+                    <p class="card-text" style="font-size: 16px; font-weight: normal;">@Html.Raw(@ticket.TicketContent)</p>
                            <br />
                            @if(@ticket.isResolved)
                            {
