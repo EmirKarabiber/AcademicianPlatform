@@ -76,7 +76,7 @@ namespace AcademicianPlatform.Controllers
 				.ToListAsync();
 
 			var newComments = await _context.Comments
-				.Where(c => c.DatePosted > lastLogin && c.User == user)
+				.Where(c => c.DatePosted > lastLogin && c.Announcement.AnnouncementSenderID == user.Id)
 				.OrderByDescending(c => c.DatePosted)
 				.ToListAsync();
 
@@ -88,7 +88,6 @@ namespace AcademicianPlatform.Controllers
 			if (notificationList.Count ==0 || (notificationList.Count > 0 && (newComments.Count > 0 || followers.Count > 0)))	//combined list içerisinde eleman yoksa böyle dolduracak. içinde eleman olunca doldurmaz zaten
 			{
 				
-
 				var followerUsersOrderedByDate = new List<FollowModelForIndexModel>();
 				foreach (var follow in followers)
 				{
