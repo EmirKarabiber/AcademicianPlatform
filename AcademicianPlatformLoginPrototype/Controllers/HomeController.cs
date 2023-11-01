@@ -38,13 +38,19 @@ namespace AcademicianPlatform.Controllers
 
 		DateTime oneMonthAgo = DateTime.Now.AddMonths(-1);      //son 1 ayki duyuruları göstermek için genel olarak tanımlandı
 																//List<object>? notificationList = new List<object>();	//bildiri sistemi için
+
+		//static tanımlama çok kullanıcılı yapılarda problem oluşturabilir , dikkat edilmeli
 		private static List<object>? notificationList = new List<object>();
+		private static List<Announcement>? newsPageAnnouncementsList = new List<Announcement>();
 
 		[Authorize]
 		public async Task<IActionResult> Index()
 		{
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
 			var lastlogin = user.LastLogin;
+
+			
 
 			var model = await GetIndexModel("Tüm Fakülteler", user, lastlogin);
 
@@ -657,17 +663,22 @@ namespace AcademicianPlatform.Controllers
 			// Kullanıcının son giriş tarihini alın
 			var lastLogin = user.LastLogin;
 
-			// Kullanıcının takip ettiği kişilerin duyurularını çekin ve sıralayın
-			var followedUsersAnnouncements = await _context.Announcements
+                // Kullanıcının takip ettiği kişilerin duyurularını çekin ve sıralayın
+            var newAnnouncements = await _context.Announcements
 				.Where(a => followedUserIds.Contains(a.AnnouncementSenderID) && a.AnnouncementSentDate > lastLogin)
 				.OrderByDescending(a => a.AnnouncementSentDate)
 				.ToListAsync();
 
+			if(newAnnouncements.Count > 0)
+			{
+				newsPageAnnouncementsList.AddRange(newAnnouncements);
+			}
+			
 
 			// Duyuruları bir model içinde taşıyın ve view'e gönderin
 			var model = new NewAnnouncementsViewModel
 			{
-				FollowerAnnouncements = followedUsersAnnouncements,
+				FollowerAnnouncements = newsPageAnnouncementsList,
 			};
 
 			// Kullanıcının son giriş tarihini güncelleyin
