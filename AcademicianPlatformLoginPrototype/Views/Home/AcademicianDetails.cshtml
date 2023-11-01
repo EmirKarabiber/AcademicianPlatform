@@ -68,7 +68,7 @@
             <div class="card-header">Duyuru (@announcement.AnnouncementFaculty)</div>
             <div class="card-body text-dark">
                 <h5 class="card-title">@announcement.AnnouncementTitle</h5>
-                <span class="card-text">@announcement.AnnouncementContent</span>
+                <span class="card-text">@Html.Raw(@announcement.AnnouncementContent)</span>
                 <a class="btn btn-outline-danger m-0" asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@announcement.ID">Detaylar</a>
                 
             </div>
