@@ -1602,3 +1602,10 @@ li a i {
 .fab.fa-instagram {
     color: #E4405F;
 }
+
+li.ozel-li {
+    line-height: 1; 
+}
+.ozel-li {
+    margin-left: 19px;
+}
