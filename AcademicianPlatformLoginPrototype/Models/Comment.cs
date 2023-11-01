@@ -10,6 +10,7 @@ namespace AcademicianPlatform.Models
 		public ApplicationUser User { get; set; }
 		public bool IsDeleted { get; set; }
         public string AnnouncementSenderId { get; set; }
+        public string AnnouncementTitle { get; set; }
 
         public DateTime DatePosted { get; set; }
 

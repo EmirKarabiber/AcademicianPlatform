@@ -620,7 +620,8 @@ namespace AcademicianPlatform.Controllers
 				Text = commentContent,
 				UserId = user.Id,
 				User = user,
-				DatePosted = DateTime.Now
+				DatePosted = DateTime.Now,
+				AnnouncementTitle = announcement.AnnouncementTitle,
 
 			};
 

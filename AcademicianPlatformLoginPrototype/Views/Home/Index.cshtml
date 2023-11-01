@@ -54,12 +54,13 @@
 														@{
 															var user = await UserManager.FindByIdAsync(comment.AnnouncementSenderId);
 															var FullName = user.FirstName + " " + user.LastName;
+															
 														}
 													   
-														<strong style="color: #85150d; font-size: 17px;">FullName</strong>
+														<strong style="color: #85150d; font-size: 17px;">@FullName</strong>
 													</a>,
 													<span style="color: black; font-size: 17px; font-weight: bold;">
-														"@comment.Announcement.AnnouncementTitle"
+														"@comment.AnnouncementTitle"
 													</span>
 													<span style="font-size: 17px; font-weight: 500;">duyuruna şu yorumu yazdı: </span>
 													<span style="font-size: 15px;">@comment.Text</span>
