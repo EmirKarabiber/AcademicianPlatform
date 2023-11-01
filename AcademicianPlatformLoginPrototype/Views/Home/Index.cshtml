@@ -17,7 +17,7 @@
 </style>
 <div class="container mb-3 mt-1">
 	<div class="row">
-		<div class="col-4">
+		<div class="col-6">
 			<select class="form-select" id="facultySelect">
 				<option value="">Duyuruları Filtrele...</option>
 				<option value="Index">Filtrele: Tüm Fakülteler</option>
@@ -29,6 +29,7 @@
 				<option value="IndexFaculty" data-faculty="İktisadi, İdari ve Sosyal Bilimler">Filtrele: İktisadi, İdari ve Sosyal Bilimler Fakültesi</option>
 			</select>
 		</div>
+		@*
 		<div class="col-4 text-end">
 			<div class="dropdown-es">
 				<button class="dropbtn-es">
@@ -38,38 +39,43 @@
 				<div class="dropdown-content-es">
 					<div class="row-es">
 						<div class="column-es" style="background-color: #ffffff;">
-							@foreach (var item in Model.NotificationList)
+
+							@if(Model.NotificationList.Count!=0)
 							{
-								if (item is Comment comment)
+								@foreach (var item in Model.NotificationList)
 								{
-									<div class="notifi-div">
-										<a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID">
-											<p>
-												<a asp-controller="Home" asp-action="AcademicianDetails"
-												   asp-route-id="@comment.User.Id">
-													<strong style="color: #85150d; font-size: 17px;">@comment.User.FirstName @comment.User.LastName</strong>
-												</a>,
-												<span style="color: black; font-size: 17px; font-weight: bold;">
-													"@comment.Announcement.AnnouncementTitle"
-												</span>
-												<span style="font-size: 17px; font-weight: 500;">duyuruna şu yorumu yazdı: </span>
-												<span style="font-size: 15px;">@comment.Text</span>
-											</p>
-										</a>
-									</div>
-									<hr />
+									if (item is Comment comment)
+									{
+										<div class="notifi-div">
+											<a asp-controller="Home" asp-action="AnnouncementDetails" asp-route-id="@comment.Announcement.ID">
+												<p>
+													<a asp-controller="Home" asp-action="AcademicianDetails"
+													   asp-route-id="@comment.User.Id">
+														<strong style="color: #85150d; font-size: 17px;">@comment.User.FirstName @comment.User.LastName</strong>
+													</a>,
+													<span style="color: black; font-size: 17px; font-weight: bold;">
+														"@comment.Announcement.AnnouncementTitle"
+													</span>
+													<span style="font-size: 17px; font-weight: 500;">duyuruna şu yorumu yazdı: </span>
+													<span style="font-size: 15px;">@comment.Text</span>
+												</p>
+											</a>
+										</div>
+										<hr />
+									}
+									else if (item is FollowModelForIndexModel follow)
+									{
+										<div class="notifi-div">
+											<a asp-controller="Home" asp-action="AcademicianDetails" asp-route-id="@follow.NewFollowerUsers.Id">
+												<p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p>
+											</a>
+											<!-- Burada bir takipçi görüntüleme kodu -->
+										</div>
+									}
 								}
-								else if (item is FollowModelForIndexModel follow)
-								{
-									<div class="notifi-div">
-										<a asp-controller="Home" asp-action="AcademicianDetails" asp-route-id="@follow.NewFollowerUsers.Id">
-											<p><strong>@follow.NewFollowerUsers.FirstName + @follow.NewFollowerUsers.LastName</strong>, seni ediyor.</p>
-										</a>
-										<!-- Burada bir takipçi görüntüleme kodu -->
-									</div>
-								}
+								
 							}
-							@if (Model.NotificationList.Count == 0)
+							else
 							{
 								<p>Şuanda herhangi bir bildiriniz bulunmamaktadır.</p>
 							}
@@ -77,8 +83,8 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-4 text-end">
+		</div>*@
+		<div class="col-6 text-end">
 			<a asp-controller="Home" asp-action="NewAnnouncement" class="btn btn-outline-dark faculty-btn">Yeni Duyuru</a>
 		</div>
 	</div>
