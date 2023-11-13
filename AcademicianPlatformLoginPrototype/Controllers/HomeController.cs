@@ -50,8 +50,6 @@ namespace AcademicianPlatform.Controllers
 
 			var lastlogin = user.LastLogin;
 
-			
-
 			var model = await GetIndexModel("Tüm Fakülteler", user, lastlogin);
 
 			// Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
@@ -69,17 +67,35 @@ namespace AcademicianPlatform.Controllers
 		
 		public async Task<IndexModel> GetIndexModel(string announcementFaculty, ApplicationUser user, DateTime? lastLogin)
 		{
-			var allAnnouncements = await _context.Announcements
+			List<Announcement>? allAnnouncements;
+			List<Announcement>? specialAnnouncements;
+
+			if (announcementFaculty == "Tüm Fakülteler")
+			{
+				 allAnnouncements = await _context.Announcements
+				.Where(a => a.AnnouncementSentDate >= oneMonthAgo)
+				.OrderByDescending(a => a.ID)
+				.ToListAsync();
+
+				 specialAnnouncements = await _context.Announcements
+					.Where(a => a.AnnouncementSentDate >= oneMonthAgo && a.AnnouncementSpecial == true)
+					.OrderByDescending(a => a.ID)
+					.ToListAsync();
+			}
+			else
+			{
+				 allAnnouncements = await _context.Announcements
 				.Where(a => a.AnnouncementSentDate >= oneMonthAgo &&
 					(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
 				.OrderByDescending(a => a.ID)
 				.ToListAsync();
 
-			var specialAnnouncements = await _context.Announcements
-				.Where(a => a.AnnouncementSentDate >= oneMonthAgo && a.AnnouncementSpecial == true &&
-					(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
-				.OrderByDescending(a => a.ID)
-				.ToListAsync();
+				specialAnnouncements = await _context.Announcements
+					.Where(a => a.AnnouncementSentDate >= oneMonthAgo && a.AnnouncementSpecial == true &&
+						(a.AnnouncementFaculty == announcementFaculty || a.AnnouncementFaculty == "Tüm Fakülteler"))
+					.OrderByDescending(a => a.ID)
+					.ToListAsync();
+			}
 
 			var newComments = await _context.Comments
 				.Where(c => c.DatePosted > lastLogin && c.Announcement.AnnouncementSenderID == user.Id)
