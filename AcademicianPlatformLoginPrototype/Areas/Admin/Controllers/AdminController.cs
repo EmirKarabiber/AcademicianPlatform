@@ -146,20 +146,26 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
             var fullName = user.FirstName + " " + user.LastName.ToUpper();
             var model = new AcademicianDetailsViewModel
             {
+                Academian = user,
+                /*
                 UserId = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                UserAnnouncements = userAnnouncements,
-                ProfilePhotoPath = user.ProfilePhotoPath,
+				ProfilePhotoPath = user.ProfilePhotoPath,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				Department = user.Department,
+				Title = user.Title,
+				AboutMeText = user.AboutMeText,
+				CVPath = user.CVPath,
+				LastLogin = user.LastLogin.ToString(),
+                */
+
+				AcademianAnnouncements = userAnnouncements,
                 FullName = fullName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Department = user.Department,
-                Title = user.Title,
-                AboutMeText = user.AboutMeText,
-                CVPath = user.CVPath,
-                LastLogin = user.LastLogin.ToString(),
+
+                
             };
             return View("EditUser", model);
         }
@@ -289,13 +295,13 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
             var fullName = user.FirstName + " " + user.LastName.ToUpper();
             var model = new AcademicianDetailsViewModel
             {
+                Academian=user,
+                /*
                 UserId = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                UserAnnouncements = userAnnouncements,
                 ProfilePhotoPath = user.ProfilePhotoPath,
-                FullName = fullName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Department = user.Department,
@@ -303,6 +309,10 @@ namespace AcademicianPlatform.Areas.Admin.Controllers
                 AboutMeText = user.AboutMeText,
                 CVPath = user.CVPath,
                 LastLogin = user.LastLogin.ToString(),
+                */
+                AcademianAnnouncements = userAnnouncements,
+                FullName = fullName,
+                
             };
             return View("EditUser", model);
         }

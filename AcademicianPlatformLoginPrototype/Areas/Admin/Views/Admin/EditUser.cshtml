@@ -45,19 +45,19 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-12 text-center">
 
-                        <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;">
-                        <h2 class="card-title custom-title">@Model.Title @Model.FullName</h2>
-                        <h5 class="card-text custom-department">@Model.Department</h5>
+                        <img src="@Model.Academian.ProfilePhotoPath" alt="Profil Resmi" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;">
+                        <h2 class="card-title custom-title">@Model.Academian.Title @Model.FullName</h2>
+                        <h5 class="card-text custom-department">@Model.Academian.Department</h5>
                     </div>
                     <div class="col-lg-6 col-md-12">
                         <div class="card-body">
-                            <p class="card-text"><strong>Email: </strong>@Model.Email</p>
-                            <p class="card-text"><b>Telefon Numarası: </b>@Model.PhoneNumber</p>
-                            <p class="card-text"><strong>Hakkında: </strong>@Model.AboutMeText</p>
+                            <p class="card-text"><strong>Email: </strong>@Model.Academian.Email</p>
+                            <p class="card-text"><b>Telefon Numarası: </b>@Model.Academian.PhoneNumber</p>
+                            <p class="card-text"><strong>Hakkında: </strong>@Model.Academian.AboutMeText</p>
                             <p class="card-text">
-                                <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.
+                                <a href="@Model.Academian.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.
                             </p>
-                            <p><strong>Son Giriş Tarihi:</strong> @Model.LastLogin</p>
+                            <p><strong>Son Giriş Tarihi:</strong> @Model.Academian.LastLogin</p>
                         </div>
                     </div>
                 </div>
@@ -69,10 +69,10 @@
             <div class="col-lg-5 col-md-12 col-12">
             <h3 class="text-center">Akademisyenin Profilini Güncelle</h3>
             <form action="/Admin/Admin/EditUserInformation" method="POST" enctype="multipart/form-data">
-                <input type="hidden" value="@Model.UserId" name="Id" />
+                <input type="hidden" value="@Model.Academian.Id" name="Id" />
                 <div class="form-floating">
                     <label for="profilePhoto" class="form-label">Profil Fotoğrafı:</label>
-                    <input type="hidden" name="profilePhotoPath" value="@Model.ProfilePhotoPath" />
+                    <input type="hidden" name="profilePhotoPath" value="@Model.Academian.ProfilePhotoPath" />
                     <input type="file" name="profilePhoto" class="form-control" />
                 </div>
                 <div class="form-floating">
@@ -138,7 +138,7 @@
                 </div>
                 <div class="form-floating">
                     <label for="cv" class="form-label">CV:</label>
-                    <input type="hidden" name="cvPath" value="@Model.CVPath" />
+                    <input type="hidden" name="cvPath" value="@Model.Academian.CVPath" />
                     <input type="file" name="cv" class="form-control" />
                 </div>
                 <button type="submit" class="w-100 btn btn-lg btn-primary btn-yeniDuyuruOlustur">Güncelle</button>
@@ -151,7 +151,7 @@
             <h3 class="text-center">Akademisyenin Duyuruları</h3>
             <ul class="announcement-list">
                 @{
-                    var announcements = Model.UserAnnouncements;
+                    var announcements = Model.AcademianAnnouncements;
                 }
                 @foreach (var announcement in announcements)
                 {

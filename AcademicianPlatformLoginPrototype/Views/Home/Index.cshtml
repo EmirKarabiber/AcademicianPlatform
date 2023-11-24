@@ -30,7 +30,7 @@
 			</select>
 		</div>
 		
-		<div class="col-4 text-end">
+		<div class="col-4 text-end">	<!--Notification System-->
 			<div class="dropdown-es">
 				<button class="dropbtn-es">
 					<i class="fa-solid fa-bell" style="color: #85150d;"></i> Bildirimler(@newscount)
@@ -99,19 +99,6 @@
 		</div>
 	</div>
 </div>
-@*<div class="container mt-1 mb-3">
-	<div class="d-flex justify-content-between">
-		<a asp-controller="Home" asp-action="Index" class="btn btn-primary faculty-btn">Tüm Fakülteler</a>
-		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="Tıp" class="btn btn-primary faculty-btn">Tıp Fakültesi</a>
-		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="Diş Hekimliği" class="btn btn-primary faculty-btn">Diş Hekimliği Fakültesi</a>
-		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="Eczacılık" class="btn btn-primary faculty-btn">Eczacılık Fakültesi</a>
-		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="Mühendislik ve Doğa Bilimleri" class="btn btn-primary faculty-btn">Mühendislik ve Doğa Bilimleri Fakültesi</a>
-		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="Sağlık Bilimleri" class="btn btn-primary faculty-btn">Sağlık Bilimleri Fakültesi</a>
-		<a asp-controller="Home" asp-action="IndexFaculty" asp-route-announcementFaculty="İktisadi, İdari ve Sosyal Bilimler" class="btn btn-primary faculty-btn">İktisadi, İdari ve Sosyal Bilimler Fakültesi</a>
-	</div>
-</div>*@
-
-<!--   bu kısım deneysel , SpecialAnnouncement için -->
 @*
 @if(Model.IndexNews > 0)
 {
@@ -197,7 +184,7 @@
 	}
 	<hr />
 }
-<!--   ----------------------------------------  -->
+<!-- Normal Announcements -->
 @if (Model.AllAnnouncement != null)
 {
 	@foreach (var item in Model.AllAnnouncement)

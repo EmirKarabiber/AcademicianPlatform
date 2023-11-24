@@ -12,8 +12,7 @@ using MailKit.Security;
 using MailKit.Net.Smtp;
 using Newtonsoft.Json.Linq;
 using System.IO;
-
-
+using Microsoft.AspNetCore.Authentication;
 
 namespace AcademicianPlatform.Controllers
 {
@@ -32,36 +31,44 @@ namespace AcademicianPlatform.Controllers
 			_context = context;
 			_userStore = userStore;
 			_userManager = userManager;
-
-			//notificationList = new List<object>();
 		}
 
-		DateTime oneMonthAgo = DateTime.Now.AddMonths(-1);      //son 1 ayki duyuruları göstermek için genel olarak tanımlandı
-																//List<object>? notificationList = new List<object>();	//bildiri sistemi için
+		//Index sayfasında sadece son 1 ayki duyuruların gözükmesini sağla
+		DateTime oneMonthAgo = DateTime.Now.AddMonths(-1);
 
-		//static tanımlama çok kullanıcılı yapılarda problem oluşturabilir , dikkat edilmeli
 		private static List<object>? notificationList = new List<object>();
 		private static List<Announcement>? newsPageAnnouncementsList = new List<Announcement>();
+		//static yapısı testler sonrasında değiştirilebilir.
 
 		[Authorize]
 		public async Task<IActionResult> Index()
 		{
-			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			if (User.Identity != null && User.Identity.IsAuthenticated)
+			{
+				var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-			var lastlogin = user.LastLogin;
+				if (user == null)
+				{
+					await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+					return RedirectToPage("/Identity/Login");
+				}
 
-			var model = await GetIndexModel("Tüm Fakülteler", user, lastlogin);
+				var lastLogin = user.LastLogin;
+				var model = await GetIndexModel("Tüm Fakülteler", user, lastLogin);
 
-			// Kullanıcı girişi başarılı olduysa, kullanıcının son giriş tarihini güncelleyin
-			user.LastLogin = DateTime.Now;
+				user.LastLogin = DateTime.Now;
 
-			//test amaçlı , silinecek sonra
-			//user.LastLogin = DateTime.Now.AddMonths(-1);
+				await _userManager.UpdateAsync(user);
 
-
-			await _userManager.UpdateAsync(user);
-
-			return View(model);
+				return View(model);
+				
+			}
+			else
+			{
+				// User is not authenticated, handle accordingly (e.g., redirect to login page)
+				//eturn RedirectToAction("Login", "Account");
+				return RedirectToPage("/Identity/Login");
+			}
 		}
 
 		
@@ -150,8 +157,6 @@ namespace AcademicianPlatform.Controllers
 			{
 				AllAnnouncement = allAnnouncements,
 				SpecialAnnouncement = specialAnnouncements,
-				//NewComments = newComments,
-				//NewFollowers = followerUsersOrderedByDate,
 				NotificationList = notificationList
 			};
 
@@ -192,11 +197,10 @@ namespace AcademicianPlatform.Controllers
 		}
 
 
-		//-------- bu kısım deneysel, mail eklerken herkese de gönderilsin mi gibi bir seçenek çıkmalı ve
-		//-------- ona göre whitelistdeki herkese mail gönderecek
 		public async Task<IActionResult> SendEmailAll(Announcement announcement)
 		{
-			// Retrieve the list of email addresses from your database
+			//Sisteme kayıtlı tüm maillere mail göndermeye yarıyor.
+
 			var usersWithEmails = await _userManager.Users  // email adresi girili hesapları listeliyor
 				.Where(u => !string.IsNullOrEmpty(u.Email)) 
 				.ToListAsync();
@@ -297,8 +301,6 @@ namespace AcademicianPlatform.Controllers
 			{
 				Announcement = announcement,
 
-
-				// Diğer özellikleri burada doldurun
 			};
 
 			/*
@@ -341,6 +343,10 @@ namespace AcademicianPlatform.Controllers
 		{
 			// Mevcut kullanıcıyı bul
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			if(user== null)
+			{
+				return NotFound();	// Kullanıcı null ise 404 döndür
+			}
 
 			// Gönderici olarak kullanıcının e-posta adresini al
 			string senderEmail = user.Email;
@@ -377,7 +383,6 @@ namespace AcademicianPlatform.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-
 				// Oluşturulan email mesajı
 				var message = new MimeMessage();
 				message.From.Add(new MailboxAddress("Gönderen : " + model.SenderEmail, model.SenderEmail));
@@ -400,7 +405,7 @@ namespace AcademicianPlatform.Controllers
 					await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
 					//yeni bir mail hesabı açtım , oradan gerekli şifreyi aldım lakin anlık olarak gereksiz mailler penceresine yolluyor maili
 
-					// E-postayı gönderme
+					// E-postayı gönder
 					await client.SendAsync(message);
 
 					// SMTP sunucusundan çıkma
@@ -410,8 +415,6 @@ namespace AcademicianPlatform.Controllers
 				TempData["Message"] = "E-posta başarıyla gönderildi!";
 				return RedirectToAction("EmailSenderResult", model);
 			}
-
-			// Model geçerli değilse formu tekrar göster
 			return View("EmailSender", model);
 		}
 
@@ -420,13 +423,19 @@ namespace AcademicianPlatform.Controllers
 			return View(model);
 		}
 
-		// Bu metot, belirli bir fakülte için duyuruları listeleyen bir sayfanın işlemesini sağlar.
-		// İstenilen fakülte adı "announcementFaculty" parametresi ile alınır.
+		//index sayfasındaki duyuruların sadece belirli bir fakülteye göre kategori edilmiş şekilde göster
 		[Authorize]
 		public async Task<IActionResult> IndexFaculty([FromQuery] string announcementFaculty)
 		{
+			// Aktif kullanıcı null ise Login sayfasına yönlendir.
 			var user = await _userManager.FindByNameAsync(User.Identity.Name);
+			if (user == null)
+			{
+				await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+				return RedirectToPage("/Identity/Login");
+			}
 
+			//fakülte değeri null değilse, fakülteyle alakalı duyuru ve özel duyuruları modele kaydet
 			if (!string.IsNullOrEmpty(announcementFaculty))
 			{
 				var model = await GetIndexModel(announcementFaculty, user, user.LastLogin);
@@ -469,8 +478,6 @@ namespace AcademicianPlatform.Controllers
 			}
 
 			return View(DepartmentUsers);
-
-
 		}
 
 
@@ -478,43 +485,49 @@ namespace AcademicianPlatform.Controllers
 
 		public async Task<IActionResult> AcademicianDetails(string id)
 		{
+			//Akademisyenlerin profil sayfaları için
+
+			//AcademianDetails sayfasında akademisyenlerin duyurularının da gözükmesini sağla
 			var academician = _userManager.Users.FirstOrDefault(u => u.Id == id);
-			var userAnnouncements = _context.Announcements
+			var AcademianAnnouncements = _context.Announcements
 				.Where(a => a.AnnouncementSenderID == id)
 				.OrderByDescending(a => a.ID)
 				.ToList();
+			
 
-			string userName = User.Identity.Name;
-			var user = await _userManager.FindByNameAsync(userName);
+			var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
+			// AcademianDetails sayfasında, Aktif kullanıcı akademisyeni takip edip etmediğine bağlı buton görünümünü ayarlamak için
 			string followerId = user.Id;
 			string followingId = id;
-
 			var follow = _context.Follows
 				.FirstOrDefault(f => f.FollowerId == followerId && f.FollowedUserId == followingId);
-
 			var isFollowing = (follow != null);
 
-
 			var FullName = academician.FirstName + " " + academician.LastName.ToUpper();
+
 			var viewModel = new AcademicianDetailsViewModel
 			{
-				UserId = academician.Id,
-				UserName = academician.UserName,
-				Email = academician.Email,
-				PhoneNumber = academician.PhoneNumber,
-				UserAnnouncements = userAnnouncements,
-				ProfilePhotoPath = academician.ProfilePhotoPath,
+				Academian = academician,
+
+				/*
+				 * UserId = academician.Id,
+				 * UserName = academician.UserName,
+				 * Email = academician.Email,
+				 * PhoneNumber = academician.PhoneNumber,
+				 * ProfilePhotoPath = academician.ProfilePhotoPath,
+				 * Department = academician.Department,
+				 * Title = academician.Title,
+				 * AboutMeText = academician.AboutMeText,
+				 * CVPath = academician.CVPath,
+				 * LastLogin = academician.LastLogin.ToString(),
+				 */
+
 				FullName = FullName,
-				Department = academician.Department,
-				Title = academician.Title,
-				AboutMeText = academician.AboutMeText,
-				CVPath = academician.CVPath,
-				LastLogin = academician.LastLogin.ToString(),
+				AcademianAnnouncements = AcademianAnnouncements,
 				IsCurrentUser = (User.Identity.Name == academician.UserName),
 				IsFollowing = isFollowing
 
-				// Diğer kullanıcı bilgilerini burada doldurun.
 			};
 
 			return View(viewModel);

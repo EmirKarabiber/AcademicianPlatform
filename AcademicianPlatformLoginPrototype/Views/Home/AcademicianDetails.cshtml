@@ -12,21 +12,21 @@
                 <div class="row">
                     <div class="col-md-3 text-center">
                        
-                        <img src="@Model.ProfilePhotoPath" alt="Profil Resmi" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-                        <h2 class="card-title custom-title">@Model.Title @Model.FullName</h2>
-                        <h5 class="card-text custom-department">@Model.Department</h5>
+                        <img src="@Model.Academian.ProfilePhotoPath" alt="Profil Resmi" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+                        <h2 class="card-title custom-title">@Model.Academian.Title @Model.FullName</h2>
+                        <h5 class="card-text custom-department">@Model.Academian.Department</h5>
                     </div>
                     <div class="col-md-6">
                         <div class="card-body">
-                            <p class="card-text"><strong>Email: </strong>@Model.Email</p>
-                            <p class="card-text"><b>Telefon Numarası: </b>@Model.PhoneNumber</p>
-                            <p class="card-text"><strong>Hakkında: </strong>@Model.AboutMeText</p>
+                            <p class="card-text"><strong>Email: </strong>@Model.Academian.Email</p>
+                            <p class="card-text"><b>Telefon Numarası: </b>@Model.Academian.PhoneNumber</p>
+                            <p class="card-text"><strong>Hakkında: </strong>@Model.Academian.AboutMeText</p>
                             <p class="card-text">
-                                <a href="@Model.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.
+                                <a href="@Model.Academian.CVPath" class="text-decoration-none">Buraya</a> tıklayarak CV dosyasına ulaşabilirsiniz.
                             </p>
-                            <p><strong>Son Giriş Tarihi:</strong> @Model.LastLogin</p>
+                            <p><strong>Son Giriş Tarihi:</strong> @Model.Academian.LastLogin</p>
                             
-                             <a class="btn btn-success mb-2" asp-controller="Home" asp-action="FollowerFollowing" asp-route-id="@Model.UserId">Takipçi - Takip Listesi</a>
+                             <a class="btn btn-success mb-2" asp-controller="Home" asp-action="FollowerFollowing" asp-route-id="@Model.Academian.Id">Takipçi - Takip Listesi</a>
                              
                
                             
@@ -35,14 +35,14 @@
                                 @if (Model.IsFollowing == true)
                                 {
                                     <form asp-controller="Home" asp-action="UnfollowUser" method="post">
-                                        <input type="hidden" name="userIdToUnfollow" value="@Model.UserId" />
+                                        <input type="hidden" name="userIdToUnfollow" value="@Model.Academian.Id" />
                                         <button type="submit" class="btn btn-danger">Takibi Bırak</button>
                                     </form>
                                 }
                                 else
                                 {
                                     <form asp-controller="Home" asp-action="FollowUser" method="post">
-                                        <input type="hidden" name="userIdToFollow" value="@Model.UserId" />
+                                        <input type="hidden" name="userIdToFollow" value="@Model.Academian.Id" />
                                         <button type="submit" class="btn btn-primary">Takip Et</button>
                                     </form>
                                 }
@@ -62,7 +62,7 @@
     <h2 class="name">@Model.FullName Duyuruları</h2>
     <hr />
 
-    @foreach (var announcement in Model.UserAnnouncements)
+    @foreach (var announcement in Model.AcademianAnnouncements)
     {
         <div class="card custom-announcement-card  mb-3" style="max-width: 100%;">
             <div class="card-header">Duyuru (@announcement.AnnouncementFaculty)</div>
@@ -76,7 +76,7 @@
         </div>
 
     }
-    @if (!Model.UserAnnouncements.Any())
+    @if (!Model.AcademianAnnouncements.Any())
     {
         <p class="font-italic text-muted mt-3 custom-announcement-no-content">Henüz duyuru yok.</p>
     }
