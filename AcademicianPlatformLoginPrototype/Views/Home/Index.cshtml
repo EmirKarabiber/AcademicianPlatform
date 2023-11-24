@@ -52,7 +52,7 @@
 													<a asp-controller="Home" asp-action="AcademicianDetails"
 													asp-route-id="@comment.UserId">
 														@{
-															var user = await UserManager.FindByIdAsync(comment.AnnouncementSenderId);
+															var user = await UserManager.FindByIdAsync(comment.UserId);
 															var FullName = user.FirstName + " " + user.LastName;
 															
 														}
