@@ -242,7 +242,7 @@ namespace AcademicianPlatform.Controllers
 					// SMTP sunucusuna bağlanma
 					await client.ConnectAsync("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
 					// Kimlik doğrulama
-					await client.AuthenticateAsync("platformacademician@gmail.com", "eyiyoklvmbrnqfbw");
+					await client.AuthenticateAsync("[redacted]", "[eyiyoklvmbrnqfbw]");
 					// E-postayı gönderme
 					await client.SendAsync(message);
 					// SMTP sunucusundan çıkma
