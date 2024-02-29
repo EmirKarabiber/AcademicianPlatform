@@ -1,7 +1,7 @@
 <br/>
 <p align="center">
   <a href="https://github.com/devmehmetakifv/AkademISTUN">
-    <img src="logo.png" alt="Logo" width="80" height="80">
+    <img src="logo.png" alt="Logo" width="500" height="500">
   </a>
 
   <h3 align="center">AkademISTUN</h3>
@@ -100,10 +100,6 @@ git clone https://github.com/devmehmetakifv/AcademicianPlatform.git
 ![Screen Shot](screenshot3.png)
 ![Screen Shot](screenshot4.png)
 ![Screen Shot](screenshot5.png)
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
 
 ## Roadmap
 
