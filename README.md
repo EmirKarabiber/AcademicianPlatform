@@ -6,7 +6,7 @@
   <h3 align="center">AkademISTUN</h3>
 
   <p align="center">
-    A web platform that connects academicians with each other.
+    A professional networking platform facilitating connections among academicians.
     <br/>
     <br/>
     <a href="https://github.com/devmehmetakifv/AcademicianPlatform"><strong>Explore the docs »</strong></a>
