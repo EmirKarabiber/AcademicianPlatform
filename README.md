@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/devmehmetakifv/AcademicianPlatform">
-    <img src="logo.png" alt="Logo" width="300" height="300">
+    <img src="readme_assets/logo.png" alt="Logo" width="300" height="300">
   </a>
 
   <h3 align="center">AkademISTUN</h3>
@@ -38,7 +38,7 @@
 
 ## About The Project
 
-![Screen Shot](screenshot1.png)
+![Screen Shot](readme_assets/screenshot1.png)
 
 Introducing AkademISTUN, a pioneering platform in academic and social communication, integrating cutting-edge technologies including ASP.NET Core MVC, HTML, CSS, JavaScript, SQL Server, and Microsoft API framework. Conceived by Dr. Nazlı Tokatlı, it embodies an interdisciplinary approach to research.
 
@@ -95,10 +95,10 @@ git clone https://github.com/devmehmetakifv/AcademicianPlatform.git
 4. Build the project and upload ```publish``` folder to your IIS.
 
 ## Screenshots
-![Screen Shot](screenshot2.png)
-![Screen Shot](screenshot3.png)
-![Screen Shot](screenshot4.png)
-![Screen Shot](screenshot5.png)
+![Screen Shot](readme_assets/screenshot2.png)
+![Screen Shot](readme_assets/screenshot3.png)
+![Screen Shot](readme_assets/screenshot4.png)
+![Screen Shot](readme_assets/screenshot5.png)
 
 ## Roadmap
 
