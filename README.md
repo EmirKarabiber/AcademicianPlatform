@@ -1,4 +1,3 @@
-<br/>
 <p align="center">
   <a href="https://github.com/devmehmetakifv/AcademicianPlatform">
     <img src="logo.png" alt="Logo" width="300" height="300">
