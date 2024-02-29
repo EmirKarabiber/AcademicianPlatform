@@ -99,6 +99,7 @@ git clone https://github.com/devmehmetakifv/AcademicianPlatform.git
 ![Screen Shot](readme_assets/screenshot3.png)
 ![Screen Shot](readme_assets/screenshot4.png)
 ![Screen Shot](readme_assets/screenshot5.png)
+![Screen Shot](readme_assets/screenshot6.png)
 
 ## Roadmap
 
