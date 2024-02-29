@@ -129,7 +129,7 @@ Distributed under the MIT License. See [LICENSE](https://github.com/devmehmetaki
 
 * **Mehmet Akif VARDAR** - *Software Engineering* - [Mehmet Akif VARDAR](https://github.com/devmehmetakifv/) - *Project Management, Full Stack Development*
 * **Ömer Faruk DOLANBAY** - *Computer Engineering* - [Ömer Faruk DOLANBAY](https://github.com/Esforper) - *Full Stack Development*
-* **Burhan ÇALIK** - *Software Engineering* - [Burhan ÇALIK](https://github.com/BurhanCalik) - *Frontend Development*
+* **Burhan ÇALIK** - *Software Engineering* - [Burhan ÇALIK](https://github.com/BurhanCalik) - *Full Stack Development*
 * **Hatice OGUR** - *Computer Engineering* - [Hatice OGUR](https://github.com/HaticeOgur) - *Frontend Development*
 * **Rumeysa ÇİÇEK** - *Computer Engineering* - [Rumeysa ÇİÇEK](https://github.com/Rumeysacck) - *Frontend Development*
 * **Emir KARABİBER** - *Computer Engineering* - [Emir KARABİBER](https://github.com/EmirKarabiber) - *Project Participant*
